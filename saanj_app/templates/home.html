@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* CSS styling for cards and layout */
+        .designs {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+        }
+
+        .design-card {
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 10px;
+            width: calc(33% - 40px);
+            position: relative;
+        }
+
+        .carousel-inner {
+            height: 550px; /* Set a fixed height for carousel */
+        }
+
+        .carousel-item img, 
+
+        .carousel-item video {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        .design-card h3, 
+        
+        .design-card p {
+            margin: 5px 0;
+            flex-shrink: 0; /* Prevent the text from shrinking */
+        }
+
+        .image-container {
+            position: relative; /* Set relative positioning for the image container */
+            overflow: hidden; /* Prevents any overflow that might cause issues */
+        }
+        
+        .watermark {
+            opacity: 0.5; /* Adjust opacity for the watermark */
+            width: 100px; /* Set a fixed width for the logo */
+            height: auto; /* Maintain aspect ratio */
+            position: absolute; /* Absolute positioning within the container */
+            bottom: 10px; /* Position at the bottom */
+            right: 10px; /* Position at the right */
+            pointer-events: none; /* Prevent mouse events on the watermark */
+            z-index: 10; /* Bring the watermark in front */
+        }
+        
+
+        input[type="text"] {
+            margin-bottom: 20px;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .auth-buttons {
+            margin-bottom: 20px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            padding: 10px 20px; /* Padding */
+            text-align: center; /* Center text */
+            text-decoration: none; /* No underline */
+            border-radius: 5px; /* Rounded corners */
+            margin-right: 10px; /* Space between buttons */
+        }
+
+        .button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .logout-button {
+            background-color: #f44336; /* Red background for logout */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f; /* Darker red on hover */
+        }
+
+        /* Styles for filter dropdown */
+        .filter {
+            margin-bottom: 20px;
+        }
+
+        .filter select {
+            padding: 10px;
+            width: 200px;
+            margin-right: 10px;
+        }
+        
+    </style>
+</head>
+<body>
+    <h1>Welcome to Vendor Home</h1>
+
+    <div class="auth-buttons">
+        <a href="{% url 'vendor_signup' %}" class="button">Sign Up</a>
+        <a href="{% url 'vendor_login' %}" class="button">Login</a>
+        <a href="{% url 'vendor_logout' %}" class="logout-button">Logout</a>
+    </div>
+
+    <input type="text" id="search" placeholder="Search Designs..." onkeyup="filterDesigns()">
+
+    <div class="filters">
+        <div class="filter">
+            <label for="category-filter">Category:</label>
+            <select id="category-filter" onchange="filterDesigns()">
+                <option value="">All Categories</option>
+                {% for category in categories %}
+                    <option value="{{ category.name }}">{{ category.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    {% for category in categories %}
+    <div class="category-section">
+        <!-- Display category name -->
+        <h2 class="category-title">{{ category.name }}</h2>
+        <a href="{% url 'download_pdf' category.id %}" class="button">Download PDF</a>
+
+        <div class="designs">
+            <!-- Loop through designs in this category -->
+            {% for design in category.design_set.all %}
+            <div class="design-card" data-category="{{ category.name }}">
+                <div id="carousel-{{ design.id }}" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                        {% if vendor.shop_logo %}  <!-- Check if vendor logo exists -->
+                            <img src="{{ vendor.shop_logo.url }}" alt="{{ vendor.shop_name }} Logo" class="watermark">
+                        {% endif %}
+                        {% for image in design.images.all %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <div class="image-container">  <!-- Image container -->
+                                <img src="{{ image.image.url }}" alt="{{ design.title }}" class="d-block w-100">
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% for video in design.videos.all %}
+                        <div class="carousel-item {% if forloop.first and design.images.count == 0 %}active{% endif %}">
+                            <div class="image-container">  <!-- Image container -->
+                                <video class="d-block w-100" style="max-height: 400px;" controls>
+                                    <source src="{{ video.video.url }}" type="video/mp4">
+                                    Your browser does not support the video tag.
+                                </video>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    <a class="carousel-control-prev" href="#carousel-{{ design.id }}" role="button" data-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Previous</span>
+                    </a>
+                    <a class="carousel-control-next" href="#carousel-{{ design.id }}" role="button" data-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="sr-only">Next</span>
+                    </a>
+                </div>
+                
+                <h3>{{ design.title }}</h3>
+                <p>{{ design.description }}</p>
+                <p>Price: {{ design.price }}</p>
+            </div>
+            {% endfor %}
+        </div>        
+    </div>
+    {% endfor %}
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <script>
+        function filterDesigns() {
+            var input, filter, categoryFilter, cards, title, category, i, txtValue;
+            input = document.getElementById("search");
+            filter = input.value.toUpperCase();
+            categoryFilter = document.getElementById("category-filter").value;
+            cards = document.getElementsByClassName("design-card");
+
+            for (i = 0; i < cards.length; i++) {
+                title = cards[i].getElementsByTagName("h3")[0];
+                txtValue = title.textContent || title.innerText;
+
+                var cardCategory = cards[i].getAttribute("data-category");
+
+                var matchesSearch = txtValue.toUpperCase().indexOf(filter) > -1 || cardCategory.toUpperCase().indexOf(filter) > -1;
+                var matchesCategory = categoryFilter === "" || cardCategory === categoryFilter;
+
+                if (matchesSearch && matchesCategory) {
+                    cards[i].style.display = "";
+                } else {
+                    cards[i].style.display = "none";
+                }
+            }
+        }
+    </script>
+</body>
+</html>
