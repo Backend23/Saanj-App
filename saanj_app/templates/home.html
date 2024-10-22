@@ -9,7 +9,75 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* CSS styling for cards and layout */
+        /* CSS styling for header layout */
+
+        .manufacturer-logo {
+            position: absolute; /* Position the logo absolutely */
+            top: 10px;          /* Distance from the top of the page */
+            left: 10px;         /* Distance from the left of the page */
+            width: 100px;       /* Set a fixed width for the logo */
+            height: auto;       /* Maintain the aspect ratio */
+            z-index: 100;       /* Ensure it stays on top of other content */
+        }
+
+        .header {
+            display: flex;
+            align-items: center; /* Center items vertically */
+            justify-content: space-between; /* Space between items */
+            width: 100%; /* Full width */
+            padding: 50px; /* Add some padding */
+            position: relative; /* Positioning for absolute logo */
+        }
+
+        .welcome-message {
+            flex-grow: 1; /* Allow the message to take up remaining space */
+            text-align: center; /* Center the welcome message */
+        }
+
+        .auth-buttons {
+            display: flex; /* Use flexbox for buttons */
+            gap: 10px; /* Space between buttons */
+        }
+
+        .search-container {
+            display: flex;
+            align-items: center; /* Center search vertically */
+            margin-top: 20px; /* Space from header */
+        }
+
+        input[type="text"] {
+            margin-right: 10px; /* Space between input and button */
+            padding: 10px;
+            width: 300px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: #4CAF50; /* Green background */
+            color: white; /* White text */
+            padding: 10px 20px; /* Padding */
+            text-align: center; /* Center text */
+            text-decoration: none; /* No underline */
+            border-radius: 5px; /* Rounded corners */
+        }
+
+        .button:hover {
+            background-color: #45a049; /* Darker green on hover */
+        }
+
+        .logout-button {
+            background-color: #f44336; /* Red background for logout */
+            color: white;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f; /* Darker red on hover */
+        }
+
+        /* Styles for cards and layout */
         .designs {
             display: flex;
             flex-wrap: wrap;
@@ -30,7 +98,6 @@
         }
 
         .carousel-item img, 
-
         .carousel-item video {
             object-fit: cover;
             width: 100%;
@@ -38,7 +105,6 @@
         }
 
         .design-card h3, 
-        
         .design-card p {
             margin: 5px 0;
             flex-shrink: 0; /* Prevent the text from shrinking */
@@ -59,44 +125,6 @@
             pointer-events: none; /* Prevent mouse events on the watermark */
             z-index: 10; /* Bring the watermark in front */
         }
-        
-
-        input[type="text"] {
-            margin-bottom: 20px;
-            padding: 10px;
-            width: 300px;
-        }
-
-        .auth-buttons {
-            margin-bottom: 20px;
-        }
-
-        .button {
-            display: inline-block;
-            background-color: #4CAF50; /* Green background */
-            color: white; /* White text */
-            padding: 10px 20px; /* Padding */
-            text-align: center; /* Center text */
-            text-decoration: none; /* No underline */
-            border-radius: 5px; /* Rounded corners */
-            margin-right: 10px; /* Space between buttons */
-        }
-
-        .button:hover {
-            background-color: #45a049; /* Darker green on hover */
-        }
-
-        .logout-button {
-            background-color: #f44336; /* Red background for logout */
-            color: white;
-            padding: 10px 20px;
-            border-radius: 5px;
-            text-decoration: none;
-        }
-
-        .logout-button:hover {
-            background-color: #d32f2f; /* Darker red on hover */
-        }
 
         /* Styles for filter dropdown */
         .filter {
@@ -112,17 +140,21 @@
     </style>
 </head>
 <body>
-    <h1>Welcome to Vendor Home</h1>
+    <img src="{% static 'Manufacturer_logo/saanj_logo.jpg' %}" alt="Manufacturer Logo" class="manufacturer-logo">
 
-    <div class="auth-buttons">
-        <a href="{% url 'vendor_signup' %}" class="button">Sign Up</a>
-        <a href="{% url 'vendor_login' %}" class="button">Login</a>
-        <a href="{% url 'vendor_logout' %}" class="logout-button">Logout</a>
+   <div class="header">
+        <div class="welcome-message">
+            <h1>Welcome to Vendor Home</h1>
+        </div>
+        <div class="auth-buttons">
+            <a href="{% url 'vendor_signup' %}" class="button">Sign Up</a>
+            <a href="{% url 'vendor_login' %}" class="button">Login</a>
+            <a href="{% url 'vendor_logout' %}" class="logout-button">Logout</a>
+        </div>
     </div>
 
-    <input type="text" id="search" placeholder="Search Designs..." onkeyup="filterDesigns()">
-
-    <div class="filters">
+    <div class="search-container">
+        <input type="text" id="search" placeholder="Search Designs..." onkeyup="filterDesigns()">
         <div class="filter">
             <label for="category-filter">Category:</label>
             <select id="category-filter" onchange="filterDesigns()">

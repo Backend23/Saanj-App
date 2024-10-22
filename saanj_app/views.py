@@ -58,17 +58,26 @@ def vendor_login(request):
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
 
-            try:
-                vendor = Vendor.objects.get(email_id=email)
-                if vendor.user.check_password(password):  # Use Django's built-in method
+            user = authenticate(username=email, password=password)
+            if user is not None:
+                try:
+                    # Fetch the vendor associated with the email
+                    vendor = Vendor.objects.get(email_id=email)
                     request.session['vendor_id'] = vendor.id
-                    print(f"Vendor {vendor.id} logged in successfully.")  # Debug line
+                    
+                    # Log in the user associated with the vendor
+                    login(request, user)  # Log the user in to set request.user
+                    print(f"Vendor {vendor.id} logged in successfully.")
+                    print("Authenticated user after login:", request.user)
+                    print("Vendor from request user:", request.user.vendor if hasattr(request.user, 'vendor') else "No vendor associated")
+
                     return redirect('vendor_home')
-                else:
-                    messages.error(request, "Invalid email or password.")
-            except Vendor.DoesNotExist:
+                except Vendor.DoesNotExist:
+                    messages.error(request, "Vendor does not exist.")
+            else:
                 messages.error(request, "Invalid email or password.")
-        return redirect('vendor_login')
+        else:
+            messages.error(request, "Invalid form submission.")
     else:
         form = VendorLoginForm()
 
@@ -175,27 +184,44 @@ def download_pdf(request, category_id):
     p.setFont("Helvetica-Bold", 16)
     p.drawCentredString(width / 2, height - 50, f"Designs for {category.name}")
     y_position = height - 120
+    x_position_left = 40
+    x_position_right = width / 2 + 20  # Half-page offset for right-side designs
+
+    design_count = 0  # Keep track of designs on the row (2 designs per row)
 
     for design in designs:
-        if y_position < 100:  # Add a new page if space is insufficient
+        if y_position < 150:  # Add a new page if space is insufficient (with extra margin)
             p.showPage()
             y_position = height - 80
+            design_count = 0  # Reset for the new page
+
+        x_position = x_position_left if design_count % 2 == 0 else x_position_right  # Alternate between left and right side
 
         # Display design details
         p.setFont("Helvetica-Bold", 12)
-        p.drawString(40, y_position, design.title)
+        p.drawString(x_position, y_position, design.title)
         p.setFont("Helvetica", 10)
-        p.drawString(40, y_position - 15, f"Description: {design.description}")
-        p.drawString(40, y_position - 30, f"Price: {design.price}")
+        p.drawString(x_position, y_position - 15, f"Description: {design.description}")
+        p.drawString(x_position, y_position - 30, f"Price: {design.price}")
 
-        # Add design images
+        # Add design images side by side
+        y_image_position = y_position - 10  # Adjust position for images
         images = design.images.all()
-        if images:
-            image_path = images[0].image.path  # Display the first image
-            p.drawImage(ImageReader(image_path), 40, y_position - 130, width=200, height=100, preserveAspectRatio=True)
-            y_position -= 150
 
-        y_position -= 50
+        if images:
+            x_image_position = x_position  # Start with the current design position
+            for image in images:
+                image_path = image.image.path  # Get each image path
+                p.drawImage(ImageReader(image_path), x_image_position, y_image_position - 130, width=100, height=100, preserveAspectRatio=True)
+                x_image_position += 120  # Move the x_position to the right for the next image (if needed)
+
+            y_position -= 150  # Adjust vertical position after placing images
+
+        if design_count % 2 == 1:  # After two designs on the same row, move to the next row
+            y_position -= 150  # Increase space between rows
+            design_count = 0  # Reset count for the new row
+        else:
+            design_count += 1  # Move to next design on the same row
 
     # Close the PDF object and return the response
     p.showPage()
