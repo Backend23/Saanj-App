@@ -111,6 +111,14 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
+# Absolute path to the directory where collectstatic will collect static files for deployment
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # This will create a directory named 'staticfiles' in your project root
+
+# Optionally, you can define where to find static files in development
+STATICFILES_DIRS = [
+    BASE_DIR /'saanj_app'/'static',  # This should point to where your app-specific static files are located
+]
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 

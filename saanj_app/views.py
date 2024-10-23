@@ -10,6 +10,10 @@ from reportlab.lib.pagesizes import letter
 from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 from django.contrib.auth import authenticate, login
+import os
+from django.conf import settings
+from django.templatetags.static import static  # Import the static function
+
 
 
 
@@ -112,6 +116,7 @@ def get_subcategories(request):
     
     return JsonResponse(response_data, safe=False)
 
+@login_required(login_url='/vendor/login/')
 def vendor_home(request):
     vendor_id = request.session.get('vendor_id')
     print(vendor_id)
@@ -146,84 +151,83 @@ def vendor_home(request):
 
 @login_required(login_url='/vendor/login/')
 def download_pdf(request, category_id):
-    print('Request User:', request.user)
-    print('User is authenticated:', request.user.is_authenticated)
-    print('Has Vendor:', hasattr(request.user, 'vendor'))
-    print('Vendor ID:', request.session.get('vendor_id'))  # Print vendor ID from session
-
-    # Get the category and associated designs
+    BASE_DIR = settings.BASE_DIR  # Now BASE_DIR is accessible
     category = get_object_or_404(Category, id=category_id)
     designs = category.design_set.all()
-
-    # Check if the logged-in user is a vendor
-    if not hasattr(request.user, 'vendor'):
-        messages.error(request, "Error: You must be a vendor to download the PDF.")
-        return redirect('vendor_login')  # Redirect to login if not a vendor
-
+    
     vendor = request.user.vendor
     vendor_logo = vendor.shop_logo.path if vendor.shop_logo else None
-
-    # Assuming manufacturer details are related to the category
-    manufacturer_logo = category.manufacturer.logo.path if hasattr(category, 'manufacturer') and category.manufacturer.logo else None
-
-    # Create the HttpResponse object with PDF headers
+    manufacturer_logo = os.path.join(settings.BASE_DIR, 'staticfiles', 'Manufacturer_logo', 'saanj_logo.jpg')
+    
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{category.name}_designs.pdf"'
-
-    # Create the PDF object
+    
     p = canvas.Canvas(response, pagesize=letter)
     width, height = letter
+    
+    def add_logos():
+        print("Checking logos...")
+        if os.path.exists(manufacturer_logo) and os.path.exists(vendor_logo):
+            try:
+                logo_image1 = ImageReader(manufacturer_logo)
+                width1, height1 = logo_image1.getSize()  # Get the size
+                print(f"manufacturer logo size: {width1}x{height1}")
+                print("Drawing manufacturer logo...")
+                p.drawImage(logo_image1, x = 30, y = 700, width= 80, height=80, preserveAspectRatio=True)
+                print("manufacturer logo drawn")
 
-    # Add logos if available
-    if manufacturer_logo:
-        p.drawImage(ImageReader(manufacturer_logo), 40, height - 80, width=100, preserveAspectRatio=True)
-    if vendor_logo:
-        p.drawImage(ImageReader(vendor_logo), width - 140, height - 80, width=100, preserveAspectRatio=True)
+                logo_image2 = ImageReader(vendor_logo)
+                width, height = logo_image2.getSize()  # Get the size
+                print(f"vendor logo size: {width}x{height}")
+                print("Drawing vendor logo...")
+                p.drawImage(logo_image2, x = 500, y = 700, width=80, height=80, preserveAspectRatio=True)
+                print("Vendor logo drawn")
+            except Exception as e:
+                print(f"Error drawing logos: {e}")
+        else:
+            print("logo path is not valid")
 
-    # Add title and designs to PDF
+    add_logos()
+
+
+    # Add title to the PDF
     p.setFont("Helvetica-Bold", 16)
     p.drawCentredString(width / 2, height - 50, f"Designs for {category.name}")
     y_position = height - 120
-    x_position_left = 40
-    x_position_right = width / 2 + 20  # Half-page offset for right-side designs
-
-    design_count = 0  # Keep track of designs on the row (2 designs per row)
+    design_count = 0
 
     for design in designs:
-        if y_position < 150:  # Add a new page if space is insufficient (with extra margin)
+        if y_position < 150:
             p.showPage()
-            y_position = height - 80
-            design_count = 0  # Reset for the new page
+            add_logos()  # Add logos on new page
+            y_position = height - 120  # Reset vertical position for the new page
+            design_count = 0
 
-        x_position = x_position_left if design_count % 2 == 0 else x_position_right  # Alternate between left and right side
-
-        # Display design details
+        x_position = 40 if design_count % 2 == 0 else width / 2 + 20
         p.setFont("Helvetica-Bold", 12)
         p.drawString(x_position, y_position, design.title)
         p.setFont("Helvetica", 10)
         p.drawString(x_position, y_position - 15, f"Description: {design.description}")
         p.drawString(x_position, y_position - 30, f"Price: {design.price}")
 
-        # Add design images side by side
-        y_image_position = y_position - 10  # Adjust position for images
+        # Add design images
+        y_image_position = y_position - 50
         images = design.images.all()
 
         if images:
-            x_image_position = x_position  # Start with the current design position
+            x_image_position = x_position
             for image in images:
-                image_path = image.image.path  # Get each image path
-                p.drawImage(ImageReader(image_path), x_image_position, y_image_position - 130, width=100, height=100, preserveAspectRatio=True)
-                x_image_position += 120  # Move the x_position to the right for the next image (if needed)
+                image_path = image.image.path
+                p.drawImage(ImageReader(image_path), x_image_position, y_image_position - 100, width=100, height=100, preserveAspectRatio=True)
+                x_image_position += 120
 
-            y_position -= 150  # Adjust vertical position after placing images
+            y_position -= 150
 
-        if design_count % 2 == 1:  # After two designs on the same row, move to the next row
-            y_position -= 150  # Increase space between rows
-            design_count = 0  # Reset count for the new row
+        if design_count % 2 == 1:
+            y_position -= 150
+            design_count = 0
         else:
-            design_count += 1  # Move to next design on the same row
+            design_count += 1
 
-    # Close the PDF object and return the response
-    p.showPage()
     p.save()
     return response
