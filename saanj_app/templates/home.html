@@ -6,135 +6,109 @@
     <title>Vendor Home</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'styles.css' %}">
-    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* CSS styling for header layout */
-
+        /* Styles (unchanged) */
         .manufacturer-logo {
-            position: absolute; /* Position the logo absolutely */
-            top: 10px;          /* Distance from the top of the page */
-            left: 10px;         /* Distance from the left of the page */
-            width: 100px;       /* Set a fixed width for the logo */
-            height: auto;       /* Maintain the aspect ratio */
-            z-index: 100;       /* Ensure it stays on top of other content */
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 100px;
+            height: auto;
+            z-index: 100;
         }
-
         .header {
             display: flex;
-            align-items: center; /* Center items vertically */
-            justify-content: space-between; /* Space between items */
-            width: 100%; /* Full width */
-            padding: 50px; /* Add some padding */
-            position: relative; /* Positioning for absolute logo */
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            padding: 50px;
+            position: relative;
         }
-
         .welcome-message {
-            flex-grow: 1; /* Allow the message to take up remaining space */
-            text-align: center; /* Center the welcome message */
+            flex-grow: 1;
+            text-align: center;
         }
-
         .auth-buttons {
-            display: flex; /* Use flexbox for buttons */
-            gap: 10px; /* Space between buttons */
+            display: flex;
+            gap: 10px;
         }
-
         .search-container {
             display: flex;
-            align-items: center; /* Center search vertically */
-            margin-top: 20px; /* Space from header */
+            align-items: center;
+            margin-top: 20px;
         }
-
         input[type="text"] {
-            margin-right: 10px; /* Space between input and button */
+            margin-right: 10px;
             padding: 10px;
             width: 300px;
         }
-
-        .button {
+        .button, .logout-button {
             display: inline-block;
-            background-color: #4CAF50; /* Green background */
-            color: white; /* White text */
-            padding: 10px 20px; /* Padding */
-            text-align: center; /* Center text */
-            text-decoration: none; /* No underline */
-            border-radius: 5px; /* Rounded corners */
-        }
-
-        .button:hover {
-            background-color: #45a049; /* Darker green on hover */
-        }
-
-        .logout-button {
-            background-color: #f44336; /* Red background for logout */
-            color: white;
             padding: 10px 20px;
             border-radius: 5px;
             text-decoration: none;
+            color: white;
         }
-
+        .button {
+            background-color: #4CAF50;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+        .logout-button {
+            background-color: #f44336;
+        }
         .logout-button:hover {
-            background-color: #d32f2f; /* Darker red on hover */
+            background-color: #d32f2f;
         }
-
-        /* Styles for cards and layout */
         .designs {
             display: flex;
             flex-wrap: wrap;
             justify-content: space-between;
         }
-
         .design-card {
             border: 1px solid #ccc;
             border-radius: 5px;
             padding: 15px;
             margin: 10px;
             width: calc(33% - 40px);
-            position: relative;
+            transition: filter 0.3s ease-in-out;
         }
-
         .carousel-inner {
-            height: 550px; /* Set a fixed height for carousel */
+            height: 550px;
         }
-
         .carousel-item img, 
         .carousel-item video {
             object-fit: cover;
             width: 100%;
             height: 100%;
         }
-
-        .design-card h3, 
-        .design-card p {
-            margin: 5px 0;
-            flex-shrink: 0; /* Prevent the text from shrinking */
-        }
-
-        .image-container {
-            position: relative; /* Set relative positioning for the image container */
-            overflow: hidden; /* Prevents any overflow that might cause issues */
-        }
-        
-        .watermark {
-            opacity: 0.5; /* Adjust opacity for the watermark */
-            width: 100px; /* Set a fixed width for the logo */
-            height: auto; /* Maintain aspect ratio */
-            position: absolute; /* Absolute positioning within the container */
-            bottom: 10px; /* Position at the bottom */
-            right: 10px; /* Position at the right */
-            pointer-events: none; /* Prevent mouse events on the watermark */
-            z-index: 10; /* Bring the watermark in front */
-        }
-
-        /* Styles for filter dropdown */
-        .filter {
-            margin-bottom: 20px;
-        }
-
         .filter select {
             padding: 10px;
-            width: 200px;
             margin-right: 10px;
+            width: 200px;
+        }
+        /* Overlay style */
+        .blackout-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none; /* Hidden by default */
+            z-index: 999; /* Ensure it covers everything */
+        }
+        
+        body:not(:hover) .design-card img {
+            filter: blur(10px);
+            opacity: 0;
+        }
+
+        img {
+            -webkit-user-drag: none;
+            user-drag: none;
         }
         
     </style>
@@ -142,7 +116,7 @@
 <body>
     <img src="{% static 'Manufacturer_logo/saanj_logo.png' %}" alt="Manufacturer Logo" class="manufacturer-logo">
 
-   <div class="header">
+    <div class="header">
         <div class="welcome-message">
             <h1>Welcome to Vendor Home</h1>
         </div>
@@ -163,34 +137,59 @@
                     <option value="{{ category.name }}">{{ category.name }}</option>
                 {% endfor %}
             </select>
+
+            <!-- Subcategory 1 -->
+            <label for="subcategory1-filter">Subcategory 1:</label>
+            <select id="subcategory1-filter" onchange="filterDesigns()">
+                <option value="">All Subcategories</option>
+                {% for subcategory1 in subcategories1 %}
+                    <option value="{{ subcategory1.name }}">{{ subcategory1.name }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Subcategory 2 -->
+            <label for="subcategory2-filter">Subcategory 2:</label>
+            <select id="subcategory2-filter" onchange="filterDesigns()">
+                <option value="">All Subcategories</option>
+                {% for subcategory2 in subcategories2 %}
+                    <option value="{{ subcategory2.name }}">{{ subcategory2.name }}</option>
+                {% endfor %}
+            </select>
+
+            <!-- Subcategory 3 -->
+            <label for="subcategory3-filter">Subcategory 3:</label>
+            <select id="subcategory3-filter" onchange="filterDesigns()">
+                <option value="">All Subcategories</option>
+                {% for subcategory3 in subcategories3 %}
+                    <option value="{{ subcategory3.name }}">{{ subcategory3.name }}</option>
+                {% endfor %}
+            </select>
         </div>
     </div>
 
     {% for category in categories %}
     <div class="category-section">
-        <!-- Display category name -->
-        <h2 class="category-title">{{ category.name }}</h2>
+        <h2>{{ category.name }}</h2>
         <a href="{% url 'download_pdf' category.id %}" class="button">Download PDF</a>
 
         <div class="designs">
-            <!-- Loop through designs in this category -->
             {% for design in category.design_set.all %}
-            <div class="design-card" data-category="{{ category.name }}">
+            <div class="design-card" data-category="{{ category.name }}" data-subcategory1="{{ design.subcategory1.name }}" data-subcategory2="{{ design.subcategory2.name }}" data-subcategory3="{{ design.subcategory3.name }}">
                 <div id="carousel-{{ design.id }}" class="carousel slide" data-ride="carousel">
                     <div class="carousel-inner">
-                        {% if vendor.shop_logo %}  <!-- Check if vendor logo exists -->
+                        {% if vendor.shop_logo %} 
                             <img src="{{ vendor.shop_logo.url }}" alt="{{ vendor.shop_name }} Logo" class="watermark">
                         {% endif %}
                         {% for image in design.images.all %}
                         <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <div class="image-container">  <!-- Image container -->
+                            <div class="image-container">
                                 <img src="{{ image.image.url }}" alt="{{ design.title }}" class="d-block w-100">
                             </div>
                         </div>
                         {% endfor %}
                         {% for video in design.videos.all %}
                         <div class="carousel-item {% if forloop.first and design.images.count == 0 %}active{% endif %}">
-                            <div class="image-container">  <!-- Image container -->
+                            <div class="image-container">
                                 <video class="d-block w-100" style="max-height: 400px;" controls>
                                     <source src="{{ video.video.url }}" type="video/mp4">
                                     Your browser does not support the video tag.
@@ -208,45 +207,83 @@
                         <span class="sr-only">Next</span>
                     </a>
                 </div>
-                
+
                 <h3>{{ design.title }}</h3>
                 <p>{{ design.description }}</p>
                 <p>Price: {{ design.price }}</p>
             </div>
             {% endfor %}
-        </div>        
+        </div>
     </div>
     {% endfor %}
 
-    <!-- Bootstrap JS and dependencies -->
+    <div class="blackout-overlay" id="blackout-overlay"></div>
+
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
+
     <script>
         function filterDesigns() {
-            var input, filter, categoryFilter, cards, title, category, i, txtValue;
-            input = document.getElementById("search");
-            filter = input.value.toUpperCase();
-            categoryFilter = document.getElementById("category-filter").value;
-            cards = document.getElementsByClassName("design-card");
+            var input = document.getElementById("search").value.toUpperCase();
+            var categoryFilter = document.getElementById("category-filter").value;
+            var subcategory1Filter = document.getElementById("subcategory1-filter").value;
+            var subcategory2Filter = document.getElementById("subcategory2-filter").value;
+            var subcategory3Filter = document.getElementById("subcategory3-filter").value;
 
-            for (i = 0; i < cards.length; i++) {
-                title = cards[i].getElementsByTagName("h3")[0];
-                txtValue = title.textContent || title.innerText;
+            var cards = document.getElementsByClassName("design-card");
 
-                var cardCategory = cards[i].getAttribute("data-category");
+            for (var i = 0; i < cards.length; i++) {
+                var title = cards[i].getElementsByTagName("h3")[0].innerText.toUpperCase();
+                var price = cards[i].getElementsByTagName("p")[1].innerText.toUpperCase();
+                var category = cards[i].getAttribute("data-category");
+                var subcategory1 = cards[i].getAttribute("data-subcategory1");
+                var subcategory2 = cards[i].getAttribute("data-subcategory2");
+                var subcategory3 = cards[i].getAttribute("data-subcategory3");
 
-                var matchesSearch = txtValue.toUpperCase().indexOf(filter) > -1 || cardCategory.toUpperCase().indexOf(filter) > -1;
-                var matchesCategory = categoryFilter === "" || cardCategory === categoryFilter;
+                var matchSearch = title.indexOf(input) > -1 || price.indexOf(input) > -1 || 
+                                  category.toUpperCase().indexOf(input) > -1 || 
+                                  subcategory1.toUpperCase().indexOf(input) > -1 || 
+                                  subcategory2.toUpperCase().indexOf(input) > -1 || 
+                                  subcategory3.toUpperCase().indexOf(input) > -1;
+                var matchCategory = categoryFilter === "" || category === categoryFilter;
+                var matchSubcategory1 = subcategory1Filter === "" || subcategory1 === subcategory1Filter;
+                var matchSubcategory2 = subcategory2Filter === "" || subcategory2 === subcategory2Filter;
+                var matchSubcategory3 = subcategory3Filter === "" || subcategory3 === subcategory3Filter;
 
-                if (matchesSearch && matchesCategory) {
-                    cards[i].style.display = "";
+                if (matchSearch && matchCategory && matchSubcategory1 && matchSubcategory2 && matchSubcategory3) {
+                    cards[i].style.display = "block";
                 } else {
                     cards[i].style.display = "none";
                 }
             }
         }
+
+        // Disable right-click
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        document.addEventListener('keydown', function (e) {
+            if (e.ctrlKey && (e.key === 'p' || e.key === 's')) {
+                e.preventDefault();
+            }
+        });
+
+        document.addEventListener("visibilitychange", function () {
+            if (document.hidden) {
+                // Show blackout overlay
+                document.getElementById("blackout-overlay").style.display = "block";
+            } else {
+                // Hide blackout overlay
+                document.getElementById("blackout-overlay").style.display = "none";
+            }
+        });
+
+        // Detect CTRL+P (Print)
+        window.onbeforeprint = function() {
+            alert('Printing is disabled!');
+        };
     </script>
 </body>
 </html>

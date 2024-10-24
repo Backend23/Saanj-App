@@ -200,31 +200,43 @@ def download_pdf(request, category_id):
         if y_position < 150:
             p.showPage()
             add_logos()  # Add logos on new page
+            p.setFont("Helvetica-Bold", 16)
+            p.drawCentredString(width / 2, height - 50, f"Designs for {category.name}")
             y_position = height - 120  # Reset vertical position for the new page
             design_count = 0
 
-        x_position = 40 if design_count % 2 == 0 else width / 2 + 20
+        # Calculate x_position for centering
         p.setFont("Helvetica-Bold", 12)
+        text_width = p.stringWidth(design.title, "Helvetica-Bold", 12)
+        x_position = (width - text_width) / 2  # Center the design title
         p.drawString(x_position, y_position, design.title)
+
+        # Center the description and price
         p.setFont("Helvetica", 10)
-        p.drawString(x_position, y_position - 15, f"Description: {design.description}")
-        p.drawString(x_position, y_position - 30, f"Price: {design.price}")
+        description = f"{design.description}"
+        price = f"Price: {design.price}"
+        
+        desc_width = p.stringWidth(description, "Helvetica", 10)
+        price_width = p.stringWidth(price, "Helvetica", 10)
+        
+        p.drawString((width - desc_width) / 2, y_position - 15, description)
+        p.drawString((width - price_width) / 2, y_position - 30, price)
 
         # Add design images
         y_image_position = y_position - 50
         images = design.images.all()
 
         if images:
-            x_image_position = x_position
+            x_image_position = (width - (len(images) * 120)) / 2  # Center images horizontally
             for image in images:
                 image_path = image.image.path
                 p.drawImage(ImageReader(image_path), x_image_position, y_image_position - 100, width=100, height=100, preserveAspectRatio=True)
                 x_image_position += 120
 
-            y_position -= 150
+            y_position -= 200
 
         if design_count % 2 == 1:
-            y_position -= 150
+            y_position -= 10
             design_count = 0
         else:
             design_count += 1
