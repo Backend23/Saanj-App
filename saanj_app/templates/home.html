@@ -270,15 +270,7 @@
             }
         });
 
-        document.addEventListener("visibilitychange", function () {
-            if (document.hidden) {
-                // Show blackout overlay
-                document.getElementById("blackout-overlay").style.display = "block";
-            } else {
-                // Hide blackout overlay
-                document.getElementById("blackout-overlay").style.display = "none";
-            }
-        });
+        
 
         // Detect CTRL+P (Print)
         window.onbeforeprint = function() {
