@@ -1,7 +1,7 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from .models import Category, Design, DesignImage, DesignVideo, SubCategory1, SubCategory2, SubCategory3
+from .models import Category, Design, DesignImage, DesignVideo, SubCategory1, SubCategory2, SubCategory3, Package
 from .forms import  *
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -13,47 +13,8 @@ from django.contrib.auth import authenticate, login
 import os
 from django.conf import settings
 from django.templatetags.static import static  # Import the static function
+import qrcode
 
-
-
-
-# Display Category Details
-def vendor_signup(request):
-    if request.method == 'POST':
-        form = VendorSignUpForm(request.POST, request.FILES)
-        if form.is_valid():
-            # Get the cleaned data from the form
-            email = form.cleaned_data['email_id']
-            password = form.cleaned_data['password']  # Get the raw password
-
-            # Check if the email is already in use
-            if User.objects.filter(username=email).exists():
-                messages.error(request, "This email is already in use.")
-                return redirect('vendor_signup')
-
-            # Create the user object (this handles user authentication)
-            user = User.objects.create_user(
-                username=email,
-                email=email,
-                password=password  # Set the password directly, Django will hash it
-            )
-
-            # Create the Vendor instance
-            vendor = Vendor(
-                user=user,  # Associate the user with the vendor
-                name=form.cleaned_data['name'],
-                shop_name=form.cleaned_data['shop_name'],
-                shop_address=form.cleaned_data['shop_address'],
-                phone_number=form.cleaned_data['phone_number'],
-                email_id=email,
-                shop_logo=form.cleaned_data['shop_logo']
-            )
-            vendor.save()  # Save the vendor instance
-            messages.success(request, "Vendor registered successfully!")
-            return redirect('vendor_login')
-    else:
-        form = VendorSignUpForm()
-    return render(request, 'signup.html', {'form': form})
 
 def vendor_login(request):
     if request.method == "POST":
@@ -63,6 +24,7 @@ def vendor_login(request):
             password = form.cleaned_data['password']
 
             user = authenticate(username=email, password=password)
+
             if user is not None:
                 try:
                     # Fetch the vendor associated with the email
@@ -87,9 +49,68 @@ def vendor_login(request):
 
     return render(request, 'login.html', {'form': form})
 
+
+
 def vendor_logout(request):
-    logout(request)  # Use Django's built-in logout function
-    return redirect('vendor_home')  # Redirect to the vendor home page after logging out
+    logout(request)  # Log out the vendor
+    return redirect('vendor_login')  # Redirect to the vendor login page
+
+
+def vendor_signup(request):
+    if request.method == 'POST':
+        form = VendorSignUpForm(request.POST, request.FILES)
+        if form.is_valid():
+            email = form.cleaned_data['email_id']
+            password = form.cleaned_data['password']
+
+            if User.objects.filter(username=email).exists():
+                messages.error(request, "This email is already in use.")
+                return redirect('vendor_signup')
+
+            user = User.objects.create_user(
+                username=email,
+                email=email,
+                password=password
+            )
+
+            package_id = request.POST.get('package')
+            package = get_object_or_404(Package, id=package_id)
+
+            vendor = Vendor(
+                user=user,
+                name=form.cleaned_data['name'],
+                shop_name=form.cleaned_data['shop_name'],
+                shop_address=form.cleaned_data['shop_address'],
+                phone_number=form.cleaned_data['phone_number'],
+                email_id=email,
+                shop_logo=form.cleaned_data['shop_logo'],
+                package=package
+            )
+            vendor.save()
+
+            messages.success(request, "Vendor registered successfully! Please proceed with the payment.")
+            return redirect('vendor_payment', vendor_id=vendor.id)
+
+    else:
+        form = VendorSignUpForm()
+
+    packages = Package.objects.all()  # Fetch all packages for display
+    return render(request, 'signup.html', {'form': form, 'packages': packages})
+
+
+def vendor_payment(request, vendor_id):
+    vendor = get_object_or_404(Vendor, id=vendor_id)
+    if vendor.payment_status:
+        return redirect('vendor_login')  # Redirect to login if payment is confirmed
+
+    return render(request, 'payment.html', {'vendor': vendor, 'qr_path': vendor.package.qr_code.url})
+
+def confirm_payment(request, vendor_id):
+    vendor = get_object_or_404(Vendor, id=vendor_id)
+    vendor.payment_status = True  # Simulate payment completion
+    vendor.save()
+    return redirect('vendor_login')  # Redirect to login after confirming payment
+
 
 def get_subcategories(request):
     category_id = request.GET.get('category_id')
@@ -127,14 +148,17 @@ def vendor_home(request):
         try:
             vendor = Vendor.objects.get(id=vendor_id)
             print(f"Vendor found: {vendor}")  # Debugging line
+            print(vendor.shop_logo.url)
+            print("Loading vendor_home view")
         except Vendor.DoesNotExist:
             print("Vendor does not exist.")  # Debugging line
     else:
         print("No vendor ID found in session.")  # Debugging line
 
     # Fetch all categories and related designs
-    categories = Category.objects.prefetch_related('design_set').all()
-    
+    categories = Category.objects.prefetch_related('design_set__images', 'design_set__videos').all()
+    for i in categories:
+        print(i.id)
     # Fetch all subcategories
     subcategories1 = SubCategory1.objects.all()
     subcategories2 = SubCategory2.objects.all()
@@ -158,6 +182,8 @@ def download_pdf(request, category_id):
     vendor = request.user.vendor
     vendor_logo = vendor.shop_logo.path if vendor.shop_logo else None
     manufacturer_logo = os.path.join(settings.BASE_DIR, 'staticfiles', 'Manufacturer_logo', 'saanj_logo.jpg')
+    print(manufacturer_logo)
+    print(vendor_logo)
     
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{category.name}_designs.pdf"'

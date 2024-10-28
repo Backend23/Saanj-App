@@ -1,20 +1,18 @@
 from django import forms
 from .models import *
 from django.forms import modelformset_factory
+from django.contrib.auth.forms import AuthenticationForm
 
 class DesignUploadForm(forms.ModelForm):
+
+    package = forms.ModelChoiceField(
+        queryset=Package.objects.all(),
+        required=True,
+        help_text="Select the package this design belongs to."
+    )
     class Meta:
         model = Design
-        fields = ['title', 'description', 'category', 'price', 'subcategory1', 'subcategory2', 'subcategory3']  # Include image and video fields]
-
-    def clean_image(self):
-        image = self.cleaned_data.get('image')
-        if image and not image.name.endswith(('.png', '.jpg', '.jpeg')):
-            raise forms.ValidationError("Invalid file type. Please upload a PNG or JPEG image.")
-        video = self.cleaned_data.get('videp')
-        if video and not video.name.endswith(('.mp4, .mov, .mkv')):
-            raise forms.ValidationError('Invalid file type. Please upload a mp4 or mkv image. ')
-        return image
+        fields = ['title', 'description', 'category', 'price', 'subcategory1', 'subcategory2', 'subcategory3', 'package']  # Include image and video fields]
 
 class CategoryForm(forms.ModelForm):
     class Meta:
@@ -47,7 +45,15 @@ class VendorSignUpForm(forms.ModelForm):
             'password': forms.PasswordInput(),
         }
 
+
 class VendorLoginForm(forms.Form):
     email = forms.EmailField(label='Email')
     password = forms.CharField(widget=forms.PasswordInput())
 
+class AdminLoginForm(AuthenticationForm):
+    class Meta:
+        model = User
+        fields = ('username', 'password')
+        widgets = {
+            'password': forms.PasswordInput(),
+        }

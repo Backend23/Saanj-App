@@ -5,13 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendor Sign Up</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">  <!-- Add your CSS file -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <h1>Vendor Sign Up</h1>
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.as_p }}
+        
+        <h3>Select a Package</h3>
+        <div>
+            {% for package in packages %}
+                <div>
+                    <input type="radio" name="package" value="{{ package.id }}" required>
+                    <label>{{ package.name }} - {{ package.price }} Rs</label>
+                    <p>{{ package.description }}</p>
+                </div>
+            {% endfor %}
+        </div>
+        
         <button type="submit">Sign Up</button>
     </form>
 </body>

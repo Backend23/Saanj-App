@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+</head>
+<body>
+    <h1>Payment</h1>
+    <p>Pay for the {{ vendor.package.name }} package for {{ vendor.package.price }} Rs</p>
+    <img src="{{ qr_path }}" alt="Payment QR Code">
+    <p>Please scan the QR code to complete the payment.</p>
+    <form action="{% url 'confirm_payment' vendor.id %}" method="post">
+        {% csrf_token %}
+        <button type="submit">Confirm Payment</button>
+    </form>
+</body>
+</html>

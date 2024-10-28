@@ -8,41 +8,61 @@
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
-        /* Styles (unchanged) */
+        /* Styles */
+
+        body {
+            background-color: #E0BFB8;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
         .manufacturer-logo {
-            position: absolute;
-            top: 10px;
-            left: 10px;
             width: 100px;
             height: auto;
             z-index: 100;
         }
+
+        .wateramrk {
+            position: absolute;
+            bottom: 20px;
+            right: 10px; /* Adjusted for spacing */
+            width: 75px;
+            height: auto;
+            z-index: 100;
+        }
+
         .header {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            align-items: center; /* Vertical center */
+            justify-content: space-around; /* Horizontal spacing */
             width: 100%;
-            padding: 50px;
+            padding: 35px;
+            background-color: #4A2E2D;
+            color: #FFD700;
             position: relative;
         }
-        .welcome-message {
-            flex-grow: 1;
-            text-align: center;
-        }
+
+        .welcome-message 
+        .search-container
+
         .auth-buttons {
             display: flex;
-            gap: 10px;
-        }
-        .search-container {
-            display: flex;
             align-items: center;
-            margin-top: 20px;
+            justify-content: center; /* Center content horizontally */
         }
+        
+
+        .search-container {
+            margin-top: 0; /* Remove the extra top margin */
+        }
+        
+
         input[type="text"] {
             margin-right: 10px;
             padding: 10px;
             width: 300px;
         }
+
         .button, .logout-button {
             display: inline-block;
             padding: 10px 20px;
@@ -50,46 +70,63 @@
             text-decoration: none;
             color: white;
         }
+
         .button {
             background-color: #4CAF50;
         }
+
         .button:hover {
             background-color: #45a049;
         }
+
         .logout-button {
             background-color: #f44336;
         }
+
         .logout-button:hover {
             background-color: #d32f2f;
         }
+
+        .content {
+            display: flex;
+            margin-top: 20px;
+        }
+
+        .filters {
+            width: 15%;
+            padding: 20px; /* Optional padding for aesthetic */
+        }
+
         .designs {
+            width: 85%;
             display: flex;
             flex-wrap: wrap;
-            justify-content: space-between;
+            justify-content: flex-start;
+            padding: 20px; /* Optional padding for aesthetic */
         }
+
         .design-card {
-            border: 1px solid #ccc;
+            border: 7px solid #E5B80B;
+            background-color: #4A2E2D;
+            color: white;
             border-radius: 5px;
-            padding: 15px;
+            padding: 10px;
             margin: 10px;
             width: calc(33% - 40px);
             transition: filter 0.3s ease-in-out;
         }
+
         .carousel-inner {
-            height: 550px;
+            height: 325px;
         }
+
         .carousel-item img, 
         .carousel-item video {
             object-fit: cover;
             width: 100%;
             height: 100%;
         }
-        .filter select {
-            padding: 10px;
-            margin-right: 10px;
-            width: 200px;
-        }
-        /* Overlay style */
+
         .blackout-overlay {
             position: fixed;
             top: 0;
@@ -100,25 +137,24 @@
             display: none; /* Hidden by default */
             z-index: 999; /* Ensure it covers everything */
         }
-        
-        body:not(:hover) .design-card img {
-            filter: blur(10px);
-            opacity: 0;
-        }
 
         img {
             -webkit-user-drag: none;
             user-drag: none;
         }
-        
+
     </style>
 </head>
 <body>
-    <img src="{% static 'Manufacturer_logo/saanj_logo.png' %}" alt="Manufacturer Logo" class="manufacturer-logo">
+    
 
     <div class="header">
+        <img src="{% static 'Manufacturer_logo/saanj_logo.png' %}" alt="Manufacturer Logo" class="manufacturer-logo">
         <div class="welcome-message">
             <h1>Welcome to Vendor Home</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Search Designs..." onkeyup="filterDesigns()">
         </div>
         <div class="auth-buttons">
             <a href="{% url 'vendor_signup' %}" class="button">Sign Up</a>
@@ -127,95 +163,99 @@
         </div>
     </div>
 
-    <div class="search-container">
-        <input type="text" id="search" placeholder="Search Designs..." onkeyup="filterDesigns()">
-        <div class="filter">
-            <label for="category-filter">Category:</label>
-            <select id="category-filter" onchange="filterDesigns()">
-                <option value="">All Categories</option>
-                {% for category in categories %}
-                    <option value="{{ category.name }}">{{ category.name }}</option>
-                {% endfor %}
-            </select>
+    
 
-            <!-- Subcategory 1 -->
-            <label for="subcategory1-filter">Subcategory 1:</label>
-            <select id="subcategory1-filter" onchange="filterDesigns()">
-                <option value="">All Subcategories</option>
-                {% for subcategory1 in subcategories1 %}
-                    <option value="{{ subcategory1.name }}">{{ subcategory1.name }}</option>
-                {% endfor %}
-            </select>
+    <div class="content">
+        <div class="filters">
+            <div class="filter">
+                <label for="category-filter"><b>Category:</b></label>
+                <select id="category-filter" onchange="filterDesigns()">
+                    <option value="">All Categories</option>
+                    {% for category in categories %}
+                        <option value="{{ category.name }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
 
-            <!-- Subcategory 2 -->
-            <label for="subcategory2-filter">Subcategory 2:</label>
-            <select id="subcategory2-filter" onchange="filterDesigns()">
-                <option value="">All Subcategories</option>
-                {% for subcategory2 in subcategories2 %}
-                    <option value="{{ subcategory2.name }}">{{ subcategory2.name }}</option>
-                {% endfor %}
-            </select>
+                <!-- Subcategory 1 -->
+                <label for="subcategory1-filter"><b>Subcategory 1:</b></label>
+                <select id="subcategory1-filter" onchange="filterDesigns()">
+                    <option value="">All Subcategories</option>
+                    {% for subcategory1 in subcategories1 %}
+                        <option value="{{ subcategory1.name }}">{{ subcategory1.name }}</option>
+                    {% endfor %}
+                </select>
 
-            <!-- Subcategory 3 -->
-            <label for="subcategory3-filter">Subcategory 3:</label>
-            <select id="subcategory3-filter" onchange="filterDesigns()">
-                <option value="">All Subcategories</option>
-                {% for subcategory3 in subcategories3 %}
-                    <option value="{{ subcategory3.name }}">{{ subcategory3.name }}</option>
-                {% endfor %}
-            </select>
+                <!-- Subcategory 2 -->
+                <label for="subcategory2-filter"><b>Subcategory 2:</b></label>
+                <select id="subcategory2-filter" onchange="filterDesigns()">
+                    <option value="">All Subcategories</option>
+                    {% for subcategory2 in subcategories2 %}
+                        <option value="{{ subcategory2.name }}">{{ subcategory2.name }}</option>
+                    {% endfor %}
+                </select>
+
+                <!-- Subcategory 3 -->
+                <label for="subcategory3-filter"><b>Subcategory 3:</b></label>
+                <select id="subcategory3-filter" onchange="filterDesigns()">
+                    <option value="">All Subcategories</option>
+                    {% for subcategory3 in subcategories3 %}
+                        <option value="{{ subcategory3.name }}">{{ subcategory3.name }}</option>
+                    {% endfor %}
+                </select>
+                <!-- Price Range Slider -->
+                <label for="price-range"><b>Price Range:</b></label>
+                <input type="range" id="price-range" min="1000" max="100000" value="100000" step="1000" oninput="filterDesigns()">
+                <span id="price-value">100000</span>
+            </div>
         </div>
-    </div>
-
-    {% for category in categories %}
-    <div class="category-section">
-        <h2>{{ category.name }}</h2>
-        <a href="{% url 'download_pdf' category.id %}" class="button">Download PDF</a>
 
         <div class="designs">
-            {% for design in category.design_set.all %}
-            <div class="design-card" data-category="{{ category.name }}" data-subcategory1="{{ design.subcategory1.name }}" data-subcategory2="{{ design.subcategory2.name }}" data-subcategory3="{{ design.subcategory3.name }}">
-                <div id="carousel-{{ design.id }}" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                        {% if vendor.shop_logo %} 
-                            <img src="{{ vendor.shop_logo.url }}" alt="{{ vendor.shop_name }} Logo" class="watermark">
-                        {% endif %}
-                        {% for image in design.images.all %}
-                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                            <div class="image-container">
-                                <img src="{{ image.image.url }}" alt="{{ design.title }}" class="d-block w-100">
-                            </div>
-                        </div>
-                        {% endfor %}
-                        {% for video in design.videos.all %}
-                        <div class="carousel-item {% if forloop.first and design.images.count == 0 %}active{% endif %}">
-                            <div class="image-container">
-                                <video class="d-block w-100" style="max-height: 400px;" controls>
-                                    <source src="{{ video.video.url }}" type="video/mp4">
-                                    Your browser does not support the video tag.
-                                </video>
-                            </div>
-                        </div>
-                        {% endfor %}
-                    </div>
-                    <a class="carousel-control-prev" href="#carousel-{{ design.id }}" role="button" data-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Previous</span>
-                    </a>
-                    <a class="carousel-control-next" href="#carousel-{{ design.id }}" role="button" data-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                        <span class="sr-only">Next</span>
-                    </a>
-                </div>
+            {% for category in categories %}
+            <div class="category-section">
+                <h2>{{ category.name }}</h2>
+                <a href="{% url 'download_pdf' category.id %}" class="button">Download PDF</a>
 
-                <h3>{{ design.title }}</h3>
-                <p>{{ design.description }}</p>
-                <p>Price: {{ design.price }}</p>
+                <div class="designs">
+                    {% for design in category.design_set.all %}
+                    <div class="design-card" data-category="{{ category.name }}" data-subcategory1="{{ design.subcategory1.name }}" data-subcategory2="{{ design.subcategory2.name }}" data-subcategory3="{{ design.subcategory3.name }}" data-price="{{ design.price }}">
+                        <div id="carousel-{{ design.id }}" class="carousel slide" data-ride="carousel">
+                            <div class="carousel-inner">
+                                {% if vendor.shop_logo %}
+                                    <img src="{{ vendor.shop_logo.url }}" alt="{{ vendor.shop_name }} Logo" class="wateramrk">
+                                {% endif %}
+                                {% for image in design.images.all %}
+                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                    <img src="{{ image.image.url }}" alt="{{ design.title }}" class="d-block w-100">
+                                </div>
+                                {% endfor %}
+                                {% for video in design.videos.all %}
+                                <div class="carousel-item {% if forloop.first and design.images.count == 0 %}active{% endif %}">
+                                    <video class="d-block w-100" controls>
+                                        <source src="{{ video.video.url }}" type="video/mp4">
+                                        Your browser does not support the video tag.
+                                    </video>
+                                </div>
+                                {% endfor %}
+                            </div>
+                            <a class="carousel-control-prev" href="#carousel-{{ design.id }}" role="button" data-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Previous</span>
+                            </a>
+                            <a class="carousel-control-next" href="#carousel-{{ design.id }}" role="button" data-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="sr-only">Next</span>
+                            </a>
+                        </div>
+                        <h3>{{ design.title }}</h3>
+                        <p>{{ design.description }}</p>
+                        <p>Price: {{ design.price }}</p>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
             {% endfor %}
         </div>
     </div>
-    {% endfor %}
 
     <div class="blackout-overlay" id="blackout-overlay"></div>
 
@@ -226,56 +266,35 @@
     <script>
         function filterDesigns() {
             var input = document.getElementById("search").value.toUpperCase();
-            var categoryFilter = document.getElementById("category-filter").value;
-            var subcategory1Filter = document.getElementById("subcategory1-filter").value;
-            var subcategory2Filter = document.getElementById("subcategory2-filter").value;
-            var subcategory3Filter = document.getElementById("subcategory3-filter").value;
-
-            var cards = document.getElementsByClassName("design-card");
-
-            for (var i = 0; i < cards.length; i++) {
-                var title = cards[i].getElementsByTagName("h3")[0].innerText.toUpperCase();
-                var price = cards[i].getElementsByTagName("p")[1].innerText.toUpperCase();
-                var category = cards[i].getAttribute("data-category");
-                var subcategory1 = cards[i].getAttribute("data-subcategory1");
-                var subcategory2 = cards[i].getAttribute("data-subcategory2");
-                var subcategory3 = cards[i].getAttribute("data-subcategory3");
-
-                var matchSearch = title.indexOf(input) > -1 || price.indexOf(input) > -1 || 
-                                  category.toUpperCase().indexOf(input) > -1 || 
-                                  subcategory1.toUpperCase().indexOf(input) > -1 || 
-                                  subcategory2.toUpperCase().indexOf(input) > -1 || 
-                                  subcategory3.toUpperCase().indexOf(input) > -1;
-                var matchCategory = categoryFilter === "" || category === categoryFilter;
-                var matchSubcategory1 = subcategory1Filter === "" || subcategory1 === subcategory1Filter;
-                var matchSubcategory2 = subcategory2Filter === "" || subcategory2 === subcategory2Filter;
-                var matchSubcategory3 = subcategory3Filter === "" || subcategory3 === subcategory3Filter;
-
-                if (matchSearch && matchCategory && matchSubcategory1 && matchSubcategory2 && matchSubcategory3) {
-                    cards[i].style.display = "block";
+            var filters = {
+                category: document.getElementById("category-filter").value,
+                subcategory1: document.getElementById("subcategory1-filter").value,
+                subcategory2: document.getElementById("subcategory2-filter").value,
+                subcategory3: document.getElementById("subcategory3-filter").value,
+                price: parseInt(document.getElementById("price-range").value)
+            };
+    
+            var priceValue = document.getElementById("price-value");
+            priceValue.textContent = filters.price;
+    
+            var designCards = document.querySelectorAll(".design-card");
+            designCards.forEach(function(card) {
+                var title = card.querySelector("h3").innerText.toUpperCase();
+                var matchesSearch = title.includes(input);
+                var matchesFilters = (!filters.category || card.dataset.category === filters.category) &&
+                                     (!filters.subcategory1 || card.dataset.subcategory1 === filters.subcategory1) &&
+                                     (!filters.subcategory2 || card.dataset.subcategory2 === filters.subcategory2) &&
+                                     (!filters.subcategory3 || card.dataset.subcategory3 === filters.subcategory3);
+                var cardPrice = parseInt(card.dataset.price); // Get the price from data attribute
+                var matchesPrice = cardPrice <= filters.price; // Check if card price is within selected range
+    
+                if (matchesSearch && matchesFilters && matchesPrice) {
+                    card.style.display = "block";
                 } else {
-                    cards[i].style.display = "none";
+                    card.style.display = "none";
                 }
-            }
+            });
         }
-
-        // Disable right-click
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
-
-        document.addEventListener('keydown', function (e) {
-            if (e.ctrlKey && (e.key === 'p' || e.key === 's')) {
-                e.preventDefault();
-            }
-        });
-
-        
-
-        // Detect CTRL+P (Print)
-        window.onbeforeprint = function() {
-            alert('Printing is disabled!');
-        };
-    </script>
+    </script>    
 </body>
 </html>

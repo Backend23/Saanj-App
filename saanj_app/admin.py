@@ -1,7 +1,16 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Design, Category, DesignImage, DesignVideo, SubCategory1, SubCategory2, SubCategory3
+from .models import Design, Category, DesignImage, DesignVideo, SubCategory1, SubCategory2, SubCategory3, Package, Vendor
 from .forms import DesignUploadForm
+
+
+@admin.register(Vendor)
+class VendorAdmin(admin.ModelAdmin):
+    list_display = ('shop_name', 'email_id', 'phone_number')
+
+@admin.register(Package)
+class PackageAdmin(admin.ModelAdmin):
+    list_display = ['name', 'price', 'description', 'qr_code']
 
 # Custom Filter for Price Range
 class PriceRangeFilter(admin.SimpleListFilter):

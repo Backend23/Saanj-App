@@ -9,14 +9,9 @@
 </head>
 <body>
     <h1>Vendor Login</h1>
-    <form method="POST" action="{% url 'vendor_login' %}">
+    <form method="post">
         {% csrf_token %}
-        <label for="email">Email:</label>
-        <input type="text" name="email" id="email" required>
-        
-        <label for="password">Password:</label>
-        <input type="password" name="password" id="password" required>
-        
+        {{ form.as_p }}
         <button type="submit">Login</button>
     </form>
     

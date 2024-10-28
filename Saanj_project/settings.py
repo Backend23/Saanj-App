@@ -43,6 +43,10 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'  # Use database sessions
+SESSION_COOKIE_AGE = 1209600  # Two weeks in seconds
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
 ROOT_URLCONF = 'Saanj_project.urls'
 
 TEMPLATES = [
