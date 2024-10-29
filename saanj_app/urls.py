@@ -10,4 +10,5 @@ urlpatterns = [
     path('vendor/confirm_payment/<int:vendor_id>/', views.confirm_payment, name='confirm_payment'),
     path('get_subcategories/', views.get_subcategories, name='get_subcategories'),  # New URL pattern for subcategories
     path('download_pdf/<int:category_id>/', views.download_pdf, name='download_pdf'),
+    path('design/<int:design_id>/', views.design_detail, name='design_detail'),  # New URL for design detail
 ]

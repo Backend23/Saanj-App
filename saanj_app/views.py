@@ -269,3 +269,23 @@ def download_pdf(request, category_id):
 
     p.save()
     return response
+
+@login_required(login_url='/vendor/login/')
+def design_detail(request, design_id):
+    design = get_object_or_404(Design, id=design_id)
+    print(design)
+    vendor = request.user.vendor if hasattr(request.user, 'vendor') else None
+    related_designs = Design.objects.filter(category=design.category).exclude(id=design.id)
+    print(related_designs)
+
+    for related_design in related_designs:
+        print(f"Related Design ID: {related_design.id}, Title: {related_design.title}")
+        for image in related_design.images.all():
+            print(f"Image URL: {image.image.url}")
+
+            
+    return render(request, 'design_detail.html', {
+        'design': design,
+        'vendor': vendor,
+        'related_designs': related_designs,
+    })

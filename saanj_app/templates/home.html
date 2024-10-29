@@ -24,8 +24,8 @@
 
         .wateramrk {
             position: absolute;
-            bottom: 20px;
-            right: 10px; /* Adjusted for spacing */
+            bottom: 10px;
+            right: 0.1px; /* Adjusted for spacing */
             width: 75px;
             height: auto;
             z-index: 100;
@@ -98,11 +98,18 @@
         }
 
         .designs {
-            width: 85%;
+            width: 100%;
             display: flex;
             flex-wrap: wrap;
-            justify-content: flex-start;
+            justify-content: space-between;
             padding: 20px; /* Optional padding for aesthetic */
+        }
+
+        @media (max-width: 768px) {
+            .design-card {
+                width: 100%; /* Full width on smaller screens */
+                margin-bottom: 20px; /* Adds spacing between cards */
+            }
         }
 
         .design-card {
@@ -111,13 +118,27 @@
             color: white;
             border-radius: 5px;
             padding: 10px;
-            margin: 10px;
-            width: calc(33% - 40px);
+            margin: 5px;
+            width: 335px;
+            height: 520px; /* Fixed height */
             transition: filter 0.3s ease-in-out;
+            overflow: hidden; /* Ensures that overflow content is hidden */
+        }
+
+        .design-card h3 {
+            height: 50px; /* Adjust as needed */
+            overflow: hidden; /* Hides overflow text */
+            text-overflow: ellipsis; /* Adds ellipsis for overflowing text */
+        }
+        
+        .design-card p {
+            height: 70px; /* Adjust as needed */
+            overflow: hidden; /* Hides overflow text */
+            text-overflow: ellipsis; /* Adds ellipsis for overflowing text */
         }
 
         .carousel-inner {
-            height: 325px;
+            height: 315px;
         }
 
         .carousel-item img, 
@@ -151,7 +172,7 @@
     <div class="header">
         <img src="{% static 'Manufacturer_logo/saanj_logo.png' %}" alt="Manufacturer Logo" class="manufacturer-logo">
         <div class="welcome-message">
-            <h1>Welcome to Vendor Home</h1>
+            <h1>Welcome {{vendor.shop_name}}</h1>
         </div>
         <div class="search-container">
             <input type="text" id="search" placeholder="Search Designs..." onkeyup="filterDesigns()">
@@ -217,39 +238,46 @@
 
                 <div class="designs">
                     {% for design in category.design_set.all %}
-                    <div class="design-card" data-category="{{ category.name }}" data-subcategory1="{{ design.subcategory1.name }}" data-subcategory2="{{ design.subcategory2.name }}" data-subcategory3="{{ design.subcategory3.name }}" data-price="{{ design.price }}">
-                        <div id="carousel-{{ design.id }}" class="carousel slide" data-ride="carousel">
-                            <div class="carousel-inner">
-                                {% if vendor.shop_logo %}
-                                    <img src="{{ vendor.shop_logo.url }}" alt="{{ vendor.shop_name }} Logo" class="wateramrk">
-                                {% endif %}
-                                {% for image in design.images.all %}
-                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                    <img src="{{ image.image.url }}" alt="{{ design.title }}" class="d-block w-100">
+                    <a href="{% url 'design_detail' design.id %}">
+                        <div class="design-card" data-category="{{ category.name }}" 
+                            data-subcategory1="{{ design.subcategory1.name }}" 
+                            data-subcategory2="{{ design.subcategory2.name }}" 
+                            data-subcategory3="{{ design.subcategory3.name }}" 
+                            data-price="{{ design.price }}">
+
+                            <div id="carousel-{{ design.id }}" class="carousel slide" data-ride="carousel">
+                                <div class="carousel-inner">
+                                    {% if vendor.shop_logo %}
+                                        <img src="{{ vendor.shop_logo.url }}" alt="{{ vendor.shop_name }} Logo" class="wateramrk">
+                                    {% endif %}
+                                    {% for image in design.images.all %}
+                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                        <img src="{{ image.image.url }}" alt="{{ design.title }}" class="d-block w-100">
+                                    </div>
+                                    {% endfor %}
+                                    {% for video in design.videos.all %}
+                                    <div class="carousel-item {% if forloop.first and design.images.count == 0 %}active{% endif %}">
+                                        <video class="d-block w-100" controls>
+                                            <source src="{{ video.video.url }}" type="video/mp4">
+                                            Your browser does not support the video tag.
+                                        </video>
+                                    </div>
+                                    {% endfor %}
                                 </div>
-                                {% endfor %}
-                                {% for video in design.videos.all %}
-                                <div class="carousel-item {% if forloop.first and design.images.count == 0 %}active{% endif %}">
-                                    <video class="d-block w-100" controls>
-                                        <source src="{{ video.video.url }}" type="video/mp4">
-                                        Your browser does not support the video tag.
-                                    </video>
-                                </div>
-                                {% endfor %}
+                                <a class="carousel-control-prev" href="#carousel-{{ design.id }}" role="button" data-slide="prev">
+                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Previous</span>
+                                </a>
+                                <a class="carousel-control-next" href="#carousel-{{ design.id }}" role="button" data-slide="next">
+                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                    <span class="sr-only">Next</span>
+                                </a>
                             </div>
-                            <a class="carousel-control-prev" href="#carousel-{{ design.id }}" role="button" data-slide="prev">
-                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Previous</span>
-                            </a>
-                            <a class="carousel-control-next" href="#carousel-{{ design.id }}" role="button" data-slide="next">
-                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                <span class="sr-only">Next</span>
-                            </a>
+                            <h3>{{ design.title }}</h3>
+                            <p>{{ design.description }}</p>
+                            <p>Price: ₹{{ design.price }}</p>
                         </div>
-                        <h3>{{ design.title }}</h3>
-                        <p>{{ design.description }}</p>
-                        <p>Price: {{ design.price }}</p>
-                    </div>
+                    </a>
                     {% endfor %}
                 </div>
             </div>

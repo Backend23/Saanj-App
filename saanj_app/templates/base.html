@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Vendor Home{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #E0BFB8;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .manufacturer-logo {
+            width: 100px;
+            height: auto;
+            z-index: 100;
+        }
+
+        .watermark {
+            position: absolute;
+            bottom: 20px;
+            right: 10px;
+            width: 75px;
+            height: auto;
+            z-index: 100;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            width: 100%;
+            padding: 35px;
+            background-color: #4A2E2D;
+            color: #FFD700;
+            position: relative;
+        }
+
+        .welcome-message {
+            text-align: center;
+        }
+
+        .search-container {
+            margin-top: 0;
+        }
+
+        input[type="text"] {
+            margin-right: 10px;
+            padding: 10px;
+            width: 300px;
+        }
+
+        .button, .logout-button {
+            display: inline-block;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+        }
+
+        .button {
+            background-color: #4CAF50;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .logout-button {
+            background-color: #f44336;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+        .content {
+            margin-top: 20px;
+            display: flex; /* Added for flex layout */
+        }
+
+        .path {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .filters {
+            width: 15%;
+            padding: 20px; /* Optional padding for aesthetic */
+        }
+
+        .designs {
+            width: 85%;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            padding: 20px; /* Optional padding for aesthetic */
+        }
+
+        .design-card {
+            border: 7px solid #E5B80B;
+            background-color: #4A2E2D;
+            color: white;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px;
+            width: calc(25% - 20px);
+            transition: filter 0.3s ease-in-out;
+        }
+
+        .carousel-inner {
+            height: 325px;
+        }
+
+        .carousel-item img, 
+        .carousel-item video {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        .blackout-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            display: none; /* Hidden by default */
+            z-index: 999; /* Ensure it covers everything */
+        }
+
+        img {
+            -webkit-user-drag: none;
+            user-drag: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">
+        <img src="{% static 'Manufacturer_logo/saanj_logo.png' %}" alt="Manufacturer Logo" class="manufacturer-logo">
+        <div class="welcome-message">
+            <h1>Welcome {{vendor.shop_name}}</h1>
+        </div>
+        <div class="search-container">
+            <input type="text" id="search" placeholder="Search Designs..." onkeyup="filterDesigns()">
+        </div>
+        <div class="auth-buttons">
+            <a href="{% url 'vendor_signup' %}" class="button">Sign Up</a>
+            <a href="{% url 'vendor_login' %}" class="button">Login</a>
+            <a href="{% url 'vendor_logout' %}" class="logout-button">Logout</a>
+        </div>
+    </div>
+
+   
+
+    <div class="path">
+        {% block path %}{% endblock %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        function filterDesigns() {
+            var input = document.getElementById("search").value.toUpperCase();
+            var filters = {
+                category: document.getElementById("category-filter").value,
+                subcategory1: document.getElementById("subcategory1-filter").value,
+                subcategory2: document.getElementById("subcategory2-filter").value,
+                subcategory3: document.getElementById("subcategory3-filter").value,
+                price: parseInt(document.getElementById("price-range").value)
+            };
+    
+            var priceValue = document.getElementById("price-value");
+            priceValue.textContent = filters.price;
+    
+            var designCards = document.querySelectorAll(".design-card");
+            designCards.forEach(function(card) {
+                var title = card.querySelector("h3").innerText.toUpperCase();
+                var matchesSearch = title.includes(input);
+                var matchesFilters = (!filters.category || card.dataset.category === filters.category) &&
+                                     (!filters.subcategory1 || card.dataset.subcategory1 === filters.subcategory1) &&
+                                     (!filters.subcategory2 || card.dataset.subcategory2 === filters.subcategory2) &&
+                                     (!filters.subcategory3 || card.dataset.subcategory3 === filters.subcategory3);
+                var cardPrice = parseInt(card.dataset.price); // Get the price from data attribute
+                var matchesPrice = cardPrice <= filters.price; // Check if card price is within selected range
+    
+                if (matchesSearch && matchesFilters && matchesPrice) {
+                    card.style.display = "block";
+                } else {
+                    card.style.display = "none";
+                }
+            });
+        }
+    </script>    
+</body>
+</html>
