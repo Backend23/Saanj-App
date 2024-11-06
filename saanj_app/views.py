@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
-from .models import Category, Design, DesignImage, DesignVideo, SubCategory1, SubCategory2, SubCategory3, Package
+import json
+from .models import *
 from .forms import  *
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -14,6 +15,8 @@ import os
 from django.conf import settings
 from django.templatetags.static import static  # Import the static function
 import qrcode
+from django.views.decorators.csrf import csrf_exempt
+from decimal import Decimal
 
 
 def vendor_login(request):
@@ -289,3 +292,186 @@ def design_detail(request, design_id):
         'vendor': vendor,
         'related_designs': related_designs,
     })
+
+
+@login_required(login_url='/vendor/login/')
+def vendor_profile(request):
+    vendor = Vendor.objects.get(user=request.user)
+    orders = vendor.order_set.all()  # Get all orders related to this vendor
+    return render(request, 'vendor_profile.html', {'vendor': vendor, 'orders': orders})
+
+@login_required(login_url='/vendor/login/')
+def edit_vendor_profile(request):
+    vendor = Vendor.objects.get(user=request.user)
+    
+    if request.method == 'POST':
+        form = VendorProfileForm(request.POST, instance=vendor)
+        if form.is_valid():
+            form.save()
+            return redirect('vendor_profile')  # Redirect to the profile page after saving
+    else:
+        form = VendorProfileForm(instance=vendor)
+
+    return render(request, 'edit_vendor_profile.html', {'form': form})
+
+@csrf_exempt
+def edit_vendor_logo(request):
+    if request.method == 'POST':
+        # Check if the file is received
+        if 'shop_logo' in request.FILES:
+            try:
+                vendor = Vendor.objects.get(user=request.user)
+                vendor.shop_logo = request.FILES['shop_logo']
+                vendor.save()
+                return JsonResponse({'success': True})
+            except Exception as e:
+                return JsonResponse({'success': False, 'error': str(e)})
+        else:
+            return JsonResponse({'success': False, 'error': 'No file found'})
+    else:
+        print("Request method is not POST.")
+    return JsonResponse({'success': False})
+
+
+# View to handle adding a new address
+def add_address(request):
+    if request.method == "POST":
+        data = json.loads(request.body)
+        form = AddressForm(data)
+        if form.is_valid():
+            # Save the new address, setting the vendor
+            address = form.save(commit=False)
+            address.vendor = request.user.vendor  # Assuming the user is a vendor
+            address.save()
+            return JsonResponse({"success": True})
+        return JsonResponse({"success": False, "error": "Form is not valid"})
+    
+def delete_address(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            address_id = data.get('address_id')
+            
+            # Fetch and delete the address
+            address = Address.objects.get(id=address_id)
+            address.delete()
+            
+            return JsonResponse({'success': True})
+        except Address.DoesNotExist:
+            return JsonResponse({'success': False, 'error': 'Address not found'})
+        except Exception as e:
+            return JsonResponse({'success': False, 'error': str(e)})
+
+    return JsonResponse({'success': False, 'error': 'Invalid request method'})
+
+def place_order(request):
+    if request.method == 'POST':
+        # Get the data from the POST request
+        data = json.loads(request.body)
+        design_id = data.get('design_id')
+        quantity = data.get('quantity', 1)
+        address_id = data.get('address_id')
+
+        # Get the design and address
+        try:
+            design = Design.objects.get(id=design_id)
+            address = Address.objects.get(id=address_id)
+        except Design.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Design not found'})
+        except Address.DoesNotExist:
+            return JsonResponse({'success': False, 'message': 'Address not found'})
+
+        # Ensure quantity is an integer and price is a Decimal
+        try:
+            quantity = int(quantity)  # Ensure quantity is an integer
+            total_price = Decimal(design.price) * quantity  # Ensure price is a Decimal
+        except (ValueError, TypeError):
+            return JsonResponse({'success': False, 'message': 'Invalid quantity or price'})
+
+        # Store the order temporarily and return success
+        order = Order.objects.create(
+            vendor=request.user.vendor,
+            design=design,
+            quantity=quantity,
+            address=address,
+            total_price=total_price
+        )
+
+        return JsonResponse({'success': True, 'message': 'Redirecting to payment.', 'order_id': order.id})
+
+    return JsonResponse({'success': False, 'message': 'Invalid request method'})
+
+def fake_payment(request, order_id):
+    # Get the order details
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        return redirect('vendor_home')  # Redirect to vendor home if the order doesn't exist
+
+    if request.method == 'POST':
+        # Simulate payment success/failure
+        payment_success = True  # Assume it's always successful for this fake payment
+
+        if payment_success:
+            # After successful payment, update the order status
+            order.payment_status = 'Paid'
+            order.order_status = 'Placed'
+            order.save()
+
+            messages.success(request, 'Payment successful! Your order is confirmed.')
+            return redirect('payment_success')  # Redirect to payment success page
+
+        else:
+            messages.error(request, 'Payment failed! Please try again.')
+            return redirect('payment_failure')  # Redirect to payment failure page
+
+    return render(request, 'fake_payment_page.html', {'order': order})
+
+def cancel_order(request):
+    if request.method == 'POST':
+        order_id = request.POST.get('order_id')
+        try:
+            # Retrieve the order object
+            order = Order.objects.get(id=order_id)
+
+            # Cancel the order (you can add your own logic, e.g., marking it as 'Canceled')
+            order.order_status = 'Canceled'
+            order.save()
+
+            messages.info(request, 'Your order has been canceled.')
+            return redirect('vendor_home')  # Redirect to vendor home or a different page
+        except Order.DoesNotExist:
+            messages.error(request, 'Order not found.')
+            return redirect('vendor_home')  # Redirect to vendor home if order doesn't exist
+    return redirect('vendor_home')
+
+def payment_success(request):
+    return render(request, 'payment_success.html')
+
+
+def process_payment(request, order_id):
+    try:
+        # Get the order details by ID
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist:
+        return redirect('vendor_home')  # Redirect to home if order doesn't exist
+
+    if request.method == 'POST':
+        # Simulate payment success/failure (this can be replaced with real payment logic)
+        payment_success = True  # Set this to False for simulating failure
+
+        if payment_success:
+            # After successful payment, update the order status
+            order.payment_status = 'Paid'
+            order.save()
+
+            messages.success(request, 'Payment successful! Your order is confirmed.')
+            return redirect('payment_success')  # Redirect to payment success page
+        else:
+            order.payment_status = 'Failed'
+            order.save()
+
+            messages.error(request, 'Payment failed! Please try again.')
+            return redirect('payment_failure')  # Redirect to failure page
+
+    return redirect('vendor_home')  # Redirect to home if the method is not POST

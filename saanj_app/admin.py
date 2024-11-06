@@ -1,12 +1,17 @@
 from django.contrib import admin
 from django.utils.html import format_html
-from .models import Design, Category, DesignImage, DesignVideo, SubCategory1, SubCategory2, SubCategory3, Package, Vendor
-from .forms import DesignUploadForm
+from .models import *
+from .forms import *
 
 
-@admin.register(Vendor)
 class VendorAdmin(admin.ModelAdmin):
-    list_display = ('shop_name', 'email_id', 'phone_number')
+    list_display = ('shop_name', 'name', 'email_id', 'shop_address', 'package', 'payment_status')
+    search_fields = ('shop_name', 'name', 'email_id')
+
+    def save_model(self, request, obj, form, change):
+        # Optionally, handle vendor-specific logic
+        super().save_model(request, obj, form, change)
+
 
 @admin.register(Package)
 class PackageAdmin(admin.ModelAdmin):
@@ -99,9 +104,55 @@ class DesignAdmin(admin.ModelAdmin):
 
     display_videos.short_description = 'Videos'
 
+class AddressAdmin(admin.ModelAdmin):
+    # Define which fields to display in the list view
+    list_display = ('vendor', 'shop_number', 'street', 'area', 'city', 'state', 'pincode', 'is_default', 'full_address')
+    list_filter = ('is_default',)
+    search_fields = ('vendor__shop_name', 'shop_number', 'street', 'area', 'city', 'state', 'pincode')
+
+    # Adding full_address method to display the complete address in the list view
+    def full_address(self, obj):
+        return obj.full_address()
+    full_address.short_description = 'Full Address'  # Title for the full address column
+
+    # Allow editing of the full address fields directly in the admin form
+    fieldsets = (
+        (None, {
+            'fields': ('vendor', 'shop_number', 'street', 'area', 'city', 'state', 'pincode', 'is_default')
+        }),
+    )
+
+    # Make the address fields more user-friendly
+    def save_model(self, request, obj, form, change):
+        # You can add additional logic if needed before saving the address
+        super().save_model(request, obj, form, change)
+
+# Create a custom admin class for Order
+class OrderAdmin(admin.ModelAdmin):
+    list_display = ('id', 'design', 'vendor_name', 'vendor_shop_name', 'quantity', 'total_price', 'order_status', 'order_date')
+    list_filter = ('order_status',)
+    search_fields = ('design__title', 'vendor__name', 'vendor__shop_name')
+    ordering = ('-order_date',)
+
+    def vendor_name(self, obj):
+        return obj.vendor.name if obj.vendor else 'N/A'
+    vendor_name.admin_order_field = 'vendor__name'  # Allows sorting by vendor name
+    vendor_name.short_description = 'Vendor Name'
+
+    def vendor_shop_name(self, obj):
+        return obj.vendor.shop_name if obj.vendor else 'N/A'
+    vendor_shop_name.admin_order_field = 'vendor__shop_name'  # Allows sorting by shop name
+    vendor_shop_name.short_description = 'Shop Name'
+
+
+# Register the model and the custom admin class
+
 # Registering models
 admin.site.register(Design, DesignAdmin)
 admin.site.register(SubCategory1)
 admin.site.register(SubCategory2)
 admin.site.register(SubCategory3)
 admin.site.register(Category)
+admin.site.register(Address, AddressAdmin)
+admin.site.register(Vendor, VendorAdmin)
+admin.site.register(Order, OrderAdmin)

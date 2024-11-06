@@ -45,6 +45,11 @@ class VendorSignUpForm(forms.ModelForm):
             'password': forms.PasswordInput(),
         }
 
+class VendorProfileForm(forms.ModelForm):
+    class Meta:
+        model = Vendor
+        fields = ['name', 'shop_name', 'shop_address', 'phone_number', 'email_id']
+
 
 class VendorLoginForm(forms.Form):
     email = forms.EmailField(label='Email')
@@ -57,3 +62,10 @@ class AdminLoginForm(AuthenticationForm):
         widgets = {
             'password': forms.PasswordInput(),
         }
+
+class AddressForm(forms.ModelForm):
+    class Meta:
+        model = Address
+        fields = ['shop_number', 'street', 'area', 'city', 'state', 'pincode', 'is_default']
+
+    is_default = forms.BooleanField(initial=True, required=False)

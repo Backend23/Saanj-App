@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vendor Profile</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Styles */
+        body {
+            background-color: #E0BFB8;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #4A2E2D;
+            color: #FFD700;
+        }
+
+        .manufacturer-logo {
+            width: 80px;
+        }
+
+        .welcome-message h1 {
+            margin: 0;
+        }
+
+        .profile-container {
+            position: relative;
+        }
+
+        .profile-icon {
+            width: 40px;
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            z-index: 1000;
+            display: none;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            width: 20px;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dropdown-open .dropdown-menu {
+            display: block; /* Show when open */
+            right: 200px;
+            width: 20px;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .button, .logout-button {
+            padding: 12px 25px;
+            border-radius: 5px;
+            text-decoration: none;
+            color: white;
+            font-size: 1.1rem; /* Increase button font size */
+        }
+
+        .button {
+            background-color: #4CAF50;
+        }
+
+        .button:hover {
+            background-color: #45a049;
+        }
+
+        .logout-button {
+            background-color: #f44336;
+        }
+
+        .logout-button:hover {
+            background-color: #d32f2f;
+        }
+
+
+        .container {
+            max-width: 800px;
+            margin: 30px auto;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            position: relative;
+        }
+
+        .profile-info p {
+            font-size: 18px;
+            margin: 10px 0;
+        }
+
+        /* Vendor logo */
+        .vendor-logo {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            position: absolute;
+            top: -20px;
+            right: 20px;
+            border: 3px solid #6F4C3E;
+            background-color: #fff;
+        }
+
+        .edit-logo-btn {
+            display: inline-block;
+            margin-top: 10px;
+            color: #FFF;
+            background-color: #007BFF;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            position: absolute;
+            top: 80px;
+            right: 30px;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        /* Blur effect */
+        .blurred {
+            filter: blur(8px);
+        }
+
+    </style>
+</head>
+<body onmouseleave="applyBlur()" onmouseenter="removeBlur()" oncontextmenu="return false;">
+
+    <div class="header">
+        <img src="{% static 'Manufacturer_logo/saanj_logo.png' %}" alt="Manufacturer Logo" class="manufacturer-logo">
+        <div class="welcome-message">
+            <h1>Welcome {{ vendor.shop_name }}</h1>
+        </div>
+        <div class="profile-container" onclick="toggleDropdown()">
+            <img src="{% static 'icons/user.png' %}" alt="Profile" class="profile-icon">
+            <div class="dropdown-menu" id="dropdown-menu">
+                <a href="{% url 'vendor_profile' %}">Profile</a>
+                <a href="{% url 'vendor_logout' %}">Logout</a>
+            </div>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Vendor Logo -->
+        <img src="{{ vendor.shop_logo.url }}" alt="Vendor Logo" class="vendor-logo">
+        <!-- Edit Logo Button -->
+        <label for="file-input" class="edit-logo-btn">Edit Logo</label>
+        <input type="file" id="file-input" class="file-input" name="shop_logo" accept="image/*" onchange="uploadLogo()">
+
+        <!-- Nav Tabs -->
+        <ul class="nav nav-tabs" id="profileTabs" role="tablist">
+            <li class="nav-item">
+                <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile Information</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">Placed Orders</a>
+            </li>
+        </ul>
+
+        <!-- Tab Content -->
+        <div class="tab-content" id="profileTabsContent">
+            <!-- Profile Information Tab -->
+            <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+                <h1>Profile Information</h1>
+                <div class="profile-info">
+                    <p><strong>Name:</strong> {{ vendor.name }}</p>
+                    <p><strong>Shop Name:</strong> {{ vendor.shop_name }}</p>
+                    <p><strong>Email:</strong> {{ vendor.email_id }}</p>
+                    <p><strong>Phone Number:</strong> {{ vendor.phone_number }}</p>
+                    <p><strong>Address:</strong> {{ vendor.shop_address }}</p>
+                </div>
+            </div>
+
+            <!-- Placed Orders Tab -->
+            <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
+                <h4>Placed Orders</h4>
+                {% if orders %}
+                    <ul>
+                        {% for order in orders %}
+                            <li>
+                                <strong>Order ID:</strong> {{ order.id }} <br>
+                                <strong>Design:</strong> {{ order.design.title }} <br>
+                                <strong>Quantity:</strong> {{ order.quantity }} <br>
+                                <strong>Total Price:</strong> ₹{{ order.total_price }} <br>
+                                <strong>Order Status:</strong> {{ order.order_status }} <br>
+                                <strong>Order Date:</strong> {{ order.order_date|date:"Y-m-d H:i" }} <br>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p>No orders placed yet.</p>
+                {% endif %}
+            </div>
+        </div>
+
+        <a href="{% url 'vendor_home' %}" class="btn btn-secondary">Back to Home</a>
+        <a href="{% url 'edit_vendor_profile' %}" class="btn btn-primary">Edit Profile</a>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        function toggleDropdown() {
+            document.querySelector('.profile-container').classList.toggle('dropdown-open');
+        }
+
+        function uploadLogo() {
+            const fileInput = document.getElementById('file-input');
+            if (fileInput.files.length > 0) {
+                const formData = new FormData();
+                formData.append('shop_logo', fileInput.files[0]);  // Ensure this matches the input name
+        
+                fetch("{% url 'edit_vendor_logo' %}", {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': '{{ csrf_token }}'
+                    },
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data);  // Log the response for debugging
+                    if (data.success) {
+                        alert('Logo updated successfully!');
+                        location.reload();  // Reload the page to show the updated logo
+                    } else {
+                        alert('Failed to update logo.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('An error occurred during the upload.');
+                });
+            }
+        }
+
+        // Disable CTRL+P and CTRL+S
+        document.addEventListener('keydown', function(event) {
+            if ((event.ctrlKey && event.key === 'p') || (event.ctrlKey && event.key === 's')) {
+                event.preventDefault();
+                alert('Print and Save are disabled on this page.');
+            }
+        });
+
+        // Apply blur to all design images when cursor leaves the page
+        function applyBlur() {
+            const designImages = document.querySelectorAll(".design-image");
+            designImages.forEach((image) => {
+                image.classList.add("blurred");
+            });
+        }
+
+        // Remove blur from all design images when cursor re-enters the page
+        function removeBlur() {
+            const designImages = document.querySelectorAll(".design-image");
+            designImages.forEach((image) => {
+                image.classList.remove("blurred");
+            });
+        }
+
+        // Disable right-click context menu
+        document.addEventListener("contextmenu", (e) => {
+            e.preventDefault();
+        });
+    </script>
+</body>
+</html>

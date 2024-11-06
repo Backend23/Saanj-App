@@ -16,12 +16,6 @@
             color: #333;
         }
 
-        .manufacturer-logo {
-            width: 100px;
-            height: auto;
-            z-index: 100;
-        }
-
         .wateramrk {
             position: absolute;
             bottom: 10px;
@@ -33,42 +27,68 @@
 
         .header {
             display: flex;
-            align-items: center; /* Vertical center */
-            justify-content: space-around; /* Horizontal spacing */
-            width: 100%;
-            padding: 35px;
+            align-items: center;
+            justify-content: space-between;
+            padding: 10px;
             background-color: #4A2E2D;
             color: #FFD700;
+        }
+
+
+        .manufacturer-logo {
+            width: 80px;
+        }
+
+        .welcome-message h1 {
+            margin: 0;
+        }
+
+        /* Profile dropdown styles */
+        .profile-container {
             position: relative;
         }
 
-        .welcome-message 
-        .search-container
+        .profile-icon {
+            width: 40px; /* Adjust size as needed */
+            cursor: pointer;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            right: 0;
+            z-index: 1000;
+            display: none; /* Hide by default */
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px;
+            text-decoration: none;
+            color: black;
+        }
+
+        .dropdown-menu a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .dropdown-open .dropdown-menu {
+            display: block; /* Show when open */
+        }
 
         .auth-buttons {
             display: flex;
-            align-items: center;
-            justify-content: center; /* Center content horizontally */
-        }
-        
-
-        .search-container {
-            margin-top: 0; /* Remove the extra top margin */
-        }
-        
-
-        input[type="text"] {
-            margin-right: 10px;
-            padding: 10px;
-            width: 300px;
+            gap: 10px;
         }
 
         .button, .logout-button {
-            display: inline-block;
-            padding: 10px 20px;
+            padding: 12px 25px;
             border-radius: 5px;
             text-decoration: none;
             color: white;
+            font-size: 1.1rem; /* Increase button font size */
         }
 
         .button {
@@ -85,6 +105,18 @@
 
         .logout-button:hover {
             background-color: #d32f2f;
+        }
+        
+
+        .search-container {
+            margin-top: 0; /* Remove the extra top margin */
+        }
+        
+
+        input[type="text"] {
+            margin-right: 10px;
+            padding: 10px;
+            width: 300px;
         }
 
         .content {
@@ -164,9 +196,14 @@
             user-drag: none;
         }
 
+        /* Blur effect */
+        .blurred {
+            filter: blur(8px);
+        }
+
     </style>
 </head>
-<body>
+<body onmouseleave="applyBlur()" onmouseenter="removeBlur()" oncontextmenu="return false;">
     
 
     <div class="header">
@@ -177,10 +214,13 @@
         <div class="search-container">
             <input type="text" id="search" placeholder="Search Designs..." onkeyup="filterDesigns()">
         </div>
-        <div class="auth-buttons">
-            <a href="{% url 'vendor_signup' %}" class="button">Sign Up</a>
-            <a href="{% url 'vendor_login' %}" class="button">Login</a>
-            <a href="{% url 'vendor_logout' %}" class="logout-button">Logout</a>
+         <!-- Profile section -->
+         <div class="profile-container" onclick="toggleDropdown()">
+            <img src="{% static 'icons/user.png' %}" alt="Profile" class="profile-icon">
+            <div class="dropdown-menu" id="dropdown-menu">
+                <a href="{% url 'vendor_profile' %}">Profile</a>
+                <a href="{% url 'vendor_logout' %}">Logout</a>
+            </div>
         </div>
     </div>
 
@@ -252,12 +292,12 @@
                                     {% endif %}
                                     {% for image in design.images.all %}
                                     <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                        <img src="{{ image.image.url }}" alt="{{ design.title }}" class="d-block w-100">
+                                        <img src="{{ image.image.url }}" alt="{{ design.title }}" class="d-block w-100 design-image">
                                     </div>
                                     {% endfor %}
                                     {% for video in design.videos.all %}
                                     <div class="carousel-item {% if forloop.first and design.images.count == 0 %}active{% endif %}">
-                                        <video class="d-block w-100" controls>
+                                        <video class="d-block w-100 design-image" controls>
                                             <source src="{{ video.video.url }}" type="video/mp4">
                                             Your browser does not support the video tag.
                                         </video>
@@ -292,6 +332,23 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <script>
+
+        function toggleDropdown() {
+            document.querySelector('.profile-container').classList.toggle('dropdown-open');
+        }
+
+        window.onclick = function(event) {
+            if (!event.target.matches('.profile-icon')) {
+                let dropdowns = document.getElementsByClassName("dropdown-menu");
+                for (let i = 0; i < dropdowns.length; i++) {
+                    let openDropdown = dropdowns[i];
+                    if (openDropdown.style.display === 'block') {
+                        openDropdown.style.display = 'none';
+                    }
+                }
+            }
+        }
+
         function filterDesigns() {
             var input = document.getElementById("search").value.toUpperCase();
             var filters = {
@@ -323,6 +380,40 @@
                 }
             });
         }
+
+        // Disable CTRL+P and CTRL+S
+        document.addEventListener('keydown', function(event) {
+            if ((event.ctrlKey && event.key === 'p') || (event.ctrlKey && event.key === 's')) {
+                event.preventDefault();
+                alert('Print and Save are disabled on this page.');
+            }
+        });
+
+        // Apply blur to all design images when cursor leaves the page
+        function applyBlur() {
+            const designImages = document.querySelectorAll(".design-image");
+            designImages.forEach((image) => {
+                image.classList.add("blurred");
+            });
+        }
+
+        // Remove blur from all design images when cursor re-enters the page
+        function removeBlur() {
+            const designImages = document.querySelectorAll(".design-image");
+            designImages.forEach((image) => {
+                image.classList.remove("blurred");
+            });
+        }
+
+        // Disable right-click context menu
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+        });
+
+        // Disable print using browser's menu (Print option) and Ctrl+P
+        document.addEventListener('beforeprint', function(event) {
+            event.preventDefault();  // Prevent print
+        });
     </script>    
 </body>
 </html>

@@ -6,25 +6,142 @@
     <title>Vendor Sign Up</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Body styling */
+        body {
+            background: linear-gradient(135deg, #E0BFB8, #4A2E2D);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        /* Centered container styling */
+        .signup-container {
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 30px 40px;
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+
+        /* Header styling */
+        .signup-container h1 {
+            font-size: 2rem;
+            color: #4A2E2D;
+            margin-bottom: 20px;
+        }
+
+        /* Form elements styling */
+        .signup-container form .form-group {
+            text-align: left;
+        }
+
+        .signup-container form label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .signup-container form input[type="text"],
+        .signup-container form input[type="password"],
+        .signup-container form input[type="email"],
+        .signup-container form select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        /* Button styling */
+        .signup-container button,
+        .login-btn {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        /* Sign Up button styling */
+        .signup-container button {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .signup-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Login button styling */
+        .login-btn {
+            background-color: #FFD700;
+            color: #4A2E2D;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .login-btn:hover {
+            background-color: #E5B80B;
+        }
+
+        /* Package selection styling */
+        .package-option {
+            background-color: #F8F8F8;
+            border: 1px solid #E0E0E0;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 10px;
+            text-align: left;
+        }
+
+        .package-option label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        .package-option p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #555;
+        }
+    </style>
 </head>
 <body>
-    <h1>Vendor Sign Up</h1>
-    <form method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {{ form.as_p }}
+    <div class="signup-container">
+        <h1>Vendor Sign Up</h1>
         
-        <h3>Select a Package</h3>
-        <div>
-            {% for package in packages %}
-                <div>
-                    <input type="radio" name="package" value="{{ package.id }}" required>
-                    <label>{{ package.name }} - {{ package.price }} Rs</label>
-                    <p>{{ package.description }}</p>
-                </div>
-            {% endfor %}
-        </div>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}  <!-- Ensure each form field is properly rendered -->
+            </div>
+
+            <h3>Select a Package</h3>
+            <div>
+                {% for package in packages %}
+                    <div class="package-option">
+                        <input type="radio" name="package" value="{{ package.id }}" required>
+                        <label>{{ package.name }} - {{ package.price }} Rs</label>
+                        <p>{{ package.description }}</p>
+                    </div>
+                {% endfor %}
+            </div>
+            
+            <button type="submit">Sign Up</button>
+        </form>
         
-        <button type="submit">Sign Up</button>
-    </form>
+        <!-- Login button -->
+        <a href="{% url 'vendor_login' %}" class="login-btn">Already have an account? Login</a>
+    </div>
 </body>
 </html>

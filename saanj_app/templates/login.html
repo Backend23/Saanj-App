@@ -5,18 +5,107 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vendor Login</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">  <!-- Add your CSS file -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Body styling */
+        body {
+            background: linear-gradient(135deg, #E0BFB8, #4A2E2D);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #333;
+        }
+
+        /* Centered container styling */
+        .login-container {
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            padding: 30px;
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        /* Header styling */
+        .login-container h1 {
+            font-size: 1.8rem;
+            color: #4A2E2D;
+            margin-bottom: 20px;
+        }
+
+        /* Form styling */
+        .login-container form .form-group {
+            margin-bottom: 1rem;
+            text-align: left;
+        }
+
+        /* Button styling */
+        .login-container button,
+        .signup-btn {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        /* Login button styling */
+        .login-container button {
+            background-color: #4CAF50;
+            color: #fff;
+        }
+
+        .login-container button:hover {
+            background-color: #45a049;
+        }
+
+        /* Signup button styling */
+        .signup-btn {
+            display: inline-block;
+            background-color: #FFD700;
+            color: #4A2E2D;
+            text-align: center;
+            text-decoration: none;
+        }
+
+        .signup-btn:hover {
+            background-color: #E5B80B;
+        }
+
+        /* Error message styling */
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
 </head>
 <body>
-    <h1>Vendor Login</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Login</button>
-    </form>
-    
-    {% if error %}
-        <p style="color:red;">{{ error }}</p>
-    {% endif %}
+    <div class="login-container">
+        <h1>Vendor Login</h1>
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.as_p }}
+            </div>
+            <button type="submit">Login</button>
+        </form>
+
+        <!-- Signup button -->
+        <a href="{% url 'vendor_signup' %}" class="signup-btn">Sign Up</a>
+
+        <!-- Error message -->
+        {% if error %}
+            <p class="error-message">{{ error }}</p>
+        {% endif %}
+    </div>
 </body>
 </html>
