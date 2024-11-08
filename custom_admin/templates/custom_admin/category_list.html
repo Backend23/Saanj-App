@@ -1,0 +1,33 @@
+{% extends 'custom_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="category-list">
+    <h2>Categories</h2>
+    <table class="category-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Parent Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for category in categories %}
+            <tr>
+                <td>{{ category.name }}</td>
+                <td>{{ category.parent }}</td>
+                <td>
+                    <a href="{% url 'category_update' category.id %}" class="btn btn-link">Edit</a>
+                    <a href="{% url 'category_delete' category.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'custom_admin/css/category_list.css' %}">
+{% endblock %}

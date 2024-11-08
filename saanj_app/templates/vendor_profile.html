@@ -173,17 +173,14 @@
     <div class="container">
         <!-- Vendor Logo -->
         <img src="{{ vendor.shop_logo.url }}" alt="Vendor Logo" class="vendor-logo">
-        <!-- Edit Logo Button -->
-        <label for="file-input" class="edit-logo-btn">Edit Logo</label>
-        <input type="file" id="file-input" class="file-input" name="shop_logo" accept="image/*" onchange="uploadLogo()">
-
+       
         <!-- Nav Tabs -->
         <ul class="nav nav-tabs" id="profileTabs" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="true">Profile Information</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">Placed Orders</a>
+                <a class="nav-link" id="orders-tab" data-toggle="tab" href="#orders" role="tab" aria-controls="orders" aria-selected="false">Your Orders</a>
             </li>
         </ul>
 
@@ -200,26 +197,53 @@
                     <p><strong>Address:</strong> {{ vendor.shop_address }}</p>
                 </div>
             </div>
-
-            <!-- Placed Orders Tab -->
+        
+            <!-- Orders Section with Multiple Tabs -->
             <div class="tab-pane fade" id="orders" role="tabpanel" aria-labelledby="orders-tab">
-                <h4>Placed Orders</h4>
-                {% if orders %}
-                    <ul>
-                        {% for order in orders %}
-                            <li>
-                                <strong>Order ID:</strong> {{ order.id }} <br>
-                                <strong>Design:</strong> {{ order.design.title }} <br>
-                                <strong>Quantity:</strong> {{ order.quantity }} <br>
-                                <strong>Total Price:</strong> ₹{{ order.total_price }} <br>
-                                <strong>Order Status:</strong> {{ order.order_status }} <br>
-                                <strong>Order Date:</strong> {{ order.order_date|date:"Y-m-d H:i" }} <br>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% else %}
-                    <p>No orders placed yet.</p>
-                {% endif %}
+                <h4>Your Orders</h4>
+                <!-- Sub-tabs for Order Status -->
+                <ul class="nav nav-tabs" id="orderStatusTabs" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="placed-orders-tab" data-toggle="tab" href="#placed-orders" role="tab" aria-controls="placed-orders" aria-selected="true">Placed Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="in-making-orders-tab" data-toggle="tab" href="#in-making-orders" role="tab" aria-controls="in-making-orders" aria-selected="false">In Making Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="shipped-orders-tab" data-toggle="tab" href="#shipped-orders" role="tab" aria-controls="shipped-orders" aria-selected="false">Shipped Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="delivered-orders-tab" data-toggle="tab" href="#delivered-orders" role="tab" aria-controls="delivered-orders" aria-selected="false">Delivered Orders</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="canceled-orders-tab" data-toggle="tab" href="#canceled-orders" role="tab" aria-controls="canceled-orders" aria-selected="false">Canceled Orders</a>
+                    </li>
+                </ul>
+        
+                <!-- Content for Each Order Status -->
+                <div class="tab-content" id="orderStatusTabsContent">
+                    {% for status, orders in orders_by_status.items %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="{{ status|slugify }}-orders" role="tabpanel" aria-labelledby="{{ status|slugify }}-orders-tab">
+                            <h5>{{ status|title }} Orders</h5>
+                            {% if orders %}
+                                <ul>
+                                    {% for order in orders %}
+                                        <li>
+                                            <strong>Order ID:</strong> {{ order.id }} <br>
+                                            <strong>Design:</strong> {{ order.design.title }} <br>
+                                            <strong>Quantity:</strong> {{ order.quantity }} <br>
+                                            <strong>Total Price:</strong> ₹{{ order.total_price }} <br>
+                                            <strong>Order Status:</strong> {{ order.order_status }} <br>
+                                            <strong>Order Date:</strong> {{ order.order_date|date:"Y-m-d H:i" }} <br>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            {% else %}
+                                <p>No {{ status }} orders found.</p>
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>
 

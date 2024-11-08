@@ -11,9 +11,18 @@
 <body>
     <div class="container">
         <h1>Edit Profile</h1>
-        <form method="POST">
+        <form method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {{ form.as_p }}
+            
+            <!-- Display existing logo if available -->
+            {% if vendor.shop_logo %}
+                <div class="form-group">
+                    <label>Current Logo:</label><br>
+                    <img src="{{ vendor.shop_logo.url }}" alt="Current Logo" width="150">
+                </div>
+            {% endif %}
+            
             <button type="submit" class="btn btn-primary">Save Changes</button>
             <a href="{% url 'vendor_profile' %}" class="btn btn-secondary">Cancel</a>
         </form>

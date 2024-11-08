@@ -31,6 +31,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django_extensions',
     'saanj_app',
+    'custom_admin',
 ]
 
 MIDDLEWARE = [
@@ -113,7 +114,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Absolute path to the directory where collectstatic will collect static files for deployment
 STATIC_ROOT = BASE_DIR / 'staticfiles'  # This will create a directory named 'staticfiles' in your project root
@@ -121,6 +122,7 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'  # This will create a directory named 'st
 # Optionally, you can define where to find static files in development
 STATICFILES_DIRS = [
     BASE_DIR /'saanj_app'/'static',  # This should point to where your app-specific static files are located
+    BASE_DIR / 'custom_admin/static',  # Include custom admin static files
 ]
 
 # Default primary key field type

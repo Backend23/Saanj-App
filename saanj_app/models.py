@@ -30,6 +30,17 @@ class SubCategory3(models.Model):
 
     def __str__(self):
         return self.name
+    
+class Package(models.Model):
+    name = models.CharField(max_length=100)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    description = models.TextField(default="No description provided.")
+    qr_code = models.ImageField(upload_to='qrcodes/', null=True, blank=True)
+    level = models.IntegerField(default=1)  # Add a level to indicate package hierarchy
+
+    def __str__(self):
+        return self.name
+
 
 class Design(models.Model):
     title = models.CharField(max_length=200)
@@ -40,6 +51,7 @@ class Design(models.Model):
     subcategory1 = models.ForeignKey(SubCategory1, on_delete=models.CASCADE, null=True, blank=True)
     subcategory2 = models.ForeignKey(SubCategory2, on_delete=models.CASCADE, null=True, blank=True)
     subcategory3 = models.ForeignKey(SubCategory3, on_delete=models.CASCADE, null=True, blank=True)
+    package = models.ForeignKey(Package, on_delete=models.CASCADE, related_name='designs', null=True)
 
     def __str__(self):
         return self.title
@@ -65,14 +77,6 @@ class DesignVideo(models.Model):
     def __str__(self):
         return f'Video for {self.design.title}'
     
-class Package(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=10, decimal_places=2)
-    description = models.TextField(default="No description provided.")
-    qr_code = models.ImageField(upload_to='qrcodes/', null=True, blank=True)  # Add QR code field
-
-    def __str__(self):
-        return self.name
 
 
 

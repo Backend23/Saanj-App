@@ -1,0 +1,17 @@
+{% extends 'custom_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="design-form">
+    <h2>{{ form.instance.pk|yesno:"Edit Design,Add New Design" }}</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Save</button>
+    </form>
+</div>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'custom_admin/css/design_form.css' %}">
+{% endblock %}

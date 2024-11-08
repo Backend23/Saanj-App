@@ -16,7 +16,7 @@
             color: #333;
         }
 
-        .wateramrk {
+        .watermark {
             position: absolute;
             bottom: 10px;
             right: 0.1px; /* Adjusted for spacing */
@@ -236,7 +236,7 @@
                         <option value="{{ category.name }}">{{ category.name }}</option>
                     {% endfor %}
                 </select>
-
+    
                 <!-- Subcategory 1 -->
                 <label for="subcategory1-filter"><b>Subcategory 1:</b></label>
                 <select id="subcategory1-filter" onchange="filterDesigns()">
@@ -245,7 +245,7 @@
                         <option value="{{ subcategory1.name }}">{{ subcategory1.name }}</option>
                     {% endfor %}
                 </select>
-
+    
                 <!-- Subcategory 2 -->
                 <label for="subcategory2-filter"><b>Subcategory 2:</b></label>
                 <select id="subcategory2-filter" onchange="filterDesigns()">
@@ -254,7 +254,7 @@
                         <option value="{{ subcategory2.name }}">{{ subcategory2.name }}</option>
                     {% endfor %}
                 </select>
-
+    
                 <!-- Subcategory 3 -->
                 <label for="subcategory3-filter"><b>Subcategory 3:</b></label>
                 <select id="subcategory3-filter" onchange="filterDesigns()">
@@ -263,73 +263,82 @@
                         <option value="{{ subcategory3.name }}">{{ subcategory3.name }}</option>
                     {% endfor %}
                 </select>
+    
                 <!-- Price Range Slider -->
                 <label for="price-range"><b>Price Range:</b></label>
                 <input type="range" id="price-range" min="1000" max="100000" value="100000" step="1000" oninput="filterDesigns()">
                 <span id="price-value">100000</span>
             </div>
         </div>
-
+    
         <div class="designs">
             {% for category in categories %}
             <div class="category-section">
                 <h2>{{ category.name }}</h2>
                 <a href="{% url 'download_pdf' category.id %}" class="button">Download PDF</a>
 
-                <div class="designs">
-                    {% for design in category.design_set.all %}
-                    <a href="{% url 'design_detail' design.id %}">
-                        <div class="design-card" data-category="{{ category.name }}" 
-                            data-subcategory1="{{ design.subcategory1.name }}" 
-                            data-subcategory2="{{ design.subcategory2.name }}" 
-                            data-subcategory3="{{ design.subcategory3.name }}" 
-                            data-price="{{ design.price }}">
-
-                            <div id="carousel-{{ design.id }}" class="carousel slide" data-ride="carousel">
-                                <div class="carousel-inner">
-                                    {% if vendor.shop_logo %}
-                                        <img src="{{ vendor.shop_logo.url }}" alt="{{ vendor.shop_name }} Logo" class="wateramrk">
-                                    {% endif %}
-                                    {% for image in design.images.all %}
-                                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
-                                        <img src="{{ image.image.url }}" alt="{{ design.title }}" class="d-block w-100 design-image">
+                {% if category.designs %}
+                    <div class="designs">
+                        {% for design in category.designs %}
+                            <a href="{% url 'design_detail' design.id %}">
+                                <div class="design-card" data-category="{{ category.name }}" 
+                                    data-subcategory1="{{ design.subcategory1.name }}" 
+                                    data-subcategory2="{{ design.subcategory2.name }}" 
+                                    data-subcategory3="{{ design.subcategory3.name }}" 
+                                    data-price="{{ design.price }}">
+                                    
+                              
+                                    <div id="carousel-{{ design.id }}" class="carousel slide" data-ride="carousel">
+                                        <div class="carousel-inner">
+                                            {% if vendor.shop_logo %}
+                                                <img src="{{ vendor.shop_logo.url }}" alt="{{ vendor.shop_name }} Logo" class="watermark">
+                                            {% endif %}
+                                            {% for image in design.images.all %}
+                                                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                                                    <img src="{{ image.image.url }}" alt="{{ design.title }}">
+                                                </div>
+                                            {% endfor %}
+                                            {% for video in design.videos.all %}
+                                            <div class="carousel-item {% if forloop.first and design.images.count == 0 %}active{% endif %}">
+                                                <video class="d-block w-100 design-image" controls>
+                                                    <source src="{{ video.video.url }}" type="video/mp4">
+                                                    Your browser does not support the video tag.
+                                                </video>
+                                            </div>
+                                            {% endfor %}
+                                        </div>
+                                        <a class="carousel-control-prev" href="#carousel-{{ design.id }}" role="button" data-slide="prev">
+                                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Previous</span>
+                                        </a>
+                                        <a class="carousel-control-next" href="#carousel-{{ design.id }}" role="button" data-slide="next">
+                                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                            <span class="sr-only">Next</span>
+                                        </a>
                                     </div>
-                                    {% endfor %}
-                                    {% for video in design.videos.all %}
-                                    <div class="carousel-item {% if forloop.first and design.images.count == 0 %}active{% endif %}">
-                                        <video class="d-block w-100 design-image" controls>
-                                            <source src="{{ video.video.url }}" type="video/mp4">
-                                            Your browser does not support the video tag.
-                                        </video>
-                                    </div>
-                                    {% endfor %}
+                                    <h3>{{ design.title }}</h3>
+                                    <p>{{ design.description }}</p>
+                                    <p>Price: ₹{{ design.price }}</p>
                                 </div>
-                                <a class="carousel-control-prev" href="#carousel-{{ design.id }}" role="button" data-slide="prev">
-                                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Previous</span>
-                                </a>
-                                <a class="carousel-control-next" href="#carousel-{{ design.id }}" role="button" data-slide="next">
-                                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                                    <span class="sr-only">Next</span>
-                                </a>
-                            </div>
-                            <h3>{{ design.title }}</h3>
-                            <p>{{ design.description }}</p>
-                            <p>Price: ₹{{ design.price }}</p>
-                        </div>
-                    </a>
-                    {% endfor %}
-                </div>
+                            </a>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                <p>No designs available for this category.</p>
+                {% endif %}
             </div>
             {% endfor %}
         </div>
     </div>
+    
 
     <div class="blackout-overlay" id="blackout-overlay"></div>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
 
@@ -405,10 +414,6 @@
             });
         }
 
-        // Disable right-click context menu
-        document.addEventListener('contextmenu', function(e) {
-            e.preventDefault();
-        });
 
         // Disable print using browser's menu (Print option) and Ctrl+P
         document.addEventListener('beforeprint', function(event) {

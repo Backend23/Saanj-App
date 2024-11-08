@@ -12,11 +12,13 @@ from reportlab.pdfgen import canvas
 from reportlab.lib.utils import ImageReader
 from django.contrib.auth import authenticate, login
 import os
+from django.db.models import Q
 from django.conf import settings
 from django.templatetags.static import static  # Import the static function
 import qrcode
 from django.views.decorators.csrf import csrf_exempt
 from decimal import Decimal
+from django.db.models import Prefetch
 
 
 def vendor_login(request):
@@ -140,10 +142,14 @@ def get_subcategories(request):
     
     return JsonResponse(response_data, safe=False)
 
+from collections import defaultdict
+from django.db.models import Prefetch
+
+from django.db.models import Q
+
 @login_required(login_url='/vendor/login/')
 def vendor_home(request):
     vendor_id = request.session.get('vendor_id')
-    print(vendor_id)
     print(f"Vendor ID from session: {vendor_id}")  # Debugging line
     vendor = None
 
@@ -151,24 +157,55 @@ def vendor_home(request):
         try:
             vendor = Vendor.objects.get(id=vendor_id)
             print(f"Vendor found: {vendor}")  # Debugging line
-            print(vendor.shop_logo.url)
-            print("Loading vendor_home view")
         except Vendor.DoesNotExist:
             print("Vendor does not exist.")  # Debugging line
+            return redirect('/vendor/login/')
     else:
         print("No vendor ID found in session.")  # Debugging line
+        return redirect('/vendor/login/')
 
-    # Fetch all categories and related designs
-    categories = Category.objects.prefetch_related('design_set__images', 'design_set__videos').all()
-    for i in categories:
-        print(i.id)
+    # Ensure the vendor is logged in and has a package
+    if vendor and vendor.package:
+        # Retrieve vendor's package level
+        vendor_package_level = vendor.package.level
+        print('Vendor package level:', vendor_package_level)
+
+        # Filter designs based on the vendor's package level, excluding any without packages
+        allowed_designs = Design.objects.filter(
+            Q(package__level__lte=vendor_package_level)
+        ).select_related('category', 'package')  # Select related fields to avoid extra DB queries
+        print('Filtered designs based on package level:')
+
+        # Organize designs by category
+        designs_by_category = defaultdict(list)
+        for design in allowed_designs:
+            designs_by_category[design.category_id].append(design)
+            print(f"Design: {design.title}")
+            for image in design.images.all():
+                print(f"Image URL: {image.image.url}")
+
+        # Fetch only the categories with allowed designs
+        categories = Category.objects.filter(id__in=designs_by_category.keys())
+
+        # Attach designs to categories
+        categories_with_designs = []
+        for category in categories:
+            print(f"Category: {category.name}, Designs: {designs_by_category.get(category.id, [])}")
+            category.designs = designs_by_category.get(category.id, [])
+            print(category.designs)
+            categories_with_designs.append(category)
+        print(f"Categories with designs: {categories_with_designs}")
+    else:
+        categories_with_designs = []  # No categories if no vendor or package
+    
     # Fetch all subcategories
     subcategories1 = SubCategory1.objects.all()
     subcategories2 = SubCategory2.objects.all()
     subcategories3 = SubCategory3.objects.all()
     
     return render(request, 'home.html', {
-        'categories': categories,
+        'allowed_designs': allowed_designs,  # Pass designs directly
+        'categories': categories_with_designs,
         'vendor': vendor,
         'subcategories1': subcategories1,
         'subcategories2': subcategories2,
@@ -176,18 +213,25 @@ def vendor_home(request):
     })
 
 
+
+
+
 @login_required(login_url='/vendor/login/')
 def download_pdf(request, category_id):
-    BASE_DIR = settings.BASE_DIR  # Now BASE_DIR is accessible
+    BASE_DIR = settings.BASE_DIR
     category = get_object_or_404(Category, id=category_id)
-    designs = category.design_set.all()
-    
+
     vendor = request.user.vendor
+    vendor_package_level = vendor.package.level if vendor.package else None
+    
+    # Filter designs based on vendor's package level
+    designs = category.design_set.filter(
+        Q(package__level__lte=vendor_package_level)
+    ).select_related('package')
+
     vendor_logo = vendor.shop_logo.path if vendor.shop_logo else None
     manufacturer_logo = os.path.join(settings.BASE_DIR, 'staticfiles', 'Manufacturer_logo', 'saanj_logo.jpg')
-    print(manufacturer_logo)
-    print(vendor_logo)
-    
+
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{category.name}_designs.pdf"'
     
@@ -195,31 +239,18 @@ def download_pdf(request, category_id):
     width, height = letter
     
     def add_logos():
-        print("Checking logos...")
         if os.path.exists(manufacturer_logo) and os.path.exists(vendor_logo):
             try:
                 logo_image1 = ImageReader(manufacturer_logo)
-                width1, height1 = logo_image1.getSize()  # Get the size
-                print(f"manufacturer logo size: {width1}x{height1}")
-                print("Drawing manufacturer logo...")
-                p.drawImage(logo_image1, x = 30, y = 700, width= 80, height=80, preserveAspectRatio=True)
-                print("manufacturer logo drawn")
+                p.drawImage(logo_image1, x=30, y=700, width=80, height=80, preserveAspectRatio=True)
 
                 logo_image2 = ImageReader(vendor_logo)
-                width, height = logo_image2.getSize()  # Get the size
-                print(f"vendor logo size: {width}x{height}")
-                print("Drawing vendor logo...")
-                p.drawImage(logo_image2, x = 500, y = 700, width=80, height=80, preserveAspectRatio=True)
-                print("Vendor logo drawn")
+                p.drawImage(logo_image2, x=500, y=700, width=80, height=80, preserveAspectRatio=True)
             except Exception as e:
                 print(f"Error drawing logos: {e}")
-        else:
-            print("logo path is not valid")
 
     add_logos()
 
-
-    # Add title to the PDF
     p.setFont("Helvetica-Bold", 16)
     p.drawCentredString(width / 2, height - 50, f"Designs for {category.name}")
     y_position = height - 120
@@ -228,19 +259,17 @@ def download_pdf(request, category_id):
     for design in designs:
         if y_position < 150:
             p.showPage()
-            add_logos()  # Add logos on new page
+            add_logos()
             p.setFont("Helvetica-Bold", 16)
             p.drawCentredString(width / 2, height - 50, f"Designs for {category.name}")
-            y_position = height - 120  # Reset vertical position for the new page
+            y_position = height - 120
             design_count = 0
 
-        # Calculate x_position for centering
         p.setFont("Helvetica-Bold", 12)
         text_width = p.stringWidth(design.title, "Helvetica-Bold", 12)
-        x_position = (width - text_width) / 2  # Center the design title
+        x_position = (width - text_width) / 2
         p.drawString(x_position, y_position, design.title)
 
-        # Center the description and price
         p.setFont("Helvetica", 10)
         description = f"{design.description}"
         price = f"Price: {design.price}"
@@ -251,12 +280,11 @@ def download_pdf(request, category_id):
         p.drawString((width - desc_width) / 2, y_position - 15, description)
         p.drawString((width - price_width) / 2, y_position - 30, price)
 
-        # Add design images
         y_image_position = y_position - 50
         images = design.images.all()
 
         if images:
-            x_image_position = (width - (len(images) * 120)) / 2  # Center images horizontally
+            x_image_position = (width - (len(images) * 120)) / 2
             for image in images:
                 image_path = image.image.path
                 p.drawImage(ImageReader(image_path), x_image_position, y_image_position - 100, width=100, height=100, preserveAspectRatio=True)
@@ -272,6 +300,7 @@ def download_pdf(request, category_id):
 
     p.save()
     return response
+
 
 @login_required(login_url='/vendor/login/')
 def design_detail(request, design_id):
@@ -297,15 +326,22 @@ def design_detail(request, design_id):
 @login_required(login_url='/vendor/login/')
 def vendor_profile(request):
     vendor = Vendor.objects.get(user=request.user)
-    orders = vendor.order_set.all()  # Get all orders related to this vendor
-    return render(request, 'vendor_profile.html', {'vendor': vendor, 'orders': orders})
+    # Organize orders by their status
+    orders_by_status = {
+        'placed': Order.objects.filter(vendor=vendor, order_status='Placed'),
+        'in-making': Order.objects.filter(vendor=vendor, order_status='In Making'),
+        'shipped': Order.objects.filter(vendor=vendor, order_status='Shipped'),
+        'delivered': Order.objects.filter(vendor=vendor, order_status='Delivered'),
+        'canceled': Order.objects.filter(vendor=vendor, order_status='Canceled'),
+    }
+    return render(request, 'vendor_profile.html', {'vendor': vendor, 'orders_by_status': orders_by_status})
 
 @login_required(login_url='/vendor/login/')
 def edit_vendor_profile(request):
     vendor = Vendor.objects.get(user=request.user)
     
     if request.method == 'POST':
-        form = VendorProfileForm(request.POST, instance=vendor)
+        form = VendorProfileForm(request.POST, request.FILES, instance=vendor)  # Add request.FILES for file handling
         if form.is_valid():
             form.save()
             return redirect('vendor_profile')  # Redirect to the profile page after saving

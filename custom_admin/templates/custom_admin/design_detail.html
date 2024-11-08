@@ -1,0 +1,30 @@
+{% extends 'custom_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="design-detail">
+    <h2>{{ design.title }}</h2>
+    <p>{{ design.description }}</p>
+    <div class="media">
+        <div class="carousel">
+            {% for image in design.images.all %}
+            <div class="carousel-item">
+                <img src="{{ image.image.url }}" alt="{{ design.title }}">
+            </div>
+            {% endfor %}
+        </div>
+        <div class="video-links">
+            {% for video in design.videos.all %}
+            <a href="{{ video.video.url }}" target="_blank">Watch Video</a>
+            {% endfor %}
+        </div>
+    </div>
+    <p><strong>Price:</strong> ${{ design.price }}</p>
+    <a href="{% url 'design_update' design.id %}" class="btn btn-link">Edit</a>
+    <a href="{% url 'design_delete' design.id %}" class="btn btn-danger">Delete</a>
+</div>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'custom_admin/css/design_detail.css' %}">
+{% endblock %}

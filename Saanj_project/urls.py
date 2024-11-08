@@ -6,6 +6,7 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('saanj_app.urls')),
+    path('custom_admin/', include('custom_admin.urls')),
 ]
 
 if settings.DEBUG:  # Serve media files during development

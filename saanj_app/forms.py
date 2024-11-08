@@ -3,6 +3,12 @@ from .models import *
 from django.forms import modelformset_factory
 from django.contrib.auth.forms import AuthenticationForm
 
+
+class AdminLoginForm(AuthenticationForm):
+    username = forms.CharField(label='Username')
+    password = forms.CharField(widget=forms.PasswordInput(), label='Password')
+
+    
 class DesignUploadForm(forms.ModelForm):
 
     package = forms.ModelChoiceField(
@@ -48,7 +54,7 @@ class VendorSignUpForm(forms.ModelForm):
 class VendorProfileForm(forms.ModelForm):
     class Meta:
         model = Vendor
-        fields = ['name', 'shop_name', 'shop_address', 'phone_number', 'email_id']
+        fields = ['name', 'shop_name', 'shop_address', 'phone_number', 'email_id', 'shop_logo']
 
 
 class VendorLoginForm(forms.Form):

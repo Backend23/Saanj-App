@@ -1,0 +1,33 @@
+{% extends 'custom_admin/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="subcategory1-list">
+    <h2>Subcategories (Level 1)</h2>
+    <table class="subcategory1-table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Category</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for subcategory1 in subcategories1 %}
+            <tr>
+                <td>{{ subcategory1.name }}</td>
+                <td>{{ subcategory1.category }}</td>
+                <td>
+                    <a href="{% url 'subcategory1_update' subcategory1.id %}" class="btn btn-link">Edit</a>
+                    <a href="{% url 'subcategory1_delete' subcategory1.id %}" class="btn btn-danger">Delete</a>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{% static 'custom_admin/css/subcategory1_list.css' %}">
+{% endblock %}

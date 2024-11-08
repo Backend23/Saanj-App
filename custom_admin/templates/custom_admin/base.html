@@ -1,0 +1,44 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Admin</title>
+    <link rel="stylesheet" href="{% static 'custom_admin/css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'custom_admin/css/fonts.css' %}">
+</head>
+<body>
+    <div class="admin-container">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>Admin Panel</h2>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li><a href="{% url 'custom_admin_dashboard' %}">Dashboard</a></li>
+                    <li><a href="{% url 'design_list' %}">Designs</a></li>
+                    <li><a href="{% url 'vendor_list' %}">Vendors</a></li>
+                    <li><a href="{% url 'category_list' %}">Categories</a></li>
+                    <li><a href="{% url 'subcategory1_list' %}">Subcategories</a></li>
+                    <li><a href="{% url 'address_list' %}">Addresses</a></li>
+                </ul>
+            </nav>
+        </aside>
+        <main class="main-content">
+            <header class="header">
+                <div class="header-container">
+                    <h1>{% block header_title %}Admin Panel{% endblock %}</h1>
+                    <div class="user-info">
+                        <a href="{% url 'admin_logout' %}" class="logout-btn">Logout</a>
+                    </div>
+                </div>
+            </header>
+            <section class="content">
+                {% block content %}{% endblock %}
+            </section>
+        </main>
+    </div>
+</body>
+</html>
