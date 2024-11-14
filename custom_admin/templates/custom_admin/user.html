@@ -1,0 +1,1102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Luxury Jewelry Management - Users</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+                /* Modern CSS Reset and Variables */
+                :root {
+    /* Colors */
+    --primary: #86220A;          /* Deep Red */
+    --primary-hover: #6A1B08;    /* Darker Red */
+    --primary-light: #FA4E23;    /* Bright Orange-Red */
+    --surface: #FFFFFF;          /* Pure White */
+    --background: #FDF8F7;       /* Very Light Red Tint */
+    --text: #2D0F06;            /* Very Dark Red */
+    --text-secondary: #755048;   /* Muted Red */
+    --border: #E5D8D6;          /* Light Red-Gray */
+    --success: #34D399;         /* Success Green (kept for contrast) */
+    --warning: #F59E0B;         /* Warning Orange */
+    --error: #DC2626;          /* Error Red */
+
+    /* Shadows with a slight red tint */
+    --shadow-sm: 0 1px 2px rgba(134, 34, 10, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(134, 34, 10, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(134, 34, 10, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(134, 34, 10, 0.1);
+}
+                /* Global Reset */
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+                    background: var(--background);
+                    color: var(--text);
+                    line-height: 1.5;
+                    -webkit-font-smoothing: antialiased;
+                }
+                
+                /* Sidebar */
+                .sidebar {
+                    width: 260px;
+                    background: var(--surface);
+                    border-right: 1px solid var(--border);
+                    height: 100vh;
+                    position: fixed;
+                    padding: 24px 0;
+                }
+                
+                .sidebar-header {
+                    padding: 0 24px;
+                    margin-bottom: 32px;
+                }
+                
+                .brand {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    justify-content: center;
+                }
+                
+                .brand-logo {
+                    width: 40px;
+                    height: 40px;
+                    background: var(--surface);
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--surface);
+                    border: 2px solid var(--primary);
+                    padding: 1.5px;
+                }
+                
+                .logo_brand{
+        height: 100%;
+        width: 100%;
+      }
+                
+                .brand-name {
+                    font-size: 20px;
+                    font-weight: 600;
+                    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                
+                /* Navigation */
+                .nav-items {
+                    padding: 0 8px;
+                }
+                
+                .nav-item {
+                    display: flex;
+                    align-items: center;
+                    padding: 12px 24px;
+                    color: var(--text);
+                    text-decoration: none;
+                    gap: 12px;
+                    border-radius: 8px;
+                    margin: 4px 8px;
+                    transition: all 0.2s ease;
+                }
+                
+                .nav-item:hover {
+                    background: rgba(197, 168, 111, 0.1);
+                }
+                
+                .nav-item.active {
+                    background: var(--primary);
+                    color: var(--surface);
+                }
+                
+                .nav-item i {
+                    font-size: 18px;
+                    width: 24px;
+                    text-align: center;
+                }
+                
+                /* Main Content */
+                .main-content {
+                    margin-left: 260px;
+                    padding: 32px;
+                    width: calc(100% - 260px);
+                }
+                
+                /* Content Header */
+                .content-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 32px;
+                    padding: 24px;
+                    background: var(--surface);
+                    border-radius: 16px;
+                    box-shadow: var(--shadow-sm);
+                }
+                
+                .page-title h1 {
+                    font-size: 24px;
+                    font-weight: 600;
+                    margin-bottom: 8px;
+                }
+                
+                .page-title p {
+                    color: var(--text-secondary);
+                    font-size: 14px;
+                }
+                
+                /* Add Button */
+                .add-button {
+                    background: var(--primary);
+                    color: var(--surface);
+                    border: none;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .add-button:hover {
+                    background: var(--primary-hover);
+                    transform: translateY(-1px);
+                    box-shadow: var(--shadow-md);
+                }
+                
+                /* Table Styles */
+                .table-container {
+                    background: var(--surface);
+                    border-radius: 16px;
+                    box-shadow: var(--shadow-sm);
+                    overflow: hidden;
+                }
+                
+                .table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                
+                .table th {
+                    background: #F8FAFC;
+                    padding: 16px 24px;
+                    text-align: left;
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: var(--text-secondary);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+                
+                .table td {
+                    padding: 16px 24px;
+                    border-top: 1px solid var(--border);
+                    font-size: 14px;
+                }
+                
+                /* Status Badge */
+                .status-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 6px 12px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 500;
+                    gap: 6px;
+                }
+                
+                .status-badge i {
+                    font-size: 8px;
+                }
+                
+                .status-badge.active {
+                    background: rgba(52, 211, 153, 0.1);
+                    color: var(--success);
+                }
+                
+                .status-badge.inactive {
+                    background: rgba(239, 68, 68, 0.1);
+                    color: var(--error);
+                }
+                
+                /* Subscription Badge */
+                .subscription-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 6px 12px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 500;
+                    gap: 6px;
+                }
+                
+                .subscription-badge.active {
+                    background: rgba(52, 211, 153, 0.1);
+                    color: var(--success);
+                }
+                
+                .subscription-badge.expired {
+                    background: rgba(239, 68, 68, 0.1);
+                    color: var(--error);
+                }
+                
+                .subscription-badge.none {
+                    background: rgba(107, 114, 128, 0.1);
+                    color: var(--text-secondary);
+                }
+                
+                /* Logo Preview */
+                .user-logo {
+                    width: 48px;
+                    height: 48px;
+                    border-radius: 8px;
+                    object-fit: cover;
+                }
+                
+                /* Contact Info */
+                .contact-info {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 4px;
+                }
+                
+                .contact-info span {
+                    color: var(--text-secondary);
+                    font-size: 13px;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                }
+                
+                .contact-info i {
+                    width: 16px;
+                    color: var(--text-secondary);
+                }
+                
+                /* Modal */
+                .modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 100;
+                    backdrop-filter: blur(4px);
+                }
+                
+                .modal.active {
+                    display: flex;
+                }
+                
+                .modal-content {
+                    background: var(--surface);
+                    border-radius: 16px;
+                    width: 90%;
+                    max-width: 600px;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    padding: 32px;
+                    box-shadow: var(--shadow-xl);
+                }
+                
+                .modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 24px;
+                }
+                
+                .modal-header h2 {
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+                
+                .modal-close {
+                    background: none;
+                    border: none;
+                    font-size: 24px;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                }
+                
+                /* Form Styles */
+                .form-section {
+                    margin-bottom: 24px;
+                }
+                
+                .form-section h3 {
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin-bottom: 16px;
+                    padding-bottom: 8px;
+                    border-bottom: 1px solid var(--border);
+                }
+                
+                .form-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: 20px;
+                }
+                
+                .form-group {
+                    margin-bottom: 16px;
+                }
+                
+                .form-group.span-2 {
+                    grid-column: span 2;
+                }
+                
+                .form-group label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                }
+                
+                .form-control {
+                    width: 100%;
+                    padding: 12px;
+                    border: 1.5px solid var(--border);
+                    border-radius: 8px;
+                    font-size: 14px;
+                    transition: all 0.2s ease;
+                }
+                
+                .form-control:focus {
+                    outline: none;
+                    border-color: var(--primary);
+                    box-shadow: 0 0 0 3px rgba(197, 168, 111, 0.1);
+                }
+                
+                /* Logo Upload */
+                .logo-upload-container {
+                    display: flex;
+                    gap: 20px;
+                    align-items: center;
+                }
+                
+                .logo-preview {
+                    width: 100px;
+                    height: 100px;
+                    border-radius: 12px;
+                    border: 2px dashed var(--border);
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    overflow: hidden;
+                }
+                
+                .logo-preview img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: cover;
+                }
+                
+                .logo-upload {
+                    flex: 1;
+                    border: 2px dashed var(--border);
+                    border-radius: 12px;
+                    padding: 24px;
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .logo-upload:hover {
+                    border-color: var(--primary);
+                    background: rgba(197, 168, 111, 0.05);
+                }
+                
+                .logo-upload i {
+                    font-size: 24px;
+                    color: var(--primary);
+                    margin-bottom: 8px;
+                }
+                
+                /* Form Actions */
+                .form-actions {
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 12px;
+                    margin-top: 32px;
+                    padding-top: 20px;
+                    border-top: 1px solid var(--border);
+                }
+                
+                .btn {
+                    display: inline-flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 12px 24px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .btn-secondary {
+                    background: var(--background);
+                    border: none;
+                    color: var(--text);
+                }
+                
+                .btn-secondary:hover {
+                    background: #EAEAEB;
+                }
+                
+                .btn-primary {
+                    background: var(--primary);
+                    border: none;
+                    color: var(--surface);
+                }
+                
+                .btn-primary:hover {
+                    background: var(--primary-hover);
+                }
+                
+                /* Action Buttons */
+                .action-buttons {
+                    display: flex;
+                    gap: 8px;
+                }
+                
+                .action-btn {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 8px;
+                    border: none;
+                    background: transparent;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                .action-btn:hover {
+                    background: rgba(197, 168, 111, 0.1);
+                    color: var(--primary);
+                }
+                
+                .action-btn.delete:hover {
+                    background: rgba(239, 68, 68, 0.1);
+                    color: var(--error);
+                }
+                
+                /* Toast Notifications */
+                .toast-container {
+                    position: fixed;
+                    top: 24px;
+                    right: 24px;
+                    z-index: 1000;
+                }
+                
+                .toast {
+                    background: var(--surface);
+                    border-radius: 8px;
+                    padding: 16px;
+                    margin-bottom: 8px;
+                    box-shadow: var(--shadow-lg);
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    animation: slideIn 0.3s ease-out;
+                    min-width: 300px;
+                }
+                
+                .toast.success {
+                    border-left: 4px solid var(--success);
+                }
+                
+                .toast.error {
+                    border-left: 4px solid var(--error);
+                }
+                
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                
+                /* Responsive Design */
+                @media (max-width: 1024px) {
+                    .sidebar {
+                        width: 80px;
+                    }
+                    
+                    .brand-name,
+                    .nav-item span {
+                        display: none;
+                    }
+                    
+                    .main-content {
+                        margin-left: 80px;
+                        width: calc(100% - 80px);
+                    }
+                    
+                    .form-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .form-group.span-2 {
+                        grid-column: auto;
+                    }
+                }
+                
+                @media (max-width: 768px) {
+                    .content-header {
+                        flex-direction: column;
+                        gap: 16px;
+                    }
+                    
+                    .logo-upload-container {
+                        flex-direction: column;
+                    }
+                    
+                    .table-container {
+                        overflow-x: auto;
+                    }
+                    
+                    .form-actions {
+                        flex-direction: column;
+                    }
+                    
+                    .btn {
+                        width: 100%;
+                    }
+                }
+                </style>
+    </head>
+    <body>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-logo">
+                        <img src="static/manufacturer_logo/saanj_logo.png" alt="" class="logo_brand">
+                    </div>
+                    <div class="brand-name">Control Panel</div>
+                </div>
+            </div>
+            <nav class="nav-items">
+                <a href="index.html" class="nav-item" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="product.html" class="nav-item" data-page="products">
+                    <i class="fas fa-gem"></i>
+                    <span>Products</span>
+                </a>
+                <a href="cat.html" class="nav-item" data-page="categories">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="user.html" class="nav-item" data-page="metal-types">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="order.html" class="nav-item" data-page="metal-types">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+
+                </a>
+                <a href="roles.html" class="nav-item ">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Access Control</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <div class="page-title">
+                    <h1>User Management</h1>
+                    <p>Manage and monitor user accounts</p>
+                </div>
+                <button class="add-button" onclick="showModal('userModal')">
+                    <i class="fas fa-plus"></i>
+                    Add User
+                </button>
+            </div>
+
+            <!-- Users Table -->
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Logo</th>
+                            <th>Name</th>
+                            <th>Contact</th>
+                            <th>Company Details</th>
+                            <th>Status</th>
+                            <th>Subscription</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="userTableBody">
+                        <!-- Users will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- User Modal -->
+            <div class="modal" id="userModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Add User</h2>
+                        <button class="modal-close"
+                            onclick="closeModal('userModal')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <form id="userForm" onsubmit="handleUserSubmit(event)">
+                        <!-- Logo Upload -->
+                        <div class="form-group">
+                            <label>Company Logo</label>
+                            <div class="logo-upload-container">
+                                <div class="logo-preview" id="logoPreview">
+                                    <i class="fas fa-building"></i>
+                                </div>
+                                <div class="logo-upload"
+                                    onclick="document.getElementById('userLogo').click()">
+                                    <i class="fas fa-cloud-upload-alt"></i>
+                                    <p>Click to upload logo</p>
+                                    <input type="file" id="userLogo"
+                                        accept="image/*" style="display: none"
+                                        onchange="handleLogoUpload(event)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Personal Information -->
+                        <div class="form-section">
+                            <h3>Personal Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="userName">Full Name</label>
+                                    <input type="text" id="userName"
+                                        name="userName" class="form-control"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="userEmail">Email Address</label>
+                                    <input type="email" id="userEmail"
+                                        name="userEmail" class="form-control"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="userPhone">Phone Number</label>
+                                    <input type="tel" id="userPhone"
+                                        name="userPhone" class="form-control"
+                                        pattern="[0-9]{10}"
+                                        title="Please enter a valid 10-digit phone number"
+                                        required>
+                                </div>
+                                <div class="form-group span-2">
+                                    <label for="userAddress">Address</label>
+                                    <textarea id="userAddress"
+                                        name="userAddress" class="form-control"
+                                        rows="3" required></textarea>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Company Information -->
+                        <div class="form-section">
+                            <h3>Company Information</h3>
+                            <div class="form-grid">
+                                <div class="form-group">
+                                    <label for="companyName">Company
+                                        Name</label>
+                                    <input type="text" id="companyName"
+                                        name="companyName" class="form-control"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="gstNumber">GST Number</label>
+                                    <input type="text" id="gstNumber"
+                                        name="gstNumber"
+                                        class="form-control"
+                                        pattern="^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$"
+                                        title="Please enter a valid GST number"
+                                        required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="userStatus">Status</label>
+                                    <select id="userStatus" name="userStatus"
+                                        class="form-control">
+                                        <option value="active">Active</option>
+                                        <option
+                                            value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="subscriptionStatus">Subscription
+                                Status</label>
+                            <select id="subscriptionStatus"
+                                name="subscriptionStatus" class="form-control"
+                                required>
+                                <option value="active">Active</option>
+                                <option value="expired">Expired</option>
+                                <option value="none">No Subscription</option>
+                            </select>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary"
+                                onclick="closeModal('userModal')">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Save User
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- Toast Container -->
+        <div class="toast-container"></div>
+    </body>
+    <script>
+        // Sample Data
+        let users = [
+            {
+                id: '1',
+                name: 'Rahul Mehta',
+                email: 'rahul@mehtagems.com',
+                phone: '9876543210',
+                address: '123, Diamond Market, Surat, Gujarat - 395002',
+                companyName: 'Mehta Gems & Jewellers',
+                gstNumber: '24AALCM0234P1Z5',
+                logo: '/api/placeholder/100/100',
+                status: 'active',
+                subscription: {
+                    status: 'active',
+                    expiryDate: '2024-12-31',
+                    plan: 'Premium'
+                }
+            },
+            {
+                id: '2',
+                name: 'Priya Shah',
+                email: 'priya@shahdiamonds.com',
+                phone: '9898989898',
+                address: '456, Jewellers Complex, Mumbai, Maharashtra - 400001',
+                companyName: 'Shah Diamonds',
+                gstNumber: '27AADCS1234R1Z5',
+                logo: '/api/placeholder/100/100',
+                status: 'active',
+                subscription: {
+                    status: 'expired',
+                    expiryDate: '2023-12-31',
+                    plan: 'Basic'
+                }
+            },
+            {
+                id: '3',
+                name: 'Amit Jain',
+                email: 'amit@jainexports.com',
+                phone: '9765432100',
+                address: '789, Gold Souk, Delhi - 110001',
+                companyName: 'Jain Exports',
+                gstNumber: '07AADFJ5678Q1Z3',
+                logo: '/api/placeholder/100/100',
+                status: 'inactive',
+                subscription: {
+                    status: 'none',
+                    expiryDate: null,
+                    plan: null
+                }
+            }
+        ];
+        
+        // Utility Functions
+        function generateId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString('en-IN', {
+                year: 'numeric',
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            const container = document.querySelector('.toast-container');
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Modal Functions
+        let currentEditId = null;
+        
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                // Reset form if it's a new user
+                if (!currentEditId) {
+                    resetForm();
+                }
+            }
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                resetForm();
+                currentEditId = null;
+            }
+        }
+        
+        function resetForm() {
+            const form = document.getElementById('userForm');
+            if (form) {
+                form.reset();
+                document.getElementById('logoPreview').innerHTML = '<i class="fas fa-building"></i>';
+                document.querySelector('#userModal .modal-header h2').textContent = 'Add User';
+            }
+        }
+        
+        // Logo Handling
+        function handleLogoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('logoPreview');
+                    preview.innerHTML = `<img src="${e.target.result}" alt="Company Logo">`;
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Form Handling
+        function handleUserSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const userData = {
+                id: currentEditId || generateId(),
+                name: formData.get('userName'),
+                email: formData.get('userEmail'),
+                phone: formData.get('userPhone'),
+                address: formData.get('userAddress'),
+                companyName: formData.get('companyName'),
+                gstNumber: formData.get('gstNumber'),
+                status: formData.get('userStatus'),
+                logo: document.getElementById('logoPreview').querySelector('img')?.src || '/api/placeholder/100/100',
+                subscription: {
+                    status: formData.get('subscriptionStatus'),
+                    expiryDate: formData.get('subscriptionStatus') === 'active' ? 
+                        new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString().split('T')[0] : 
+                        null,
+                    plan: formData.get('subscriptionStatus') === 'active' ? 'Premium' : null
+                }
+            };
+        
+            if (currentEditId) {
+                const index = users.findIndex(u => u.id === currentEditId);
+                users[index] = { ...users[index], ...userData };
+                showToast('User updated successfully');
+            } else {
+                users.push(userData);
+                showToast('User added successfully');
+            }
+        
+            renderUsers();
+            closeModal('userModal');
+        }
+        
+        // User Operations
+        function editUser(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                currentEditId = id;
+                
+                // Populate form fields
+                document.getElementById('userName').value = user.name;
+                document.getElementById('userEmail').value = user.email;
+                document.getElementById('userPhone').value = user.phone;
+                document.getElementById('userAddress').value = user.address;
+                document.getElementById('companyName').value = user.companyName;
+                document.getElementById('gstNumber').value = user.gstNumber;
+                document.getElementById('userStatus').value = user.status;
+                document.getElementById('subscriptionStatus').value = user.subscription.status;
+                
+                // Show logo preview
+                const logoPreview = document.getElementById('logoPreview');
+                logoPreview.innerHTML = `<img src="${user.logo}" alt="Company Logo">`;
+                
+                // Update modal title
+                document.querySelector('#userModal .modal-header h2').textContent = 'Edit User';
+                showModal('userModal');
+            }
+        }
+        
+        function deleteUser(id) {
+            if (confirm('Are you sure you want to delete this user?')) {
+                users = users.filter(u => u.id !== id);
+                renderUsers();
+                showToast('User deleted successfully');
+            }
+        }
+        
+        function toggleUserStatus(id) {
+            const user = users.find(u => u.id === id);
+            if (user) {
+                user.status = user.status === 'active' ? 'inactive' : 'active';
+                renderUsers();
+                showToast(`User ${user.status === 'active' ? 'activated' : 'deactivated'} successfully`);
+            }
+        }
+        
+        // Render Function
+        function renderUsers() {
+            const tbody = document.getElementById('userTableBody');
+            tbody.innerHTML = users.map(user => `
+                <tr>
+                    <td>
+                        <img src="${user.logo}" alt="${user.companyName}" class="user-logo">
+                    </td>
+                    <td>
+                        <div class="user-info">
+                            <div>
+                                <div class="user-name">${user.name}</div>
+                                <div class="user-email">${user.email}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="contact-info">
+                            <span><i class="fas fa-phone"></i>${user.phone}</span>
+                            <span><i class="fas fa-map-marker-alt"></i>${user.address}</span>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="company-info">
+                            <div class="company-name">${user.companyName}</div>
+                            <div class="company-gst">GST: ${user.gstNumber}</div>
+                        </div>
+                    </td>
+                    <td>
+                        <span class="subscription-badge ${user.subscription.status}">
+                            <i class="fas fa-${user.subscription.status === 'active' ? 'check-circle' : 
+                                            user.subscription.status === 'expired' ? 'clock' : 'times-circle'}"></i>
+                            ${user.subscription.status === 'active' ? 
+                                `Active until ${formatDate(user.subscription.expiryDate)}` :
+                                user.subscription.status === 'expired' ? 'Expired' : 'No Subscription'}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="status-badge ${user.status}">
+                            <i class="fas fa-circle"></i>
+                            ${user.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="editUser('${user.id}')" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn" onclick="toggleUserStatus('${user.id}')" title="Toggle Status">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                            <button class="action-btn delete" onclick="deleteUser('${user.id}')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Validation Functions
+        function validateGST(gstNumber) {
+            const gstPattern = /^[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[1-9A-Z]{1}Z[0-9A-Z]{1}$/;
+            return gstPattern.test(gstNumber);
+        }
+        
+        function validatePhone(phone) {
+            const phonePattern = /^[0-9]{10}$/;
+            return phonePattern.test(phone);
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            renderUsers();
+            
+            // Add form validation
+            const form = document.getElementById('userForm');
+            if (form) {
+                form.addEventListener('submit', (e) => {
+                    const gstNumber = document.getElementById('gstNumber').value;
+                    const phone = document.getElementById('userPhone').value;
+                    
+                    if (!validateGST(gstNumber)) {
+                        e.preventDefault();
+                        showToast('Please enter a valid GST number', 'error');
+                        return;
+                    }
+                    
+                    if (!validatePhone(phone)) {
+                        e.preventDefault();
+                        showToast('Please enter a valid 10-digit phone number', 'error');
+                        return;
+                    }
+                });
+            }
+        
+            // Add modal close on outside click
+            document.querySelectorAll('.modal').forEach(modal => {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        closeModal(modal.id);
+                    }
+                });
+            });
+        });
+        </script>
+</html>

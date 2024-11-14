@@ -1,0 +1,1656 @@
+<!DOCTYPE html>
+{%load static%}
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Luxury Jewelry Management - Products</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <link rel="stylesheet" href="style.css">
+        <style>
+
+    
+        /* style.css */
+        /* Modern CSS Reset and Variables */
+
+        :root {
+    /* Colors */
+    --primary: #86220A;          /* Deep Red */
+    --primary-hover: #6A1B08;    /* Darker Red */
+    --primary-light: #FA4E23;    /* Bright Orange-Red */
+    --surface: #FFFFFF;          /* Pure White */
+    --background: #FDF8F7;       /* Very Light Red Tint */
+    --text: #2D0F06;            /* Very Dark Red */
+    --text-secondary: #755048;   /* Muted Red */
+    --border: #E5D8D6;          /* Light Red-Gray */
+    --success: #34D399;         /* Success Green (kept for contrast) */
+    --warning: #F59E0B;         /* Warning Orange */
+    --error: #DC2626;          /* Error Red */
+
+      /* Spacing */
+      --spacing-xs: 4px;
+        --spacing-sm: 8px;
+        --spacing-md: 12px;
+        --spacing-lg: 16px;
+        --spacing-xl: 24px;
+
+    /* Shadows with a slight red tint */
+    --shadow-sm: 0 1px 2px rgba(134, 34, 10, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(134, 34, 10, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(134, 34, 10, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(134, 34, 10, 0.1);
+}
+       
+        /* Global Reset */
+        * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        }
+
+        body {
+        font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text',
+        'Helvetica Neue', sans-serif;
+        background: var(--background);
+        color: var(--text);
+        line-height: 1.5;
+        -webkit-font-smoothing: antialiased;
+        }
+
+        /* Layout */
+        .container {
+        display: flex;
+        min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+        width: 260px;
+        background: var(--surface);
+        border-right: 1px solid var(--border);
+        height: 100vh;
+        position: fixed;
+        padding: 24px 0;
+        }
+
+        .sidebar-header {
+        padding: 0 24px;
+        margin-bottom: 32px;
+        }
+
+        .brand {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    justify-content: center;
+                }
+                
+                .brand-logo {
+                    width: 40px;
+                    height: 40px;
+                    background: var(--surface);
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--surface);
+                    border: 2px solid var(--primary);
+                    padding: 1.5px;
+                }
+                
+
+                .logo_brand{
+        height: 100%;
+        width: 100%;
+      }
+      
+        .brand-name {
+        font-size: 20px;
+        font-weight: 600;
+        background: linear-gradient(135deg, var(--primary) 0%,
+        var(--primary-light) 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        }
+
+        /* Navigation */
+        .nav-items {
+        padding: 0 8px;
+        }
+
+        .nav-item {
+        display: flex;
+        align-items: center;
+        padding: 12px 24px;
+        color: var(--text);
+        text-decoration: none;
+        gap: 12px;
+        border-radius: 8px;
+        margin: 4px 8px;
+        transition: all 0.2s ease;
+        }
+
+        .nav-item:hover {
+        background: rgba(197, 168, 111, 0.1);
+        }
+
+        .nav-item.active {
+        background: var(--primary);
+        color: var(--surface);
+        }
+
+        .nav-item i {
+        font-size: 18px;
+        width: 24px;
+        text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+        margin-left: 260px;
+        padding: var(--spacing-xl);
+        width: calc(100% - 260px);
+        }
+
+        /* Content Header */
+        .content-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-xl);
+        padding: var(--spacing-xl);
+        background: var(--surface);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        }
+
+        .page-title h1 {
+        font-size: 24px;
+        font-weight: 600;
+        margin-bottom: var(--spacing-xs);
+        }
+
+        .page-title p {
+        color: var(--text-secondary);
+        font-size: 14px;
+        }
+
+        /* Table Styles */
+        .table-container {
+        background: var(--surface);
+        border-radius: 12px;
+        box-shadow: var(--shadow-sm);
+        overflow: hidden;
+        }
+
+        .table {
+        width: 100%;
+        border-collapse: collapse;
+        }
+
+        .table th {
+        background: #F8FAFC;
+        padding: var(--spacing-md) var(--spacing-lg);
+        text-align: left;
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--text-secondary);
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        }
+
+        .table td {
+        padding: var(--spacing-md) var(--spacing-lg);
+        border-top: 1px solid var(--border);
+        font-size: 14px;
+        vertical-align: middle;
+        }
+
+        /* Form Styles */
+        .form-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--spacing-xl);
+        }
+
+        .form-group {
+        margin-bottom: var(--spacing-lg);
+        }
+
+        .form-group.span-2 {
+        grid-column: span 2;
+        }
+
+        .form-group label {
+        display: block;
+        margin-bottom: var(--spacing-sm);
+        font-weight: 500;
+        color: var(--text);
+        }
+
+        .form-control {
+        width: 100%;
+        padding: var(--spacing-md);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 14px;
+        transition: all 0.2s ease;
+        }
+
+        .form-control:focus {
+        outline: none;
+        border-color: var(--primary);
+        box-shadow: 0 0 0 3px rgba(197, 168, 111, 0.1);
+        }
+
+        /* Multiselect Styles */
+        .multiselect-container {
+        position: relative;
+        width: 100%;
+        }
+
+        .multiselect-input {
+        width: 100%;
+        padding: var(--spacing-md);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        font-size: 14px;
+        cursor: pointer;
+        background: var(--surface);
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        }
+
+        .multiselect-input::after {
+        content: '\f107';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        color: var(--text-secondary);
+        }
+
+        .multiselect-input:hover {
+        border-color: var(--primary-light);
+        }
+
+        .multiselect-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        max-height: 200px;
+        overflow-y: auto;
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 8px;
+        box-shadow: var(--shadow-md);
+        display: none;
+        z-index: 1000;
+        margin-top: 4px;
+        }
+
+        .multiselect-dropdown.active {
+        display: block;
+        }
+
+        .multiselect-option {
+        padding: var(--spacing-md);
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        }
+
+        .multiselect-option::before {
+        content: '';
+        width: 18px;
+        height: 18px;
+        border: 2px solid var(--border);
+        border-radius: 4px;
+        transition: all 0.2s ease;
+        }
+
+        .multiselect-option.selected::before {
+        content: '\f00c';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        background: var(--primary);
+        border-color: var(--primary);
+        color: var(--surface);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 12px;
+        }
+
+        .multiselect-option:hover {
+        background: rgba(197, 168, 111, 0.1);
+        }
+
+        .selected-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-top: 8px;
+        }
+
+        .selected-item {
+        background: rgba(197, 168, 111, 0.1);
+        color: var(--primary);
+        padding: 4px 12px;
+        border-radius: 6px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        }
+
+        .remove-item {
+        cursor: pointer;
+        font-size: 16px;
+        opacity: 0.7;
+        transition: all 0.2s ease;
+        }
+
+        .remove-item:hover {
+        opacity: 1;
+        color: var(--error);
+        }
+
+        /* Modal Styles */
+        .modal {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        display: none;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+        backdrop-filter: blur(4px);
+        }
+
+        .modal.active {
+        display: flex;
+        }
+
+        .modal-content {
+        background: var(--surface);
+        border-radius: 12px;
+        width: 90%;
+        max-width: 800px;
+        max-height: 90vh;
+        overflow-y: auto;
+        padding: var(--spacing-xl);
+        box-shadow: var(--shadow-lg);
+        }
+
+        .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: var(--spacing-xl);
+        }
+
+        /* Media Upload Styles */
+        .media-upload-container {
+        border: 2px dashed var(--border);
+        padding: var(--spacing-xl);
+        border-radius: 8px;
+        }
+
+        .media-upload {
+        cursor: pointer;
+        padding: var(--spacing-xl);
+        background: rgba(197, 168, 111, 0.05);
+        border-radius: 8px;
+        text-align: center;
+        transition: all 0.2s ease;
+        }
+
+        .media-upload:hover {
+        background: rgba(197, 168, 111, 0.1);
+        }
+
+        .media-upload i {
+        font-size: 24px;
+        color: var(--primary);
+        margin-bottom: var(--spacing-sm);
+        }
+
+        /* Button Styles */
+        .btn {
+        padding: var(--spacing-md) var(--spacing-xl);
+        border: none;
+        border-radius: 8px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        }
+
+        .btn-primary {
+        background: var(--primary);
+        color: var(--surface);
+        }
+
+        .btn-primary:hover {
+        background: var(--primary-hover);
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+        }
+
+        .btn-secondary {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        color: var(--text);
+        }
+
+        .btn-secondary:hover {
+        background: var(--background);
+        border-color: var(--text-secondary);
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        z-index: 1100;
+        }
+
+        .toast {
+        background: var(--surface);
+        border-radius: 8px;
+        padding: var(--spacing-md) var(--spacing-lg);
+        margin-bottom: var(--spacing-sm);
+        box-shadow: var(--shadow-lg);
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        animation: slideIn 0.3s ease-out;
+        }
+
+        @keyframes slideIn {
+        from {
+        transform: translateX(100%);
+        opacity: 0;
+        }
+        to {
+        transform: translateX(0);
+        opacity: 1;
+        }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+        .form-grid {
+        grid-template-columns: 1fr;
+        }
+
+        .form-group.span-2 {
+        grid-column: auto;
+        }
+        }
+
+        @media (max-width: 768px) {
+        .sidebar {
+        width: 80px;
+        }
+
+        .brand-name,
+        .nav-item span {
+        display: none;
+        }
+
+        .main-content {
+        margin-left: 80px;
+        width: calc(100% - 80px);
+        }
+
+        .content-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        }
+        }
+        /* Add these styles to your existing CSS */
+
+/* Image Preview Styles */
+.preview-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: var(--spacing-md);
+    background: var(--background);
+}
+
+.preview-container img,
+.preview-container video {
+    width: 100%;
+    max-height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    display: block;
+}
+
+/* Watermark Styles */
+.watermark {
+    position: absolute;
+    padding: 4px 8px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.watermark.top-right {
+    top: 12px;
+    right: 12px;
+}
+
+.watermark.top-left {
+    top: 12px;
+    left: 12px;
+}
+
+.watermark.bottom-right {
+    bottom: 12px;
+    right: 12px;
+}
+
+.watermark img {
+    width: 16px !important;
+    height: 16px !important;
+    object-fit: contain !important;
+}
+
+.watermark span {
+    font-size: 12px;
+    color: var(--text);
+    font-weight: 500;
+}
+
+/* Status Badge Styles */
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-badge.active {
+    background-color: rgba(52, 211, 153, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(52, 211, 153, 0.2);
+}
+
+.status-badge.inactive {
+    background-color: rgba(239, 68, 68, 0.1);
+    color: var(--error);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.status-badge i {
+    font-size: 8px;
+}
+
+/* Action Buttons */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.action-btn {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    background: transparent;
+    border-radius: 6px;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.action-btn:hover {
+    background: rgba(197, 168, 111, 0.1);
+    color: var(--primary);
+}
+
+/* Media Upload Area */
+.media-upload {
+    cursor: pointer;
+    padding: var(--spacing-xl);
+    background: var(--surface);
+    border: 2px dashed var(--border);
+    border-radius: 8px;
+    text-align: center;
+    transition: all 0.2s ease;
+}
+
+.media-upload:hover {
+    border-color: var(--primary);
+    background: rgba(197, 168, 111, 0.05);
+}
+
+.media-upload i {
+    font-size: 24px;
+    color: var(--primary);
+    margin-bottom: var(--spacing-sm);
+}
+
+.media-upload p {
+    color: var(--text-secondary);
+    margin: 0;
+    font-size: 14px;
+}
+
+/* Watermark Options Panel */
+.watermark-options {
+    margin-top: var(--spacing-md);
+    padding: var(--spacing-md);
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: none;
+}
+
+.watermark-options.active {
+    display: block;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+    accent-color: var(--primary);
+}
+
+.watermark-position-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.position-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.position-btn:hover {
+    border-color: var(--primary-light);
+    background: rgba(197, 168, 111, 0.05);
+}
+
+.position-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+    color: var(--surface);
+}
+
+/* Table Image Cell */
+.table td img {
+    width: 50px;
+    height: 50px;
+    object-fit: cover;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+}
+
+/* Form Action Buttons */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+.form-actions .btn {
+    min-width: 120px;
+    height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 500;
+}
+.add-button {
+    background: var(--primary);
+    color: var(--surface);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 500;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(197, 168, 111, 0.2);
+}
+
+.add-button i {
+    font-size: 16px;
+}
+
+.add-button:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(197, 168, 111, 0.3);
+}
+
+.add-button:active {
+    transform: translateY(0);
+    box-shadow: 0 1px 2px rgba(197, 168, 111, 0.2);
+}
+
+/* Content Header Refinements */
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--spacing-xl);
+    padding: var(--spacing-xl);
+    background: var(--surface);
+    border-radius: 12px;
+    box-shadow: var(--shadow-sm);
+}
+
+.page-title h1 {
+    font-size: 24px;
+    font-weight: 600;
+    margin-bottom: var(--spacing-xs);
+    color: var(--text);
+}
+
+.page-title p {
+    color: var(--text-secondary);
+    font-size: 14px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .content-header {
+        padding: var(--spacing-lg);
+    }
+    
+    .add-button {
+        padding: 10px 20px;
+    }
+}
+
+@media (max-width: 480px) {
+    .content-header {
+        flex-direction: column;
+        gap: var(--spacing-md);
+        text-align: center;
+    }
+    
+    .add-button {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+    </style>
+        <body>
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <div class="sidebar-header">
+                    <div class="brand">
+                        <div class="brand-logo">
+                            <img src="{% static 'manufacturer_logo/saanj_logo.png' %}" alt="Manufacturer Logo" class="logo_brand">
+                        </div>
+                        <div class="brand-name">Control Panel</div>
+                    </div>
+                </div>
+                <nav class="nav-items">
+                    <a href="index.html" class="nav-item">
+                        <i class="fas fa-home"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <a href="product.html" class="nav-item ">
+                        <i class="fas fa-gem"></i>
+                        <span>Products</span>
+                    </a>
+                    <a href="cat.html" class="nav-item">
+                        <i class="fas fa-layer-group"></i>
+                        <span>Categories</span>
+                    </a>
+                    <a href="user.html" class="nav-item">
+                        <i class="fas fa-users"></i>
+                        <span>Users</span>
+                    </a>
+                    <a href="order.html" class="nav-item">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Orders</span>
+                    </a>
+                    <a href="roles.html" class="nav-item ">
+                        <i class="fas fa-user-shield"></i>
+                        <span>Access Control</span>
+                    </a>
+                </nav>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="main-content">
+                <div class="content-header">
+                    <div class="page-title">
+                        <h1>Product Management</h1>
+                        <p>Manage your jewelry products</p>
+                    </div>
+                    <button class="add-button"
+                        onclick="showModal('productModal')">
+                        <i class="fas fa-plus"></i>
+                        Add Product
+                    </button>
+                </div>
+
+                <!-- Products Table -->
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Image</th>
+                                <th>Title</th>
+                                <th>Category</th>
+                                <th>Weight</th>
+                                <th>Metal Type</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTableBody">
+                            <!-- Products will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Product Modal -->
+                <div class="modal" id="productModal">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h2>Add Product</h2>
+                            <button class="modal-close"
+                                onclick="closeModal('productModal')">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </div>
+                        <form id="productForm"
+                            onsubmit="handleProductSubmit(event)">
+                            <div class="form-grid">
+                                <!-- Image Upload -->
+                                <div class="form-group">
+                                    <label>Product Image</label>
+                                    <div class="media-upload-container">
+                                        <div class="media-upload"
+                                            onclick="triggerFileInput('productImage')">
+                                            <i
+                                                class="fas fa-cloud-upload-alt"></i>
+                                            <p>Click to upload image</p>
+                                            <input type="file" id="productImage"
+                                                accept="image/*"
+                                                style="display: none"
+                                                onchange="handleImageUpload(event)">
+                                        </div>
+                                        <div class="watermark-options"
+                                            id="imageWatermarkOptions">
+                                            <div class="checkbox-wrapper">
+                                                <input type="checkbox"
+                                                    id="imageWatermarkEnabled"
+                                                    onchange="toggleWatermark('image')">
+                                                <span>Add Watermark</span>
+                                            </div>
+                                            <label
+                                                class="watermark-position-label">Watermark
+                                                Position</label>
+                                            <div class="watermark-position">
+                                                <button type="button"
+                                                    class="position-btn arrow-top-left"
+                                                    data-position="top-left"
+                                                    data-tooltip="Top Left">
+                                                    <span
+                                                        class="arrow-icon"></span>
+                                                </button>
+                                                <button type="button"
+                                                    class="position-btn arrow-top-right active"
+                                                    data-position="top-right"
+                                                    data-tooltip="Top Right">
+                                                    <span
+                                                        class="arrow-icon"></span>
+                                                </button>
+                                                <button type="button"
+                                                    class="position-btn arrow-bottom-right"
+                                                    data-position="bottom-right"
+                                                    data-tooltip="Bottom Right">
+                                                    <span
+                                                        class="arrow-icon"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="media-preview"
+                                            id="imagePreview"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Video Upload -->
+                                <div class="form-group">
+                                    <label>Product Video</label>
+                                    <div class="media-upload-container">
+                                        <div class="media-upload"
+                                            onclick="triggerFileInput('productVideo')">
+                                            <i class="fas fa-video"></i>
+                                            <p>Click to upload video</p>
+                                            <input type="file" id="productVideo"
+                                                accept="video/*"
+                                                style="display: none"
+                                                onchange="handleVideoUpload(event)">
+                                        </div>
+                                        <div class="watermark-options"
+                                            id="videoWatermarkOptions">
+                                            <div class="checkbox-wrapper">
+                                                <input type="checkbox"
+                                                    id="videoWatermarkEnabled"
+                                                    onchange="toggleWatermark('video')">
+                                                <span>Add Watermark</span>
+                                            </div>
+                                            <label
+                                                class="watermark-position-label">Watermark
+                                                Position</label>
+                                            <div class="watermark-position">
+                                                <button type="button"
+                                                    class="position-btn arrow-top-left"
+                                                    data-position="top-left"
+                                                    data-tooltip="Top Left">
+                                                    <span
+                                                        class="arrow-icon"></span>
+                                                </button>
+                                                <button type="button"
+                                                    class="position-btn arrow-top-right active"
+                                                    data-position="top-right"
+                                                    data-tooltip="Top Right">
+                                                    <span
+                                                        class="arrow-icon"></span>
+                                                </button>
+                                                <button type="button"
+                                                    class="position-btn arrow-bottom-right"
+                                                    data-position="bottom-right"
+                                                    data-tooltip="Bottom Right">
+                                                    <span
+                                                        class="arrow-icon"></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        <div class="media-preview"
+                                            id="videoPreview"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Product Details -->
+                                <div class="form-group">
+                                    <label>Title</label>
+                                    <input type="text" id="productTitle"
+                                        class="form-control" required>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Weight (in grams)</label>
+                                    <input type="number" id="productWeight"
+                                        class="form-control" step="0.01" min="0"
+                                        required>
+                                </div>
+
+                                <!-- Multiselect Categories -->
+                                <div class="form-group">
+                                    <label>Category</label>
+                                    <div class="multiselect-container"
+                                        id="categorySelect">
+                                        <div class="multiselect-input">Select
+                                            Categories</div>
+                                        <div class="selected-items"
+                                            id="selectedCategories"></div>
+                                        <div class="multiselect-dropdown">
+                                            <!-- Categories will be populated dynamically -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Multiselect Subcategories -->
+                                <div class="form-group">
+                                    <label>Subcategory</label>
+                                    <div class="multiselect-container"
+                                        id="subcategorySelect">
+                                        <div class="multiselect-input">Select
+                                            Subcategories</div>
+                                        <div class="selected-items"
+                                            id="selectedSubcategories"></div>
+                                        <div class="multiselect-dropdown">
+                                            <!-- Subcategories will be populated dynamically -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Metal Type</label>
+                                    <select id="metalType" class="form-control"
+                                        required>
+                                        <option value>Select Metal Type</option>
+                                        <option value="gold">Gold</option>
+                                        <option value="silver">Silver</option>
+                                        <option
+                                            value="platinum">Platinum</option>
+                                        <option value="rose-gold">Rose
+                                            Gold</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label>Status</label>
+                                    <select id="productStatus"
+                                        class="form-control"
+                                        required>
+                                        <option value="active">Active</option>
+                                        <option
+                                            value="inactive">Inactive</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group span-2">
+                                    <label>Description</label>
+                                    <textarea id="productDescription"
+                                        class="form-control" rows="4"
+                                        required></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn btn-secondary"
+                                    onclick="closeModal('productModal')">
+                                    <i class="fas fa-times"></i>
+                                    Cancel
+                                </button>
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fas fa-save"></i>
+                                    Save Product
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Toast Container -->
+            <div class="toast-container"></div>
+            <script>
+                // Part 1: Core Data and MultiSelect Class Implementation
+
+// Sample Data
+const categories = [
+    {
+        id: '1',
+        name: 'Necklaces',
+        subcategories: ['Choker', 'Pendant', 'Chain', 'Mangalsutra']
+    },
+    {
+        id: '2',
+        name: 'Rings',
+        subcategories: ['Engagement', 'Cocktail', 'Bands', 'Solitaire']
+    },
+    {
+        id: '3',
+        name: 'Earrings',
+        subcategories: ['Studs', 'Drops', 'Hoops', 'Chandeliers']
+    },
+    {
+        id: '4',
+        name: 'Bracelets',
+        subcategories: ['Tennis', 'Bangles', 'Cuff', 'Charm']
+    }
+];
+
+const metalTypes = [
+    { id: '1', name: '18K Gold', code: '18KT' },
+    { id: '2', name: '22K Gold', code: '22KT' },
+    { id: '3', name: '24K Gold', code: '24KT' },
+    { id: '4', name: 'Platinum', code: 'PT950' },
+    { id: '5', name: 'Silver', code: 'AG925' }
+];
+
+// Initial products data
+let products = [
+    {
+        id: '1',
+        title: 'Diamond Pendant Necklace',
+        description: 'Elegant diamond pendant with 18K gold chain',
+        categories: ['1'],
+        subcategories: ['Pendant'],
+        weight: 12.5,
+        metalType: '1',
+        status: 'active',
+        image: {
+            url: '/api/placeholder/400/320',
+            watermark: {
+                enabled: true,
+                position: 'top-right'
+            }
+        },
+        video: {
+            url: null,
+            watermark: {
+                enabled: false,
+                position: 'top-right'
+            }
+        }
+    }
+];
+
+// Multiselect Class Implementation
+class MultiSelect {
+    constructor(containerId, options = {}) {
+        this.container = document.getElementById(containerId);
+        this.input = this.container.querySelector('.multiselect-input');
+        this.dropdown = this.container.querySelector('.multiselect-dropdown');
+        this.selectedItems = this.container.querySelector('.selected-items');
+        this.selectedValues = new Set();
+        this.onSelectionChange = options.onSelectionChange || (() => {});
+        this.options = new Map();
+        
+        this.initializeEvents();
+    }
+
+    initializeEvents() {
+        // Toggle dropdown
+        this.input.addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.toggleDropdown();
+        });
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', (e) => {
+            if (!this.container.contains(e.target)) {
+                this.closeDropdown();
+            }
+        });
+    }
+
+    toggleDropdown() {
+        this.dropdown.classList.toggle('active');
+    }
+
+    closeDropdown() {
+        this.dropdown.classList.remove('active');
+    }
+
+    setOptions(options) {
+        this.dropdown.innerHTML = '';
+        this.options.clear();
+        
+        options.forEach(option => {
+            const optionElement = document.createElement('div');
+            optionElement.className = 'multiselect-option';
+            optionElement.dataset.value = option.value;
+            optionElement.textContent = option.label;
+            
+            if (this.selectedValues.has(option.value)) {
+                optionElement.classList.add('selected');
+            }
+            
+            optionElement.addEventListener('click', (e) => {
+                e.stopPropagation();
+                this.toggleOption(option.value, option.label);
+            });
+            
+            this.dropdown.appendChild(optionElement);
+            this.options.set(option.value, { element: optionElement, label: option.label });
+        });
+    }
+
+    toggleOption(value, label) {
+        if (this.selectedValues.has(value)) {
+            this.removeItem(value);
+        } else {
+            this.addItem(value, label);
+        }
+        this.onSelectionChange(Array.from(this.selectedValues));
+    }
+
+    addItem(value, label) {
+        this.selectedValues.add(value);
+        const item = document.createElement('div');
+        item.className = 'selected-item';
+        item.innerHTML = `
+            ${label}
+            <span class="remove-item" data-value="${value}">×</span>
+        `;
+
+        item.querySelector('.remove-item').addEventListener('click', (e) => {
+            e.stopPropagation();
+            this.removeItem(value);
+            this.onSelectionChange(Array.from(this.selectedValues));
+        });
+
+        this.selectedItems.appendChild(item);
+        this.options.get(value)?.element.classList.add('selected');
+        this.updateInputText();
+    }
+
+    removeItem(value) {
+        this.selectedValues.delete(value);
+        const item = this.selectedItems.querySelector(`[data-value="${value}"]`)?.parentNode;
+        if (item) {
+            item.remove();
+        }
+        this.options.get(value)?.element.classList.remove('selected');
+        this.updateInputText();
+    }
+
+    updateInputText() {
+        const count = this.selectedValues.size;
+        this.input.textContent = count === 0 ? 'Select Items' : 
+            `${count} item${count !== 1 ? 's' : ''} selected`;
+    }
+
+    clearSelection() {
+        this.selectedValues.clear();
+        this.selectedItems.innerHTML = '';
+        this.options.forEach(option => option.element.classList.remove('selected'));
+        this.updateInputText();
+    }
+
+    getSelectedValues() {
+        return Array.from(this.selectedValues);
+    }
+
+    setSelectedValues(values) {
+        this.clearSelection();
+        values.forEach(value => {
+            const option = this.options.get(value);
+            if (option) {
+                this.addItem(value, option.label);
+            }
+        });
+    }
+}
+
+// Global variables
+let currentProductId = null;
+let categoryMultiSelect, subcategoryMultiSelect;
+let watermarkSettings = {
+    image: { enabled: false, position: 'top-right' },
+    video: { enabled: false, position: 'top-right' }
+};
+
+// Utility Functions
+function generateId() {
+    return '_' + Math.random().toString(36).substr(2, 9);
+}
+
+
+
+async function fetchCategories() {
+    try {
+        const response = await fetch('/custom_admin/categories/list_json'); // Adjust the URL if needed
+        if (!response.ok) {
+            throw new Error('Failed to fetch categories');
+        }
+        const data = await response.json();
+        categories = data; // Assuming `data` is an array of categories
+        initializeMultiselects(categories); // Initialize dropdown after fetching categories
+    } catch (error) {
+        console.error('Error fetching categories:', error);
+    }
+}
+
+function getCategoryNames(categoryIds) {
+    return categoryIds.map(id => {
+        const category = categories.find(c => c.id === id);
+        return category ? category.name : '';
+    }).filter(name => name);
+}
+
+function getMetalTypeName(metalTypeId) {
+    const metalType = metalTypes.find(m => m.id === metalTypeId);
+    return metalType ? metalType.name : '';
+}
+// Part 2: Event Handlers and Functions
+
+// Initialize Multiselect
+function initializeMultiselects(categories) {
+    // Initialize category multiselect
+    categoryMultiSelect = new MultiSelect('categorySelect', {
+        onSelectionChange: () => {
+            loadSubcategories();  // Call loadSubcategories function when selection changes
+        }
+    });
+    
+    // Set category options dynamically using the categories data
+    categoryMultiSelect.setOptions(
+        categories.map(cat => ({
+            value: cat.id,  // Use category ID as the value
+            label: cat.name  // Use category name as the label
+        }))
+    );
+
+    // Initialize subcategory multiselect
+    subcategoryMultiSelect = new MultiSelect('subcategorySelect');
+}
+
+function loadSubcategories() {
+    const selectedCategories = categoryMultiSelect.getSelectedValues();
+    let subcategories = new Set();
+    
+    selectedCategories.forEach(categoryId => {
+        const category = categories.find(c => c.id === categoryId);
+        if (category) {
+            category.subcategories.forEach(sub => subcategories.add(sub));
+        }
+    });
+    
+    subcategoryMultiSelect.setOptions(
+        Array.from(subcategories).map(sub => ({
+            value: sub,
+            label: sub
+        }))
+    );
+}
+
+// Modal Functions
+function showModal(modalId) {
+    document.getElementById(modalId).classList.add('active');
+    if (!currentProductId) {
+        resetForm();
+    }
+}
+
+function closeModal(modalId) {
+    document.getElementById(modalId).classList.remove('active');
+    resetForm();
+    currentProductId = null;
+}
+
+function resetForm() {
+    const form = document.getElementById('productForm');
+    form.reset();
+    categoryMultiSelect.clearSelection();
+    subcategoryMultiSelect.clearSelection();
+    
+    // Reset media previews
+    ['image', 'video'].forEach(type => {
+        document.getElementById(`${type}Preview`).style.display = 'none';
+        document.getElementById(`${type}WatermarkOptions`).classList.remove('active');
+    });
+    
+    // Reset watermark settings
+    watermarkSettings = {
+        image: { enabled: false, position: 'top-right' },
+        video: { enabled: false, position: 'top-right' }
+    };
+}
+
+// Media Handling Functions
+function triggerFileInput(inputId) {
+    document.getElementById(inputId).click();
+}
+
+function handleImageUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('imagePreview');
+            preview.innerHTML = `
+                <div class="preview-container">
+                    <img src="${e.target.result}" alt="Product image">
+                    <div class="watermark ${watermarkSettings.image.position}" 
+                         style="display: ${watermarkSettings.image.enabled ? 'flex' : 'none'}">
+                        <img src="/api/placeholder/16/16" alt="Brand Logo">
+                        <span>Your Brand</span>
+                    </div>
+                </div>
+            `;
+            preview.style.display = 'block';
+            document.getElementById('imageWatermarkOptions').classList.add('active');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+function handleVideoUpload(event) {
+    const file = event.target.files[0];
+    if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const preview = document.getElementById('videoPreview');
+            preview.innerHTML = `
+                <div class="preview-container">
+                    <video controls>
+                        <source src="${e.target.result}" type="${file.type}">
+                    </video>
+                    <div class="watermark ${watermarkSettings.video.position}"
+                         style="display: ${watermarkSettings.video.enabled ? 'flex' : 'none'}">
+                        <img src="/api/placeholder/16/16" alt="Brand Logo">
+                        <span>Your Brand</span>
+                    </div>
+                </div>
+            `;
+            preview.style.display = 'block';
+            document.getElementById('videoWatermarkOptions').classList.add('active');
+        };
+        reader.readAsDataURL(file);
+    }
+}
+
+// Watermark Functions
+function toggleWatermark(type) {
+    watermarkSettings[type].enabled = document.getElementById(`${type}WatermarkEnabled`).checked;
+    updateWatermarkPreview(type);
+}
+
+function setWatermarkPosition(type, position) {
+    watermarkSettings[type].position = position;
+    updateWatermarkPreview(type);
+    
+    const buttons = document.querySelectorAll(`#${type}WatermarkOptions .position-btn`);
+    buttons.forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.position === position);
+    });
+}
+
+function updateWatermarkPreview(type) {
+    const preview = document.getElementById(`${type}Preview`);
+    const watermark = preview.querySelector('.watermark');
+    if (watermark) {
+        watermark.className = `watermark ${watermarkSettings[type].position}`;
+        watermark.style.display = watermarkSettings[type].enabled ? 'flex' : 'none';
+    }
+}
+
+// Form Submission
+function handleProductSubmit(event) {
+    event.preventDefault();
+    
+    const formData = {
+        id: currentProductId || generateId(),
+        title: document.getElementById('productTitle').value,
+        description: document.getElementById('productDescription').value,
+        categories: categoryMultiSelect.getSelectedValues(),
+        subcategories: subcategoryMultiSelect.getSelectedValues(),
+        weight: parseFloat(document.getElementById('productWeight').value),
+        metalType: document.getElementById('metalType').value,
+        status: document.getElementById('productStatus').value,
+        image: {
+            url: document.getElementById('imagePreview').querySelector('img')?.src || '/api/placeholder/400/320',
+            watermark: {...watermarkSettings.image}
+        },
+        video: {
+            url: document.getElementById('videoPreview').querySelector('video > source')?.src || null,
+            watermark: {...watermarkSettings.video}
+        }
+    };
+
+    if (currentProductId) {
+        const index = products.findIndex(p => p.id === currentProductId);
+        products[index] = formData;
+        showToast('Product updated successfully');
+    } else {
+        products.push(formData);
+        showToast('Product added successfully');
+    }
+
+    renderProducts();
+    closeModal('productModal');
+}
+
+// Product Operations
+function editProduct(productId) {
+    const product = products.find(p => p.id === productId);
+    if (product) {
+        currentProductId = productId;
+        
+        // Populate form fields
+        document.getElementById('productTitle').value = product.title;
+        document.getElementById('productDescription').value = product.description;
+        document.getElementById('productWeight').value = product.weight;
+        document.getElementById('metalType').value = product.metalType;
+        document.getElementById('productStatus').value = product.status;
+
+        // Set multiselect values
+        categoryMultiSelect.setSelectedValues(product.categories);
+        subcategoryMultiSelect.setSelectedValues(product.subcategories);
+        
+        // Show modal
+        document.querySelector('#productModal .modal-header h2').textContent = 'Edit Product';
+        showModal('productModal');
+    }
+}
+
+function deleteProduct(productId) {
+    if (confirm('Are you sure you want to delete this product?')) {
+        products = products.filter(p => p.id !== productId);
+        renderProducts();
+        showToast('Product deleted successfully');
+    }
+}
+
+function toggleProductStatus(productId) {
+    const product = products.find(p => p.id === productId);
+    if (product) {
+        product.status = product.status === 'active' ? 'inactive' : 'active';
+        renderProducts();
+        showToast(`Product ${product.status === 'active' ? 'activated' : 'deactivated'} successfully`);
+    }
+}
+
+// UI Functions
+function showToast(message, type = 'success') {
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+        <span>${message}</span>
+    `;
+    
+    const container = document.querySelector('.toast-container');
+    container.appendChild(toast);
+    
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+function renderProducts() {
+    const tbody = document.getElementById('productTableBody');
+    tbody.innerHTML = products.map(product => `
+        <tr>
+            <td>
+                <img src="${product.image.url}" alt="${product.title}" style="width: 50px; height: 50px; object-fit: cover; border-radius: 4px;">
+            </td>
+            <td>${product.title}</td>
+            <td>${getCategoryNames(product.categories).join(', ')} - ${product.subcategories.join(', ')}</td>
+            <td>${product.weight}g</td>
+            <td>${getMetalTypeName(product.metalType)}</td>
+            <td>
+                <span class="status-badge ${product.status}">
+                    <i class="fas fa-circle"></i>
+                    ${product.status}
+                </span>
+            </td>
+            <td>
+                <div class="action-buttons">
+                    <button class="action-btn" onclick="editProduct('${product.id}')" title="Edit">
+                        <i class="fas fa-edit"></i>
+                    </button>
+                    <button class="action-btn" onclick="toggleProductStatus('${product.id}')" title="Toggle Status">
+                        <i class="fas fa-power-off"></i>
+                    </button>
+                    <button class="action-btn" onclick="deleteProduct('${product.id}')" title="Delete">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    `).join('');
+}
+
+// Initialize everything when the DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    fetchCategories();
+    renderProducts();
+    
+    // Add watermark position button listeners
+    document.querySelectorAll('.position-btn').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const type = e.target.closest('.watermark-options').id.replace('WatermarkOptions', '');
+            setWatermarkPosition(type, btn.dataset.position);
+        });
+    });
+});
+
+// Prevent form submission on Enter key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && e.target.tagName !== 'TEXTAREA') {
+        e.preventDefault();
+    }
+});
+            </script>
+        </body>
+    </html>

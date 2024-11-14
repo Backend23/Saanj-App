@@ -1,54 +1,39 @@
-# urls.py in custom_admin
-
 from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.admin_login, name='admin_login'),
-    path('logout/', views.logout_view, name='admin_logout'),
-    path('dashboard/', views.custom_admin_dashboard, name='custom_admin_dashboard'),
+    path('categories/', views.category_list, name='category_list'),
 
-    # Design URLs
-    path('designs/', views.DesignListView.as_view(), name='design_list'),
-    path('design/<int:pk>/', views.DesignDetailView.as_view(), name='design_detail'),
-    path('design/create/', views.DesignCreateView.as_view(), name='design_create'),
-    path('design/update/<int:pk>/', views.DesignUpdateView.as_view(), name='design_update'),
-    path('design/delete/<int:pk>/', views.DesignDeleteView.as_view(), name='design_delete'),
+    path('categories/list_json/', views.get_categories_json, name='get_categories_json'), # JSON endpoint for categories
+    path('categories/add_or_edit/', views.add_or_edit_category, name='add_or_edit_category'),
+    path('categories/<int:category_id>/', views.get_category, name='get_category'),
+    path('categories/delete/<int:category_id>/', views.delete_category, name='delete_category'),
+    path('categories/toggle_status/<int:category_id>/', views.toggle_category_status, name='toggle_category_status'),
 
-    # Vendor URLs
-    path('vendors/', views.VendorListView.as_view(), name='vendor_list'),
-    path('vendor/<int:pk>/', views.VendorDetailView.as_view(), name='vendor_detail'),
-    path('vendor/create/', views.VendorCreateView.as_view(), name='vendor_create'),
-    path('vendor/update/<int:pk>/', views.VendorUpdateView.as_view(), name='vendor_update'),
-    path('vendor/delete/<int:pk>/', views.VendorDeleteView.as_view(), name='vendor_delete'),
+    path('categories/subcategories/list_json/', views.get_subcategories_json, name='get_subcategories_json'),
+    path('categories/subcategories/add_or_edit/', views.add_or_edit_subcategory, name='add_or_edit_subcategory'),
+    path('categories/subcategories/<int:subcategory_id>/', views.get_subcategory, name='get_subcategory'),
+    path('categories/subcategories/delete/<int:subcategory_id>/', views.delete_subcategory, name='delete_subcategory'),
+    path('categories/subcategories/toggle_status/<int:subcategory_id>/', views.toggle_subcategory_status, name='toggle_subcategory_status'),
 
-    # Category URLs
-    path('categories/', views.CategoryListView.as_view(), name='category_list'),
-    path('category/create/', views.CategoryCreateView.as_view(), name='category_create'),
-    path('category/update/<int:pk>/', views.CategoryUpdateView.as_view(), name='category_update'),
-    path('category/delete/<int:pk>/', views.CategoryDeleteView.as_view(), name='category_delete'),
+    path('categories/get_metal_types_json/', views.get_metal_types_json, name='get_metal_types_json'),
+    path('categories/get_metal_type/<int:id>/', views.get_metal_type, name='get_metal_type'),
+    path('categories/add_or_edit_metal_type/', views.add_or_edit_metal_type, name='add_or_edit_metal_type'),
+    path('categories/delete_metal_type/<int:id>/', views.delete_metal_type, name='delete_metal_type'),
+    path('categories/toggle_metal_status/<int:id>/', views.toggle_metal_status, name='toggle_metal_status'),
 
-    # SubCategory1 URLs
-    path('subcategories1/', views.SubCategory1ListView.as_view(), name='subcategory1_list'),
-    path('subcategory1/create/', views.SubCategory1CreateView.as_view(), name='subcategory1_create'),
-    path('subcategory1/update/<int:pk>/', views.SubCategory1UpdateView.as_view(), name='subcategory1_update'),
-    path('subcategory1/delete/<int:pk>/', views.SubCategory1DeleteView.as_view(), name='subcategory1_delete'),
+    path('categories/weight_options/list_json/', views.get_weight_options_json, name='weight_option_list_json'),
+    path('categories/weight_options/<int:id>/', views.get_weight_option, name='weight_option_detail'),
+    path('categories/weight_options/add_or_edit/', views.add_or_edit_weight_option, name='add_or_edit_weight_option'),
+    path('categories/weight_options/delete/<int:id>/', views.delete_weight_option, name='delete_weight_option'),
+    path('categories/weight_options/toggle_status/<int:id>/', views.toggle_weight_status, name='toggle_weight_status'),
 
-    # SubCategory2 URLs
-    path('subcategories2/', views.SubCategory2ListView.as_view(), name='subcategory2_list'),
-    path('subcategory2/create/', views.SubCategory2CreateView.as_view(), name='subcategory2_create'),
-    path('subcategory2/update/<int:pk>/', views.SubCategory2UpdateView.as_view(), name='subcategory2_update'),
-    path('subcategory2/delete/<int:pk>/', views.SubCategory2DeleteView.as_view(), name='subcategory2_delete'),
-
-    # SubCategory3 URLs
-    path('subcategories3/', views.SubCategory3ListView.as_view(), name='subcategory3_list'),
-    path('subcategory3/create/', views.SubCategory3CreateView.as_view(), name='subcategory3_create'),
-    path('subcategory3/update/<int:pk>/', views.SubCategory3UpdateView.as_view(), name='subcategory3_update'),
-    path('subcategory3/delete/<int:pk>/', views.SubCategory3DeleteView.as_view(), name='subcategory3_delete'),
-
-    # Address URLs
-    path('addresses/', views.AddressListView.as_view(), name='address_list'),
-    path('address/create/', views.AddressCreateView.as_view(), name='address_create'),
-    path('address/update/<int:pk>/', views.AddressUpdateView.as_view(), name='address_update'),
-    path('address/delete/<int:pk>/', views.AddressDeleteView.as_view(), name='address_delete'),
+    # Product management
+    path('products/', views.product_list, name='product_list'),  # Display all products
+    
+    path('products/add_or_edit/', views.add_or_edit_product, name='add_or_edit_product'),  # Add/Edit product
+    path('product/<int:product_id>/', views.get_product, name='get_product'),
+    path('products/<int:product_id>/delete/', views.delete_product, name='delete_product'),  # Delete product
+    path('products/<int:product_id>/toggle/', views.toggle_product_status, name='toggle_product_status'),  # Toggle product status
+    path('products/list_json/', views.get_products_json, name='get_products_json'),
 ]

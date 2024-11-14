@@ -1,0 +1,1483 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Luxury Jewelry Management - Products</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+                /* Modern CSS Reset and Variables */
+                :root {
+                    /* Colors */
+                    --primary: #C5A86F;          /* Refined Gold */
+                    --primary-hover: #B39962;    /* Darker Gold */
+                    --primary-light: #D4AF37;    /* Light Gold */
+                    --surface: #FFFFFF;          /* Pure White */
+                    --background: #F9FAFB;       /* Light Gray */
+                    --text: #374151;            /* Dark Gray */
+                    --text-secondary: #6B7280;   /* Secondary Text */
+                    --border: #E5E7EB;          /* Border Color */
+                    --success: #34D399;         /* Success Green */
+                    --warning: #FBBF24;         /* Warning Yellow */
+                    --error: #EF4444;          /* Error Red */
+                
+                    /* Spacing */
+                    --spacing-xs: 4px;
+                    --spacing-sm: 8px;
+                    --spacing-md: 12px;
+                    --spacing-lg: 16px;
+                    --spacing-xl: 24px;
+                
+                    /* Shadows */
+                    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+                    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+                }
+                
+                /* Global Reset */
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+                    background: var(--background);
+                    color: var(--text);
+                    line-height: 1.5;
+                    -webkit-font-smoothing: antialiased;
+                }
+                
+                /* Layout */
+                .container {
+                    display: flex;
+                    min-height: 100vh;
+                }
+                
+               /* Sidebar */
+               .sidebar {
+                    width: 260px;
+                    background: var(--surface);
+                    border-right: 1px solid var(--border);
+                    height: 100vh;
+                    position: fixed;
+                    padding: 24px 0;
+                }
+                
+                .sidebar-header {
+                    padding: 0 24px;
+                    margin-bottom: 32px;
+                }
+                
+                .brand {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                }
+                
+                .brand-logo {
+                    width: 40px;
+                    height: 40px;
+                    background: var(--primary);
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--surface);
+                }
+                
+                .brand-name {
+                    font-size: 20px;
+                    font-weight: 600;
+                    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                
+                /* Navigation */
+                .nav-items {
+                    padding: 0 8px;
+                }
+                
+                .nav-item {
+                    display: flex;
+                    align-items: center;
+                    padding: 12px 24px;
+                    color: var(--text);
+                    text-decoration: none;
+                    gap: 12px;
+                    border-radius: 8px;
+                    margin: 4px 8px;
+                    transition: all 0.2s ease;
+                }
+                
+                .nav-item:hover {
+                    background: rgba(197, 168, 111, 0.1);
+                }
+                
+                .nav-item.active {
+                    background: var(--primary);
+                    color: var(--surface);
+                }
+                
+                .nav-item i {
+                    font-size: 18px;
+                    width: 24px;
+                    text-align: center;
+                }
+                
+                /* Main Content */
+                .main-content {
+                    margin-left: 260px;
+                    padding: 32px;
+                    width: calc(100% - 260px);
+                }
+                
+                /* Main Content */
+                .main-content {
+                    margin-left: 260px;
+                    padding: var(--spacing-xl);
+                    width: calc(100% - 260px);
+                }
+                
+                /* Content Header */
+                .content-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: var(--spacing-xl);
+                    padding: var(--spacing-xl);
+                    background: var(--surface);
+                    border-radius: 12px;
+                    box-shadow: var(--shadow-sm);
+                }
+                
+                .page-title h1 {
+                    font-size: 24px;
+                    font-weight: 600;
+                    margin-bottom: var(--spacing-xs);
+                }
+                
+                .page-title p {
+                    color: var(--text-secondary);
+                    font-size: 14px;
+                }
+                
+                /* Add Button */
+                .add-button {
+                    background: var(--primary);
+                    color: var(--surface);
+                    border: none;
+                    padding: var(--spacing-md) var(--spacing-xl);
+                    border-radius: 8px;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    gap: var(--spacing-sm);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .add-button:hover {
+                    background: var(--primary-hover);
+                    transform: translateY(-1px);
+                    box-shadow: var(--shadow-md);
+                }
+                
+                /* Table Styles */
+                .table-container {
+                    background: var(--surface);
+                    border-radius: 12px;
+                    box-shadow: var(--shadow-sm);
+                    overflow: hidden;
+                }
+                
+                .table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                
+                .table th {
+                    background: #F8FAFC;
+                    padding: var(--spacing-md) var(--spacing-lg);
+                    text-align: left;
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: var(--text-secondary);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+                
+                .table td {
+                    padding: var(--spacing-md) var(--spacing-lg);
+                    border-top: 1px solid var(--border);
+                    font-size: 14px;
+                    vertical-align: middle;
+                }
+                
+                /* Media Preview */
+                .media-preview {
+                    position: relative;
+                    margin-top: var(--spacing-md);
+                    border-radius: 8px;
+                    overflow: hidden;
+                    display: none;
+                }
+                
+                .media-preview img,
+                .media-preview video {
+                    width: 100%;
+                    max-height: 200px;
+                    object-fit: cover;
+                    border-radius: 8px;
+                }
+                
+                /* Watermark */
+                .watermark {
+                    position: absolute;
+                    padding: var(--spacing-sm);
+                    background: rgba(255, 255, 255, 0.9);
+                    border-radius: 4px;
+                    display: flex;
+                    align-items: center;
+                    gap: var(--spacing-xs);
+                    pointer-events: none;
+                }
+                
+                .watermark img {
+                    width: 16px;
+                    height: 16px;
+                }
+                
+                .watermark.top-right { top: 12px; right: 12px; }
+                .watermark.top-left { top: 12px; left: 12px; }
+                .watermark.bottom-right { bottom: 12px; right: 12px; }
+                
+                /* Modal */
+                .modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 1000;
+                    backdrop-filter: blur(4px);
+                }
+                
+                .modal.active {
+                    display: flex;
+                }
+                
+                .modal-content {
+                    background: var(--surface);
+                    border-radius: 12px;
+                    width: 90%;
+                    max-width: 800px;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    padding: var(--spacing-xl);
+                    box-shadow: var(--shadow-lg);
+                }
+                
+                .modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: var(--spacing-xl);
+                }
+                
+                /* Form Styles */
+                .form-grid {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    gap: var(--spacing-xl);
+                }
+                
+                .form-group {
+                    margin-bottom: var(--spacing-lg);
+                }
+                
+                .form-group.span-2 {
+                    grid-column: span 2;
+                }
+                
+                .form-group label {
+                    display: block;
+                    margin-bottom: var(--spacing-sm);
+                    font-weight: 500;
+                    color: var(--text);
+                }
+                
+                .form-control {
+                    width: 100%;
+                    padding: var(--spacing-md);
+                    border: 1px solid var(--border);
+                    border-radius: 8px;
+                    font-size: 14px;
+                    transition: all 0.2s ease;
+                }
+                
+                .form-control:focus {
+                    outline: none;
+                    border-color: var(--primary);
+                    box-shadow: 0 0 0 3px rgba(197, 168, 111, 0.1);
+                }
+                
+                /* Media Upload */
+                .media-upload {
+                    border: 2px dashed var(--border);
+                    border-radius: 8px;
+                    padding: var(--spacing-xl);
+                    text-align: center;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .media-upload:hover {
+                    border-color: var(--primary);
+                    background: rgba(197, 168, 111, 0.05);
+                }
+                
+                .media-upload i {
+                    font-size: 24px;
+                    color: var(--primary);
+                    margin-bottom: var(--spacing-sm);
+                }
+                
+                /* Watermark Options */
+                .watermark-options {
+                    margin-top: var(--spacing-md);
+                    padding: var(--spacing-md);
+                    background: var(--background);
+                    border-radius: 8px;
+                    display: none;
+                }
+                
+                .watermark-options.active {
+                    display: block;
+                }
+                
+                .watermark-position {
+                    display: grid;
+                    grid-template-columns: repeat(3, 1fr);
+                    gap: var(--spacing-sm);
+                    margin-top: var(--spacing-sm);
+                }
+                
+                .position-btn {
+                    padding: var(--spacing-sm);
+                    border: 1px solid var(--border);
+                    border-radius: 4px;
+                    background: var(--surface);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .position-btn:hover {
+                    background: rgba(197, 168, 111, 0.1);
+                }
+                
+                .position-btn.active {
+                    background: var(--primary);
+                    border-color: var(--primary);
+                    color: var(--surface);
+                }
+                
+                /* Action Buttons */
+                .action-buttons {
+                    display: flex;
+                    gap: var(--spacing-sm);
+                }
+                
+                .action-btn {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 6px;
+                    border: none;
+                    background: transparent;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                .action-btn:hover {
+                    background: rgba(197, 168, 111, 0.1);
+                    color: var(--primary);
+                }
+                
+                /* Status Badge */
+                .status-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 4px 12px;
+                    border-radius: 12px;
+                    font-size: 12px;
+                    font-weight: 500;
+                    display: flex;
+                    gap: 5px;
+                    width: fit-content;
+                }
+                
+                .status-badge.active {
+                    background: rgba(52, 211, 153, 0.1);
+                    color: var(--success);
+                }
+                
+                .status-badge.inactive {
+                    background: rgba(239, 68, 68, 0.1);
+                    color: var(--error);
+                }
+                
+                /* Toast Notifications */
+                .toast-container {
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    z-index: 1100;
+                }
+                
+                .toast {
+                    background: var(--surface);
+                    border-radius: 8px;
+                    padding: var(--spacing-md) var(--spacing-lg);
+                    margin-bottom: var(--spacing-sm);
+                    box-shadow: var(--shadow-lg);
+                    display: flex;
+                    align-items: center;
+                    gap: var(--spacing-sm);
+                    animation: slideIn 0.3s ease-out;
+                }
+                
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                
+                /* Responsive Design */
+                @media (max-width: 1024px) {
+                    .form-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .form-group.span-2 {
+                        grid-column: auto;
+                    }
+                }
+                
+                @media (max-width: 768px) {
+                    .sidebar {
+                        width: 80px;
+                    }
+                    
+                    .brand-name,
+                    .nav-item span {
+                        display: none;
+                    }
+                    
+                    .main-content {
+                        margin-left: 80px;
+                        width: calc(100% - 80px);
+                    }
+                    
+                    .content-header {
+                        flex-direction: column;
+                        gap: var(--spacing-md);
+                    }
+                }
+
+                .watermark-options {
+    margin-top: 16px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: none;
+}
+
+.watermark-options.active {
+    display: block;
+}
+
+.checkbox-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    border-radius: 4px;
+    border: 2px solid var(--border);
+    cursor: pointer;
+}
+
+.watermark-position-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    display: block;
+}
+
+.watermark-position {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.position-btn {
+    width: 40px;
+    height: 40px;
+    padding: 0;
+    border: 1.5px solid var(--border);
+    border-radius: 8px;
+    background: var(--surface);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.position-btn:hover {
+    border-color: var(--primary-light);
+    background: rgba(197, 168, 111, 0.05);
+}
+
+.position-btn.active {
+    background: var(--primary);
+    border-color: var(--primary);
+}
+
+/* Arrow Icons for Position Buttons */
+.position-btn i {
+    font-size: 14px;
+    color: var(--text-secondary);
+    transition: all 0.2s ease;
+}
+
+.position-btn:hover i {
+    color: var(--primary);
+}
+
+.position-btn.active i {
+    color: var(--surface);
+}
+
+/* Custom Arrow Icons */
+.arrow-icon {
+    width: 20px;
+    height: 20px;
+    position: relative;
+}
+
+.arrow-icon::before,
+.arrow-icon::after {
+    content: '';
+    position: absolute;
+    background: currentColor;
+    transition: all 0.2s ease;
+}
+
+/* Top Left Arrow */
+.arrow-top-left .arrow-icon::before {
+    width: 10px;
+    height: 2px;
+    top: 9px;
+    left: 5px;
+    transform: rotate(-45deg);
+}
+
+.arrow-top-left .arrow-icon::after {
+    width: 2px;
+    height: 10px;
+    top: 5px;
+    left: 9px;
+    transform: rotate(-45deg);
+}
+
+/* Top Right Arrow */
+.arrow-top-right .arrow-icon::before {
+    width: 10px;
+    height: 2px;
+    top: 9px;
+    right: 5px;
+    transform: rotate(45deg);
+}
+
+.arrow-top-right .arrow-icon::after {
+    width: 2px;
+    height: 10px;
+    top: 5px;
+    right: 9px;
+    transform: rotate(45deg);
+}
+
+/* Bottom Right Arrow */
+.arrow-bottom-right .arrow-icon::before {
+    width: 10px;
+    height: 2px;
+    bottom: 9px;
+    right: 5px;
+    transform: rotate(-45deg);
+}
+
+.arrow-bottom-right .arrow-icon::after {
+    width: 2px;
+    height: 10px;
+    bottom: 5px;
+    right: 9px;
+    transform: rotate(-45deg);
+}
+
+/* Position Button Tooltip */
+.position-btn::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 4px 8px;
+    background: rgba(0, 0, 0, 0.8);
+    color: white;
+    font-size: 12px;
+    border-radius: 4px;
+    white-space: nowrap;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease;
+}
+
+.position-btn:hover::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* Modal Footer & Button Styles */
+.form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px solid var(--border);
+}
+
+/* Base Button Styles */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    min-width: 100px;
+    height: 40px;
+}
+
+/* Secondary Button (Cancel) */
+.btn-secondary {
+    background: var(--surface);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+}
+
+.btn-secondary:hover {
+    background: var(--background);
+    border-color: var(--text-secondary);
+}
+
+.btn-secondary:active {
+    background: var(--border);
+    transform: translateY(1px);
+}
+
+/* Primary Button (Save) */
+.btn-primary {
+    background: var(--primary);
+    border: none;
+    color: var(--surface);
+    box-shadow: 0 2px 4px rgba(197, 168, 111, 0.2);
+}
+
+.btn-primary:hover {
+    background: var(--primary-hover);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 8px rgba(197, 168, 111, 0.3);
+}
+
+.btn-primary:active {
+    transform: translateY(1px);
+    box-shadow: 0 1px 2px rgba(197, 168, 111, 0.2);
+}
+
+/* Button Icons */
+.btn i {
+    font-size: 16px;
+}
+
+/* Loading State */
+.btn.loading {
+    position: relative;
+    pointer-events: none;
+    color: transparent;
+}
+
+.btn.loading::after {
+    content: '';
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    border: 2px solid;
+    border-radius: 50%;
+    border-color: currentColor transparent transparent transparent;
+    animation: button-loading 0.8s linear infinite;
+}
+
+@keyframes button-loading {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Disabled State */
+.btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+/* Focus States */
+.btn:focus {
+    outline: none;
+}
+
+.btn:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Button Group (if needed) */
+.btn-group {
+    display: flex;
+    gap: 8px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+    .form-actions {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+
+
+                </style>
+    </head>
+    <body>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-logo">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <div class="brand-name">Jewelry Admin</div>
+                </div>
+            </div>
+            <nav class="nav-items">
+                <a href="index.html" class="nav-item" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="product.html" class="nav-item" data-page="products">
+                    <i class="fas fa-gem"></i>
+                    <span>Products</span>
+                </a>
+                <a href="cat.html" class="nav-item" data-page="categories">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="user.html" class="nav-item" data-page="metal-types">
+                    <i class="fas fa-users"></i>
+                    <span>User</span>
+                </a>
+                <a href="order.html" class="nav-item" data-page="metal-types">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-header">
+                <div class="page-title">
+                    <h1>Product Management</h1>
+                    <p>Manage your jewelry products</p>
+                </div>
+                <button class="add-button" onclick="showModal('productModal')">
+                    <i class="fas fa-plus"></i>
+                    Add Product
+                </button>
+            </div>
+
+            <!-- Products Table -->
+            <div class="table-container">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Image</th>
+                            <th>Title</th>
+                            <th>Category</th>
+                            <th>Weight</th>
+                            <th>Metal Type</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="productTableBody">
+                        <!-- Products will be dynamically added here -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Product Modal -->
+            <div class="modal" id="productModal">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h2>Add Product</h2>
+                        <button class="modal-close"
+                            onclick="closeModal('productModal')">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <form id="productForm"
+                        onsubmit="handleProductSubmit(event)">
+                        <div class="form-grid">
+                            <!-- Image Upload -->
+                            <div class="form-group">
+                                <label>Product Image</label>
+                                <div class="media-upload-container">
+                                    <div class="media-upload"
+                                        onclick="triggerFileInput('productImage')">
+                                        <i class="fas fa-cloud-upload-alt"></i>
+                                        <p>Click to upload image</p>
+                                        <input type="file" id="productImage"
+                                            accept="image/*"
+                                            style="display: none"
+                                            onchange="handleImageUpload(event)">
+                                    </div>
+                                    <div class="watermark-options"
+                                        id="imageWatermarkOptions">
+                                        <label class="checkbox-wrapper">
+                                            <input type="checkbox"
+                                                id="imageWatermarkEnabled"
+                                                onchange="toggleWatermark('image')">
+                                            <span>Add Watermark</span>
+                                        </label>
+                                        <label
+                                            class="watermark-position-label">Watermark
+                                            Position</label>
+                                        <div class="watermark-position">
+                                            <button type="button"
+                                                class="position-btn arrow-top-left"
+                                                data-position="top-left"
+                                                data-tooltip="Top Left"
+                                                onclick="setWatermarkPosition('image', 'top-left')">
+                                                <span class="arrow-icon"></span>
+                                            </button>
+                                            <button type="button"
+                                                class="position-btn arrow-top-right active"
+                                                data-position="top-right"
+                                                data-tooltip="Top Right"
+                                                onclick="setWatermarkPosition('image', 'top-right')">
+                                                <span class="arrow-icon"></span>
+                                            </button>
+                                            <button type="button"
+                                                class="position-btn arrow-bottom-right"
+                                                data-position="bottom-right"
+                                                data-tooltip="Bottom Right"
+                                                onclick="setWatermarkPosition('image', 'bottom-right')">
+                                                <span class="arrow-icon"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    <div class="media-preview"
+                                        id="imagePreview"></div>
+                                </div>
+                            </div>
+
+                            <!-- Video Upload -->
+                            <div class="form-group">
+                                <label>Product Video</label>
+                                <div class="media-upload-container">
+                                    <div class="media-upload"
+                                        onclick="triggerFileInput('productVideo')">
+                                        <i class="fas fa-video"></i>
+                                        <p>Click to upload video</p>
+                                        <input type="file" id="productVideo"
+                                            accept="video/*"
+                                            style="display: none"
+                                            onchange="handleVideoUpload(event)">
+                                    </div>
+                                    <div class="watermark-options"
+                                        id="videoWatermarkOptions">
+                                        <label class="checkbox-wrapper">
+                                            <input type="checkbox"
+                                                id="videoWatermarkEnabled"
+                                                onchange="toggleWatermark('video')">
+                                            <span>Add Watermark</span>
+                                        </label>
+                                        <label
+                                            class="watermark-position-label">Watermark
+                                            Position</label>
+                                        <div class="watermark-position">
+                                            <button type="button"
+                                                class="position-btn arrow-top-left"
+                                                data-position="top-left"
+                                                data-tooltip="Top Left"
+                                                onclick="setWatermarkPosition('video', 'top-left')">
+                                                <span class="arrow-icon"></span>
+                                            </button>
+                                            <button type="button"
+                                                class="position-btn arrow-top-right active"
+                                                data-position="top-right"
+                                                data-tooltip="Top Right"
+                                                onclick="setWatermarkPosition('video', 'top-right')">
+                                                <span class="arrow-icon"></span>
+                                            </button>
+                                            <button type="button"
+                                                class="position-btn arrow-bottom-right"
+                                                data-position="bottom-right"
+                                                data-tooltip="Bottom Right"
+                                                onclick="setWatermarkPosition('video', 'bottom-right')">
+                                                <span class="arrow-icon"></span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div class="media-preview"
+                                        id="videoPreview"></div>
+                                </div>
+                            </div>
+
+                            <!-- Product Details -->
+                            <div class="form-group">
+                                <label for="productTitle">Title</label>
+                                <input type="text" id="productTitle"
+                                    name="productTitle" class="form-control"
+                                    required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productWeight">Weight (in
+                                    grams)</label>
+                                <input type="number" id="productWeight"
+                                    name="productWeight" class="form-control"
+                                    step="0.01" min="0" required>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productCategory">Category</label>
+                                <select id="productCategory"
+                                    name="productCategory" class="form-control"
+                                    onchange="loadSubcategories()" required>
+                                    <option value>Select Category</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label
+                                    for="productSubcategory">Subcategory</label>
+                                <select id="productSubcategory"
+                                    name="productSubcategory"
+                                    class="form-control" required>
+                                    <option value>Select Subcategory</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="metalType">Metal Type</label>
+                                <select id="metalType" name="metalType"
+                                    class="form-control" required>
+                                    <option value>Select Metal Type</option>
+                                    <option value="gold">Gold</option>
+                                    <option value="silver">Silver</option>
+                                    <option value="platinum">Platinum</option>
+                                    <option value="rose-gold">Rose Gold</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="productStatus">Status</label>
+                                <select id="productStatus" name="productStatus"
+                                    class="form-control" required>
+                                    <option value="active">Active</option>
+                                    <option value="inactive">Inactive</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group span-2">
+                                <label
+                                    for="productDescription">Description</label>
+                                <textarea id="productDescription"
+                                    name="productDescription"
+                                    class="form-control" rows="4"
+                                    required></textarea>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary"
+                                onclick="closeModal('productModal')">
+                                <i class="fas fa-times"></i>
+                                Cancel
+                            </button>
+                            <button type="submit" class="btn btn-primary">
+                                <i class="fas fa-save"></i>
+                                Save Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </main>
+
+        <!-- Toast Container -->
+        <div class="toast-container"></div>
+    </body>
+    <script>
+        // Sample Data
+        const categories = [
+            {
+                id: '1',
+                name: 'Necklaces',
+                subcategories: ['Choker', 'Pendant', 'Chain', 'Mangalsutra']
+            },
+            {
+                id: '2',
+                name: 'Rings',
+                subcategories: ['Engagement', 'Cocktail', 'Bands', 'Solitaire']
+            },
+            {
+                id: '3',
+                name: 'Earrings',
+                subcategories: ['Studs', 'Drops', 'Hoops', 'Chandeliers']
+            },
+            {
+                id: '4',
+                name: 'Bracelets',
+                subcategories: ['Tennis', 'Bangles', 'Cuff', 'Charm']
+            }
+        ];
+        
+        const metalTypes = [
+            { id: '1', name: '18K Gold', code: '18KT' },
+            { id: '2', name: '22K Gold', code: '22KT' },
+            { id: '3', name: '24K Gold', code: '24KT' },
+            { id: '4', name: 'Platinum', code: 'PT950' },
+            { id: '5', name: 'Silver', code: 'AG925' }
+        ];
+        
+        // Sample products data
+        let products = [
+            {
+                id: '1',
+                title: 'Diamond Pendant Necklace',
+                description: 'Elegant diamond pendant with 18K gold chain',
+                category: '1',
+                subcategory: 'Pendant',
+                weight: 12.5,
+                metalType: '1',
+                status: 'active',
+                image: {
+                    url: '/api/placeholder/400/320',
+                    watermark: {
+                        enabled: true,
+                        position: 'top-right'
+                    }
+                },
+                video: {
+                    url: null,
+                    watermark: {
+                        enabled: false,
+                        position: 'top-right'
+                    }
+                }
+            },
+            {
+                id: '2',
+                title: 'Emerald Ring',
+                description: 'Classic emerald ring with diamond accents',
+                category: '2',
+                subcategory: 'Cocktail',
+                weight: 8.3,
+                metalType: '2',
+                status: 'active',
+                image: {
+                    url: '/api/placeholder/400/320',
+                    watermark: {
+                        enabled: true,
+                        position: 'top-right'
+                    }
+                },
+                video: {
+                    url: null,
+                    watermark: {
+                        enabled: false,
+                        position: 'top-right'
+                    }
+                }
+            }
+        ];
+        
+        // Watermark settings
+        let watermarkSettings = {
+            image: {
+                enabled: false,
+                position: 'top-right'
+            },
+            video: {
+                enabled: false,
+                position: 'top-right'
+            }
+        };
+        
+        // Utility Functions
+        function generateId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            const container = document.querySelector('.toast-container');
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Modal Functions
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                // Reset form if it's a new product
+                if (!currentProductId) {
+                    resetForm();
+                }
+            }
+        }
+        
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                resetForm();
+                currentProductId = null;
+            }
+        }
+        
+        function resetForm() {
+            const form = document.getElementById('productForm');
+            form.reset();
+            document.getElementById('imagePreview').style.display = 'none';
+            document.getElementById('videoPreview').style.display = 'none';
+            document.getElementById('imageWatermarkOptions').classList.remove('active');
+            document.getElementById('videoWatermarkOptions').classList.remove('active');
+            watermarkSettings = {
+                image: { enabled: false, position: 'top-right' },
+                video: { enabled: false, position: 'top-right' }
+            };
+        }
+        
+        // Media Handling
+        function triggerFileInput(inputId) {
+            document.getElementById(inputId).click();
+        }
+        
+        function handleImageUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('imagePreview');
+                    preview.innerHTML = `
+                        <div class="preview-container">
+                            <img src="${e.target.result}" alt="Product image">
+                            <div class="watermark ${watermarkSettings.image.position}" 
+                                 style="display: ${watermarkSettings.image.enabled ? 'flex' : 'none'}">
+                                <img src="/api/placeholder/16/16" alt="Brand Logo">
+                                <span>Your Brand</span>
+                            </div>
+                        </div>
+                    `;
+                    preview.style.display = 'block';
+                    document.getElementById('imageWatermarkOptions').classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        function handleVideoUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const preview = document.getElementById('videoPreview');
+                    preview.innerHTML = `
+                        <div class="preview-container">
+                            <video controls>
+                                <source src="${e.target.result}" type="${file.type}">
+                            </video>
+                            <div class="watermark ${watermarkSettings.video.position}"
+                                 style="display: ${watermarkSettings.video.enabled ? 'flex' : 'none'}">
+                                <img src="/api/placeholder/16/16" alt="Brand Logo">
+                                <span>Your Brand</span>
+                            </div>
+                        </div>
+                    `;
+                    preview.style.display = 'block';
+                    document.getElementById('videoWatermarkOptions').classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+        
+        // Watermark Controls
+        function toggleWatermark(type) {
+            const enabled = document.getElementById(`${type}WatermarkEnabled`).checked;
+            watermarkSettings[type].enabled = enabled;
+            updateWatermarkPreview(type);
+        }
+        
+        function setWatermarkPosition(type, position) {
+            watermarkSettings[type].position = position;
+            updateWatermarkPreview(type);
+            
+            // Update active button state
+            const buttons = document.querySelectorAll(`#${type}WatermarkOptions .position-btn`);
+            buttons.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.position === position);
+            });
+        }
+        
+        function updateWatermarkPreview(type) {
+            const preview = document.getElementById(`${type}Preview`);
+            const watermark = preview.querySelector('.watermark');
+            if (watermark) {
+                watermark.className = `watermark ${watermarkSettings[type].position}`;
+                watermark.style.display = watermarkSettings[type].enabled ? 'flex' : 'none';
+            }
+        }
+        
+        // Product Operations
+        let currentProductId = null;
+        
+        function handleProductSubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const productData = {
+                id: currentProductId || generateId(),
+                title: formData.get('productTitle'),
+                description: formData.get('productDescription'),
+                category: formData.get('productCategory'),
+                subcategory: formData.get('productSubcategory'),
+                weight: parseFloat(formData.get('productWeight')),
+                metalType: formData.get('metalType'),
+                status: formData.get('productStatus'),
+                image: {
+                    url: document.getElementById('productImage').files[0] ? 
+                        URL.createObjectURL(document.getElementById('productImage').files[0]) : 
+                        '/api/placeholder/400/320',
+                    watermark: {...watermarkSettings.image}
+                },
+                video: {
+                    url: document.getElementById('productVideo').files[0] ?
+                        URL.createObjectURL(document.getElementById('productVideo').files[0]) :
+                        null,
+                    watermark: {...watermarkSettings.video}
+                }
+            };
+        
+            if (currentProductId) {
+                const index = products.findIndex(p => p.id === currentProductId);
+                products[index] = productData;
+                showToast('Product updated successfully');
+            } else {
+                products.push(productData);
+                showToast('Product added successfully');
+            }
+        
+            renderProducts();
+            closeModal('productModal');
+        }
+        
+        function deleteProduct(productId) {
+            if (confirm('Are you sure you want to delete this product?')) {
+                products = products.filter(p => p.id !== productId);
+                renderProducts();
+                showToast('Product deleted successfully');
+            }
+        }
+        
+        function editProduct(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                currentProductId = productId;
+                
+                // Populate form fields
+                document.getElementById('productTitle').value = product.title;
+                document.getElementById('productDescription').value = product.description;
+                document.getElementById('productCategory').value = product.category;
+                loadSubcategories();
+                document.getElementById('productSubcategory').value = product.subcategory;
+                document.getElementById('productWeight').value = product.weight;
+                document.getElementById('metalType').value = product.metalType;
+                document.getElementById('productStatus').value = product.status;
+        
+                // Set watermark settings
+                watermarkSettings = {
+                    image: {...product.image.watermark},
+                    video: {...product.video.watermark}
+                };
+        
+                // Show modal
+                document.querySelector('#productModal .modal-header h2').textContent = 'Edit Product';
+                showModal('productModal');
+            }
+        }
+        
+        function toggleProductStatus(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                product.status = product.status === 'active' ? 'inactive' : 'active';
+                renderProducts();
+                showToast(`Product ${product.status === 'active' ? 'activated' : 'deactivated'} successfully`);
+            }
+        }
+        
+        // Render Functions
+        function loadCategories() {
+            const select = document.getElementById('productCategory');
+            select.innerHTML = '<option value="">Select Category</option>';
+            categories.forEach(category => {
+                select.innerHTML += `<option value="${category.id}">${category.name}</option>`;
+            });
+        }
+        
+        function loadSubcategories() {
+            const categoryId = document.getElementById('productCategory').value;
+            const select = document.getElementById('productSubcategory');
+            select.innerHTML = '<option value="">Select Subcategory</option>';
+            
+            const category = categories.find(c => c.id === categoryId);
+            if (category) {
+                category.subcategories.forEach(sub => {
+                    select.innerHTML += `<option value="${sub}">${sub}</option>`;
+                });
+            }
+        }
+        
+        function renderProducts() {
+            const tbody = document.getElementById('productTableBody');
+            tbody.innerHTML = products.map(product => `
+                <tr>
+                    <td>
+                        <div class="media-preview" style="display: block;">
+                            <img src="${product.image.url}" alt="${product.title}" class="product-image">
+                            ${product.image.watermark.enabled ? `
+                                <div class="watermark ${product.image.watermark.position}">
+                                    <img src="/api/placeholder/16/16" alt="Brand Logo">
+                                    <span>Your Brand</span>
+                                </div>
+                            ` : ''}
+                        </div>
+                    </td>
+                    <td>${product.title}</td>
+                    <td>${getCategoryName(product.category)} - ${product.subcategory}</td>
+                    <td>${product.weight}g</td>
+                    <td>${getMetalTypeName(product.metalType)}</td>
+                    <td>
+                        <span class="status-badge ${product.status}">
+                            <i class="fas fa-circle"></i>
+                            ${product.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn" onclick="editProduct('${product.id}')" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn" onclick="toggleProductStatus('${product.id}')" title="Toggle Status">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+                            <button class="action-btn" onclick="deleteProduct('${product.id}')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        function getCategoryName(categoryId) {
+            const category = categories.find(c => c.id === categoryId);
+            return category ? category.name : '';
+        }
+        
+        function getMetalTypeName(metalTypeId) {
+            const metalType = metalTypes.find(m => m.id === metalTypeId);
+            return metalType ? metalType.name : '';
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCategories();
+            renderProducts();
+            
+            // Add event listeners for watermark position buttons
+            document.querySelectorAll('.position-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    const type = e.target.closest('.watermark-options').id.replace('WatermarkOptions', '');
+                    setWatermarkPosition(type, btn.dataset.position);
+                });
+            });
+        });
+        </script>
+</html>

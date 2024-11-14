@@ -230,7 +230,7 @@ def download_pdf(request, category_id):
     ).select_related('package')
 
     vendor_logo = vendor.shop_logo.path if vendor.shop_logo else None
-    manufacturer_logo = os.path.join(settings.BASE_DIR, 'staticfiles', 'Manufacturer_logo', 'saanj_logo.jpg')
+    manufacturer_logo = os.path.join(settings.BASE_DIR, 'staticfiles', 'Manufacturer_logo', 'saanj_logo.png')
 
     response = HttpResponse(content_type='application/pdf')
     response['Content-Disposition'] = f'attachment; filename="{category.name}_designs.pdf"'

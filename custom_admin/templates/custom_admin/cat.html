@@ -1,0 +1,1768 @@
+<!DOCTYPE html>
+{% load static %}
+
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Luxury Jewelry Management - Categories</title>
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+        <style>
+                /* Modern CSS Reset and Variables */
+                :root {
+    /* Colors */
+    --primary: #86220A;          /* Deep Red */
+    --primary-hover: #6A1B08;    /* Darker Red */
+    --primary-light: #FA4E23;    /* Bright Orange-Red */
+    --surface: #FFFFFF;          /* Pure White */
+    --background: #FDF8F7;       /* Very Light Red Tint */
+    --text: #2D0F06;            /* Very Dark Red */
+    --text-secondary: #755048;   /* Muted Red */
+    --border: #E5D8D6;          /* Light Red-Gray */
+    --success: #34D399;         /* Success Green (kept for contrast) */
+    --warning: #F59E0B;         /* Warning Orange */
+    --error: #DC2626;          /* Error Red */
+
+      /* Spacing */
+      --spacing-xs: 4px;
+        --spacing-sm: 8px;
+        --spacing-md: 12px;
+        --spacing-lg: 16px;
+        --spacing-xl: 24px;
+
+    /* Shadows with a slight red tint */
+    --shadow-sm: 0 1px 2px rgba(134, 34, 10, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(134, 34, 10, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(134, 34, 10, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(134, 34, 10, 0.1);
+}
+     
+                
+                /* Global Reset */
+                * {
+                    margin: 0;
+                    padding: 0;
+                    box-sizing: border-box;
+                }
+                
+                body {
+                    font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', sans-serif;
+                    background: var(--background);
+                    color: var(--text);
+                    line-height: 1.5;
+                    -webkit-font-smoothing: antialiased;
+                }
+                
+                /* Layout */
+                .container {
+                    display: flex;
+                    min-height: 100vh;
+                }
+                
+                /* Sidebar */
+               /* Sidebar */
+               .sidebar {
+                    width: 260px;
+                    background: var(--surface);
+                    border-right: 1px solid var(--border);
+                    height: 100vh;
+                    position: fixed;
+                    padding: 24px 0;
+                }
+                
+                .sidebar-header {
+                    padding: 0 24px;
+                    margin-bottom: 32px;
+                }
+                
+                .brand {
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    justify-content: center;
+                    
+                }
+                
+                .brand-logo {
+                    width: 40px;
+                    height: 40px;
+                    background: var(--surface);
+                    border-radius: 10px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    color: var(--surface);
+                    border: 2px solid var(--primary);
+                    padding: 1.5px;
+                }
+                
+                .logo_brand{
+        height: 100%;
+        width: 100%;
+      }
+                
+                .brand-name {
+                    font-size: 20px;
+                    font-weight: 600;
+                    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-light) 100%);
+                    -webkit-background-clip: text;
+                    -webkit-text-fill-color: transparent;
+                }
+                
+                /* Navigation */
+                .nav-items {
+                    padding: 0 8px;
+                }
+                
+                .nav-item {
+                    display: flex;
+                    align-items: center;
+                    padding: 12px 24px;
+                    color: var(--text);
+                    text-decoration: none;
+                    gap: 12px;
+                    border-radius: 8px;
+                    margin: 4px 8px;
+                    transition: all 0.2s ease;
+                }
+                
+                .nav-item:hover {
+                    background: rgba(197, 168, 111, 0.1);
+                }
+                
+                .nav-item.active {
+                    background: var(--primary);
+                    color: var(--surface);
+                }
+                
+                .nav-item i {
+                    font-size: 18px;
+                    width: 24px;
+                    text-align: center;
+                }
+                
+                /* Main Content */
+                .main-content {
+                    margin-left: 260px;
+                    padding: 32px;
+                    width: calc(100% - 260px);
+                }
+                
+                /* Main Content */
+                .main-content {
+                    margin-left: 260px;
+                    padding: 24px;
+                    width: calc(100% - 260px);
+                }
+                
+                /* Tabs */
+                .tabs-container {
+                    margin-bottom: 24px;
+                    background: var(--surface);
+                    border-radius: 12px;
+                    padding: 16px;
+                    box-shadow: var(--shadow-sm);
+                }
+                
+                .tabs {
+                    display: flex;
+                    gap: 8px;
+                    border-bottom: 1px solid var(--border);
+                    padding-bottom: 16px;
+                }
+                
+                .tab-btn {
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    padding: 10px 16px;
+                    background: none;
+                    border: none;
+                    border-radius: 8px;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    font-weight: 500;
+                }
+                
+                .tab-btn:hover {
+                    background: rgba(197, 168, 111, 0.1);
+                    color: var(--primary);
+                }
+                
+                .tab-btn.active {
+                    background: var(--primary);
+                    color: var(--surface);
+                }
+                
+                .tab-btn i {
+                    font-size: 16px;
+                }
+                
+                /* Tab Content */
+                .tab-content {
+                    display: none;
+                }
+                
+                .tab-content.active {
+                    display: block;
+                }
+                
+                /* Content Header */
+                .content-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 24px;
+                    padding: 24px;
+                    background: var(--surface);
+                    border-radius: 12px;
+                    box-shadow: var(--shadow-sm);
+                }
+                
+                .page-title h1 {
+                    font-size: 24px;
+                    font-weight: 600;
+                    margin-bottom: 4px;
+                    color: var(--text);
+                }
+                
+                .page-title p {
+                    color: var(--text-secondary);
+                    font-size: 14px;
+                }
+                
+                /* Add Button */
+                .add-button {
+                    background: var(--primary);
+                    color: var(--surface);
+                    border: none;
+                    padding: 12px 20px;
+                    border-radius: 8px;
+                    font-weight: 500;
+                    display: flex;
+                    align-items: center;
+                    gap: 8px;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .add-button:hover {
+                    background: var(--primary-hover);
+                    transform: translateY(-1px);
+                    box-shadow: var(--shadow-md);
+                }
+                
+                /* Table */
+                .table-container {
+                    background: var(--surface);
+                    border-radius: 12px;
+                    box-shadow: var(--shadow-sm);
+                    overflow: hidden;
+                }
+                
+                .table {
+                    width: 100%;
+                    border-collapse: collapse;
+                }
+                
+                .table th {
+                    background: #F8FAFC;
+                    padding: 16px;
+                    text-align: left;
+                    font-size: 12px;
+                    font-weight: 600;
+                    color: var(--text-secondary);
+                    text-transform: uppercase;
+                    letter-spacing: 0.05em;
+                }
+                
+                .table td {
+                    padding: 16px;
+                    border-top: 1px solid var(--border);
+                    font-size: 14px;
+                }
+                
+                /* Status Badge */
+                .status-badge {
+                    display: inline-flex;
+                    align-items: center;
+                    padding: 6px 12px;
+                    border-radius: 20px;
+                    font-size: 12px;
+                    font-weight: 500;
+                    gap: 6px;
+                }
+                
+                .status-badge.active {
+                    background: rgba(52, 211, 153, 0.1);
+                    color: var(--success);
+                }
+                
+                .status-badge.inactive {
+                    background: rgba(239, 68, 68, 0.1);
+                    color: var(--error);
+                }
+                
+                .status-badge i {
+                    font-size: 8px;
+                }
+                
+                /* Action Buttons */
+                .action-buttons {
+                    display: flex;
+                    gap: 8px;
+                }
+                
+                .action-btn {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 6px;
+                    border: none;
+                    background: transparent;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                }
+                
+                .action-btn:hover {
+                    background: rgba(197, 168, 111, 0.1);
+                    color: var(--primary);
+                }
+                
+                .action-btn.delete:hover {
+                    background: rgba(239, 68, 68, 0.1);
+                    color: var(--error);
+                }
+                
+                /* Modal */
+                .modal {
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    background: rgba(0, 0, 0, 0.5);
+                    display: none;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 100;
+                    backdrop-filter: blur(4px);
+                }
+                
+                .modal.active {
+                    display: flex;
+                }
+                
+                .modal-content {
+                    background: var(--surface);
+                    border-radius: 12px;
+                    width: 90%;
+                    max-width: 500px;
+                    max-height: 90vh;
+                    overflow-y: auto;
+                    padding: 24px;
+                    box-shadow: var(--shadow-xl);
+                }
+                
+                .modal-header {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    margin-bottom: 24px;
+                }
+                
+                .modal-header h2 {
+                    font-size: 20px;
+                    font-weight: 600;
+                }
+                
+                .modal-close {
+                    width: 32px;
+                    height: 32px;
+                    border-radius: 50%;
+                    border: none;
+                    background: none;
+                    color: var(--text-secondary);
+                    cursor: pointer;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    transition: all 0.2s ease;
+                }
+                
+                .modal-close:hover {
+                    background: rgba(0, 0, 0, 0.05);
+                    color: var(--text);
+                }
+                
+                /* Form */
+                .form-group {
+                    margin-bottom: 20px;
+                }
+                
+                .form-group label {
+                    display: block;
+                    margin-bottom: 8px;
+                    font-weight: 500;
+                    color: var(--text);
+                }
+                
+                .form-control {
+                    width: 100%;
+                    padding: 12px;
+                    border: 1.5px solid var(--border);
+                    border-radius: 8px;
+                    font-size: 14px;
+                    transition: all 0.2s ease;
+                    color: var(--text);
+                }
+                
+                .form-control:focus {
+                    outline: none;
+                    border-color: var(--primary);
+                    box-shadow: 0 0 0 3px rgba(197, 168, 111, 0.1);
+                }
+                
+                textarea.form-control {
+                    min-height: 100px;
+                    resize: vertical;
+                }
+                
+                /* Form Actions */
+                .form-actions {
+                    display: flex;
+                    justify-content: flex-end;
+                    gap: 12px;
+                    margin-top: 24px;
+                    padding-top: 20px;
+                    border-top: 1px solid var(--border);
+                }
+                
+                .btn {
+                    display: inline-flex;
+                    align-items: center;
+                    justify-content: center;
+                    gap: 8px;
+                    padding: 10px 20px;
+                    border-radius: 8px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                }
+                
+                .btn-secondary {
+                    background: var(--surface);
+                    border: 1.5px solid var(--border);
+                    color: var(--text);
+                }
+                
+                .btn-secondary:hover {
+                    background: var(--background);
+                    border-color: var(--text-secondary);
+                }
+                
+                .btn-primary {
+                    background: var(--primary);
+                    border: none;
+                    color: var(--surface);
+                }
+                
+                .btn-primary:hover {
+                    background: var(--primary-hover);
+                    transform: translateY(-1px);
+                    box-shadow: var(--shadow-md);
+                }
+                
+                /* Toast */
+                .toast-container {
+                    position: fixed;
+                    top: 24px;
+                    right: 24px;
+                    z-index: 1000;
+                }
+                
+                .toast {
+                    background: var(--surface);
+                    border-radius: 8px;
+                    padding: 16px;
+                    margin-bottom: 8px;
+                    box-shadow: var(--shadow-lg);
+                    display: flex;
+                    align-items: center;
+                    gap: 12px;
+                    animation: slideIn 0.3s ease-out;
+                    min-width: 300px;
+                }
+                
+                .toast.success {
+                    border-left: 4px solid var(--success);
+                }
+                
+                .toast.error {
+                    border-left: 4px solid var(--error);
+                }
+                
+                @keyframes slideIn {
+                    from {
+                        transform: translateX(100%);
+                        opacity: 0;
+                    }
+                    to {
+                        transform: translateX(0);
+                        opacity: 1;
+                    }
+                }
+                
+                /* Responsive Design */
+                @media (max-width: 1024px) {
+                    .sidebar {
+                        width: 80px;
+                    }
+                    
+                    .brand-name,
+                    .nav-item span {
+                        display: none;
+                    }
+                    
+                    .main-content {
+                        margin-left: 80px;
+                        width: calc(100% - 80px);
+                    }
+                }
+                
+                @media (max-width: 768px) {
+                    .content-header {
+                        flex-direction: column;
+                        gap: 16px;
+                    }
+                    
+                    .tabs {
+                        overflow-x: auto;
+                        padding-bottom: 8px;
+                    }
+                    
+                    .tab-btn {
+                        white-space: nowrap;
+                    }
+                    
+                    .form-actions {
+                        flex-direction: column;
+                    }
+                    
+                    .btn {
+                        width: 100%;
+                    }
+                }
+                </style>
+    </head>
+    <body>
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="brand">
+                    <div class="brand-logo">
+                        <img src="{% static 'manufacturer_logo/saanj_logo.png' %}" alt="Manufacturer Logo" class="logo_brand">
+                    </div>
+                    <div class="brand-name">Control Panel</div>
+                </div>
+            </div>
+            <nav class="nav-items">
+                <a href="index.html" class="nav-item" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="product.html" class="nav-item" data-page="products">
+                    <i class="fas fa-gem"></i>
+                    <span>Products</span>
+                </a>
+                <a href="cat.html" class="nav-item" data-page="categories">
+                    <i class="fas fa-layer-group"></i>
+                    <span>Categories</span>
+                </a>
+                <a href="user.html" class="nav-item" data-page="metal-types">
+                    <i class="fas fa-users"></i>
+                    <span>Users</span>
+                </a>
+                <a href="order.html" class="nav-item" data-page="metal-types">
+                    <i class="fas fa-shopping-cart"></i>
+                    <span>Orders</span>
+                </a>
+                <a href="roles.html" class="nav-item ">
+                    <i class="fas fa-user-shield"></i>
+                    <span>Access Control</span>
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Tabs -->
+            <div class="tabs-container">
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="categories">
+                        <i class="fas fa-layer-group"></i>
+                        Categories
+                    </button>
+                    <button class="tab-btn" data-tab="subcategories">
+                        <i class="fas fa-sitemap"></i>
+                        Subcategories
+                    </button>
+                    <button class="tab-btn" data-tab="metals">
+                        <i class="fas fa-coins"></i>
+                        Metal Types
+                    </button>
+                    <button class="tab-btn" data-tab="weights">
+                        <i class="fas fa-weight-hanging"></i>
+                        Weight Options
+                    </button>
+                </div>
+            </div>
+
+            <!-- Categories Tab Content -->
+            <div class="tab-content active" id="categories-content">
+                <div class="content-header">
+                    <div class="page-title">
+                        <h1>Category Management</h1>
+                        <p>Manage product categories and organization</p>
+                    </div>
+                    <button class="add-button" onclick="showModal('categoryModal')">
+                        <i class="fas fa-plus"></i>
+                        Add Category
+                    </button>
+                </div>
+            
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Category Name</th>
+                                <th>Description</th>
+                                <th>Subcategories</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="categoryTableBody">
+                            <!-- Categories will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+
+            <!-- Subcategories Tab Content -->
+            <div class="tab-content" id="subcategories-content">
+                <div class="content-header">
+                    <div class="page-title">
+                        <h1>Subcategory Management</h1>
+                        <p>Manage product subcategories</p>
+                    </div>
+                    <button class="add-button"
+                        onclick="showModal('subcategoryModal')">
+                        <i class="fas fa-plus"></i>
+                        Add Subcategory
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Subcategory Name</th>
+                                <th>Parent Category</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="subcategoryTableBody">
+                            <!-- Subcategories will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Metal Types Tab Content -->
+            <div class="tab-content" id="metals-content">
+                <div class="content-header">
+                    <div class="page-title">
+                        <h1>Metal Type Management</h1>
+                        <p>Manage product metal types</p>
+                    </div>
+                    <button class="add-button"
+                        onclick="showModal('metalModal')">
+                        <i class="fas fa-plus"></i>
+                        Add Metal Type
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Metal Name</th>
+                                <th>Purity</th>
+                                <th>Code</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="metalTableBody">
+                            <!-- Metal types will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Weight Options Tab Content -->
+            <div class="tab-content" id="weights-content">
+                <div class="content-header">
+                    <div class="page-title">
+                        <h1>Weight Options Management</h1>
+                        <p>Manage product weight ranges</p>
+                    </div>
+                    <button class="add-button"
+                        onclick="showModal('weightModal')">
+                        <i class="fas fa-plus"></i>
+                        Add Weight Option
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Range Name</th>
+                                <th>Min Weight (g)</th>
+                                <th>Max Weight (g)</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="weightTableBody">
+                            <!-- Weight options will be dynamically added here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+
+        <!-- Category Modal -->
+        <div class="modal" id="categoryModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add Category</h2>
+                    <button class="modal-close"
+                        onclick="closeModal('categoryModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="categoryForm" onsubmit="handleCategorySubmit(event)">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="categoryName">Category Name</label>
+                        <input type="text" id="categoryName" name="categoryName"
+                            class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoryDescription">Description</label>
+                        <textarea id="categoryDescription"
+                            name="categoryDescription" class="form-control"
+                            rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="categoryStatus">Status</label>
+                        <select id="categoryStatus" name="categoryStatus"
+                            class="form-control">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="closeModal('categoryModal')">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Save Category
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Subcategory Modal -->
+        <div class="modal" id="subcategoryModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 id="modalTitle">Add Subcategory</h2>  <!-- Change header dynamically -->
+                    <button class="modal-close" onclick="closeModal('subcategoryModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="subcategoryForm" onsubmit="handleSubcategorySubmit(event)">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="parentCategory">Parent Category</label>
+                        <select id="parentCategory" name="parentCategory" class="form-control" required>
+                            <!-- Categories will be dynamically added here -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="subcategoryName">Subcategory Name</label>
+                        <input type="text" id="subcategoryName" name="subcategoryName" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="subcategoryDescription">Description</label>
+                        <textarea id="subcategoryDescription" name="subcategoryDescription" class="form-control" rows="3"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="subcategoryStatus">Status</label>
+                        <select id="subcategoryStatus" name="subcategoryStatus" class="form-control">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary" onclick="closeModal('subcategoryModal')">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Save Subcategory
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+
+        <!-- Metal Type Modal -->
+        <div class="modal" id="metalModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add Metal Type</h2>
+                    <button class="modal-close"
+                        onclick="closeModal('metalModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="metalForm" onsubmit="handleMetalSubmit(event)">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="metalName">Metal Name</label>
+                        <input type="text" id="metalName" name="metalName"
+                            class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metalPurity">Purity</label>
+                        <input type="text" id="metalPurity" name="metalPurity"
+                            class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metalCode">Code</label>
+                        <input type="text" id="metalCode" name="metalCode"
+                            class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="metalStatus">Status</label>
+                        <select id="metalStatus" name="metalStatus"
+                            class="form-control">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="closeModal('metalModal')">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Save Metal Type
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Weight Option Modal -->
+        <div class="modal" id="weightModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Add Weight Option</h2>
+                    <button class="modal-close"
+                        onclick="closeModal('weightModal')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <form id="weightForm" onsubmit="handleWeightSubmit(event)">
+                    <div class="form-group">
+                        <label for="weightName">Range Name</label>
+                        <input type="text" id="weightName" name="weightName"
+                            class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="minWeight">Minimum Weight (g)</label>
+                        <input type="number" id="minWeight" name="minWeight"
+                            class="form-control" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="maxWeight">Maximum Weight (g)</label>
+                        <input type="number" id="maxWeight" name="maxWeight"
+                            class="form-control" step="0.01" min="0" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="weightStatus">Status</label>
+                        <select id="weightStatus" name="weightStatus"
+                            class="form-control">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                        </select>
+                    </div>
+                    <div class="form-actions">
+                        <button type="button" class="btn btn-secondary"
+                            onclick="closeModal('weightModal')">
+                            <i class="fas fa-times"></i>
+                            Cancel
+                        </button>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i>
+                            Save Weight Option
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Toast Container -->
+        <div class="toast-container"></div>
+    </body>
+    <script>
+        // Sample Data
+        let categories = [
+            {
+                id: '1',
+                name: 'Necklaces',
+                description: 'Elegant necklaces and pendants collection',
+                status: 'active'
+            },
+            {
+                id: '2',
+                name: 'Rings',
+                description: 'Wedding, engagement and fashion rings',
+                status: 'active'
+            },
+            {
+                id: '3',
+                name: 'Earrings',
+                description: 'Studs, drops and hoop earrings',
+                status: 'active'
+            }
+        ];
+        
+        let subcategories = [
+            {
+                id: '1',
+                categoryId: '1',
+                name: 'Chokers',
+                description: 'Short length necklaces worn close to neck',
+                status: 'active'
+            },
+            {
+                id: '2',
+                categoryId: '1',
+                name: 'Pendants',
+                description: 'Hanging ornamental jewelry pieces',
+                status: 'active'
+            },
+            {
+                id: '3',
+                categoryId: '2',
+                name: 'Engagement Rings',
+                description: 'Diamond and gemstone engagement rings',
+                status: 'active'
+            }
+        ];
+        
+        let metalTypes = [
+            {
+                id: '1',
+                name: '18K Gold',
+                purity: '18 Karat',
+                code: '18KT',
+                status: 'active'
+            },
+            {
+                id: '2',
+                name: '22K Gold',
+                purity: '22 Karat',
+                code: '22KT',
+                status: 'active'
+            },
+            {
+                id: '3',
+                name: 'Platinum',
+                purity: '950',
+                code: 'PT950',
+                status: 'active'
+            }
+        ];
+        
+        let weightOptions = [
+            {
+                id: '1',
+                name: 'Light',
+                minWeight: 0,
+                maxWeight: 5,
+                status: 'active'
+            },
+            {
+                id: '2',
+                name: 'Medium',
+                minWeight: 5,
+                maxWeight: 10,
+                status: 'active'
+            },
+            {
+                id: '3',
+                name: 'Heavy',
+                minWeight: 10,
+                maxWeight: 20,
+                status: 'active'
+            }
+        ];
+        
+        // Utility Functions
+        function generateId() {
+            return '_' + Math.random().toString(36).substr(2, 9);
+        }
+        
+        function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = `toast ${type}`;
+            toast.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            const container = document.querySelector('.toast-container');
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+        
+        // Tab Management
+        function initTabs() {
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            const tabContents = document.querySelectorAll('.tab-content');
+        
+            tabButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const tabId = button.dataset.tab;
+                    
+                    // Update active tab button
+                    tabButtons.forEach(btn => btn.classList.remove('active'));
+                    button.classList.add('active');
+                    
+                    // Update active content
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        if (content.id === `${tabId}-content`) {
+                            content.classList.add('active');
+                        }
+                    });
+                });
+            });
+        }
+        
+        // Modal Functions
+        let currentEditId = null;
+
+        function showModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.add('active');
+                // Reset form if it's a new item
+                if (!currentEditId) {
+                    const form = modal.querySelector('form');
+                    if (form) form.reset();
+                }
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(modalId);
+            if (modal) {
+                modal.classList.remove('active');
+                currentEditId = null;
+                const form = modal.querySelector('form');
+                if (form) form.reset();
+            }
+        }
+
+        function getCSRFToken() {
+            return document.querySelector('[name=csrfmiddlewaretoken]').value;
+        }
+
+        // Category Management
+        // Handle Category Submission
+        function handleCategorySubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+        
+            const categoryData = {
+                categoryName: formData.get('categoryName'),
+                categoryDescription: formData.get('categoryDescription'),
+                categoryStatus: formData.get('categoryStatus')
+            };
+        
+            if (currentEditId) {
+                categoryData.id = currentEditId;
+            }
+        
+            fetch('/custom_admin/categories/add_or_edit/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: new URLSearchParams(categoryData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showToast(data.message);
+                renderCategories();
+                closeModal('categoryModal');
+                currentEditId = null;  // Reset the edit ID
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Edit Category
+        function editCategory(id) {
+            fetch(`/custom_admin/categories/${id}/`)
+                .then(response => response.json())
+                .then(category => {
+                    currentEditId = id;
+                    document.getElementById('categoryName').value = category.name;
+                    document.getElementById('categoryDescription').value = category.description;
+                    document.getElementById('categoryStatus').value = category.status;
+                    showModal('categoryModal');
+                })
+                .catch(error => console.error('Error fetching category:', error));
+        }
+
+        // Delete Category
+        function deleteCategory(id) {
+            if (confirm('Are you sure you want to delete this category?')) {
+                fetch(`/custom_admin/categories/delete/${id}/`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRFToken': getCSRFToken(),
+                    }
+                })
+                .then(response => response.json())
+                .then(data => {
+                    showToast(data.message);
+                    renderCategories();
+                });
+            }
+        }
+
+        // Toggle Category Status
+        function toggleCategoryStatus(id) {
+            fetch(`/custom_admin/categories/toggle_status/${id}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                showToast(data.message);
+                renderCategories();
+            });
+        }
+
+        
+        // Subcategory Management
+        // Handle Subcategory Submit (Add/Edit)
+        function handleSubcategorySubmit(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(event.target);
+            const subcategoryData = {
+                subcategoryName: formData.get('subcategoryName'),
+                subcategoryDescription: formData.get('subcategoryDescription'),
+                subcategoryStatus: formData.get('subcategoryStatus'),
+                parentCategory: formData.get('parentCategory')
+            };
+        
+            if (currentEditId) {
+                subcategoryData.id = currentEditId;
+            }
+        
+            fetch('/custom_admin/categories/subcategories/add_or_edit/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: new URLSearchParams(subcategoryData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showToast(data.message);
+                fetchSubcategories();  // Re-fetch subcategories to update the list
+                closeModal('subcategoryModal');
+                currentEditId = null;  // Reset edit ID
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+
+        // Metal Type Management
+        function handleMetalSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+        
+            const metalData = {
+                metalName: formData.get('metalName'),
+                metalPurity: formData.get('metalPurity'),
+                metalCode: formData.get('metalCode'),
+                metalStatus: formData.get('metalStatus')
+            };
+        
+            if (currentEditId) {
+                metalData.id = currentEditId;
+            }
+        
+            fetch('/custom_admin/categories/add_or_edit_metal_type/', {  // Adjust the endpoint accordingly
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: new URLSearchParams(metalData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showToast(data.message);
+                renderMetalTypes();
+                closeModal('metalModal');
+                currentEditId = null;  // Reset the edit ID
+            })
+            .catch(error => console.error('Error:', error));
+        }
+        
+        // Weight Option Management
+        // Submit Weight Option (Add/Edit)
+        function handleWeightSubmit(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+
+            const weightData = {
+                name: formData.get('weightName'),
+                minWeight: parseFloat(formData.get('minWeight')),
+                maxWeight: parseFloat(formData.get('maxWeight')),
+                status: formData.get('weightStatus')
+            };
+
+            if (currentEditId) {
+                weightData.id = currentEditId;
+            }
+
+            fetch('/custom_admin/categories/weight_options/add_or_edit/', {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                },
+                body: new URLSearchParams(weightData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                showToast(data.message);
+                renderWeightOptions(); // Update the weight options after adding or editing
+                closeModal('weightModal');
+                currentEditId = null;  // Reset the edit ID
+            })
+            .catch(error => console.error('Error:', error));
+        }
+
+        // Fetch categories from backend and initialize the form
+        function fetchCategories() {
+            fetch('/custom_admin/categories/list_json/')  // Adjust the endpoint accordingly
+                .then(response => response.json())
+                .then(categoriesData => {
+                    categories = categoriesData;  // Store the fetched categories
+                    initializeForms();  // Call initializeForms after categories are fetched
+                })
+                .catch(error => console.error('Error fetching categories:', error));
+        }
+
+        
+        
+        // Render Functions
+        // Render Categories Function
+        function renderCategories() {
+            // Fetch categories and subcategories together
+            Promise.all([
+                fetch('/custom_admin/categories/list_json/'),
+                fetch('/custom_admin/categories/subcategories/list_json/') // Ensure this URL matches your backend path
+            ])
+            .then(([categoriesResponse, subcategoriesResponse]) => Promise.all([categoriesResponse.json(), subcategoriesResponse.json()]))
+            .then(([categories, subcategories]) => {
+                const tbody = document.getElementById('categoryTableBody');
+                tbody.innerHTML = categories.map(category => `
+                    <tr>
+                        <td>${category.name}</td>
+                        <td>${category.description}</td>
+                        <td>${getSubcategoryCount(category.id, subcategories)}</td> <!-- Pass category.id to getSubcategoryCount -->
+                        <td>
+                            <span class="status-badge ${category.status}">
+                                <i class="fas fa-circle"></i>
+                                ${category.status}
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons">
+                                <button class="action-btn" onclick="editCategory('${category.id}')" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn" onclick="toggleCategoryStatus('${category.id}')" title="Toggle Status">
+                                    <i class="fas fa-power-off"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="deleteCategory('${category.id}')" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `).join('');
+            })
+            .catch(error => console.error('Error fetching categories or subcategories:', error));
+        }
+
+        
+        
+        // Fetch subcategories and render in the table
+        function fetchSubcategories() {
+            fetch('/custom_admin/categories/subcategories/list_json/')
+                .then(response => response.json())
+                .then(subcategoriesData => {
+                    subcategories = subcategoriesData;
+                    renderSubcategories();  // Render subcategories table
+                })
+                .catch(error => console.error('Error fetching subcategories:', error));
+        }
+
+        // Render Subcategories in the Table
+        function renderSubcategories() {
+            const tbody = document.getElementById('subcategoryTableBody');
+            tbody.innerHTML = subcategories.map(subcategory => `
+                <tr>
+                    <td>${subcategory.name}</td>
+                    <td>${getCategoryName(subcategory.category_id)}</td>  <!-- Get Category Name dynamically -->
+                    <td>${subcategory.description}</td>
+                    <td>
+                        <span class="status-badge ${subcategory.status}">
+                            <i class="fas fa-circle"></i>
+                            ${subcategory.status}
+                        </span>
+                    </td>
+                    <td>
+                        <div class="action-buttons">
+                            <!-- Edit Button -->
+                            <button class="action-btn" onclick="editSubcategory('${subcategory.id}')" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </button>
+
+                            <!-- Toggle Status Button -->
+                            <button class="action-btn" onclick="toggleSubcategoryStatus('${subcategory.id}')" title="Toggle Status">
+                                <i class="fas fa-power-off"></i>
+                            </button>
+
+                            <!-- Delete Button -->
+                            <button class="action-btn delete" onclick="deleteSubcategory('${subcategory.id}')" title="Delete">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+            `).join('');
+        }
+        
+        // Fetch metal types from backend and initialize the form
+        function fetchMetalTypes() {
+            fetch('/custom_admin/categories/get_metal_types_json/')  // Adjust the endpoint accordingly
+                .then(response => response.json())
+                .then(metalTypesData => {
+                    metalTypes = metalTypesData;  // Store the fetched metal types
+                    initializeForms();  // Call initializeMetalForms after metal types are fetched
+                })
+                .catch(error => console.error('Error fetching metal types:', error));
+        }
+
+
+        function renderMetalTypes() {
+            fetch('/custom_admin/categories/get_metal_types_json/')  // Adjust the endpoint accordingly
+                .then(response => response.json())
+                .then(metalTypes => {
+                    const tbody = document.getElementById('metalTableBody');
+                    tbody.innerHTML = metalTypes.map(metal => `
+                        <tr>
+                            <td>${metal.name}</td>
+                            <td>${metal.purity}</td>
+                            <td>${metal.code}</td>
+                            <td>
+                                <span class="status-badge ${metal.status}">
+                                    <i class="fas fa-circle"></i>
+                                    ${metal.status}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn" onclick="editMetalType('${metal.id}')" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn" onclick="toggleMetalStatus('${metal.id}')" title="Toggle Status">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteMetalType('${metal.id}')" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                })
+                .catch(error => console.error('Error fetching metal types:', error));
+        }
+
+        // Fetch weight options from backend and initialize the form
+        function fetchWeightOptions() {
+            fetch('/custom_admin/categories/weight_options/list_json/')  // Adjust the endpoint accordingly
+                .then(response => response.json())
+                .then(weightOptionsData => {
+                    weightOptions = weightOptionsData;  // Store the fetched weight options
+                    initializeForms();  // Call initializeForms after weight options are fetched
+                })
+                .catch(error => console.error('Error fetching weight options:', error));
+        }
+        
+        // Render Weight Options
+        function renderWeightOptions() {
+            fetch('/custom_admin/categories/weight_options/list_json/')  // Adjust the endpoint accordingly
+                .then(response => response.json())
+                .then(weightOptions => {
+                    const tbody = document.getElementById('weightTableBody');
+                    tbody.innerHTML = weightOptions.map(weight => `
+                        <tr>
+                            <td>${weight.name}</td>
+                            <td>${weight.min_weight}g</td>
+                            <td>${weight.max_weight}g</td>
+                            <td>
+                                <span class="status-badge ${weight.status}">
+                                    <i class="fas fa-circle"></i>
+                                    ${weight.status}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="action-buttons">
+                                    <button class="action-btn" onclick="editWeightOption('${weight.id}')" title="Edit">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                    <button class="action-btn" onclick="toggleWeightStatus('${weight.id}')" title="Toggle Status">
+                                        <i class="fas fa-power-off"></i>
+                                    </button>
+                                    <button class="action-btn delete" onclick="deleteWeightOption('${weight.id}')" title="Delete">
+                                        <i class="fas fa-trash"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join('');
+                })
+                .catch(error => console.error('Error fetching weight options:', error));
+        }
+        
+        // Helper Functions
+        function getSubcategoryCount(categoryId, subcategories) {
+            return subcategories.filter(s => s.category_id === categoryId).length; // Use 'category_id' to match backend data
+        }
+        
+        function getCategoryName(categoryId) {
+            const category = categories.find(c => c.id === categoryId);
+            return category ? category.name : '';
+        }
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            initTabs();
+            renderCategories();
+            renderSubcategories();
+            renderMetalTypes();
+            renderWeightOptions();
+            fetchCategories();
+            fetchSubcategories();  // Fetch subcategories when the page loads
+            fetchMetalTypes();
+        });
+        </script>
+    <script>
+    // Subcategory Functions
+    // Edit Subcategory
+    function editSubcategory(id) {
+        fetch(`/custom_admin/categories/subcategories/${id}/`)
+            .then(response => response.json())
+            .then(subcategory => {
+                currentEditId = id;
+    
+                // Populate the parent category dropdown
+                const parentCategorySelect = document.getElementById('parentCategory');
+                parentCategorySelect.innerHTML = '<option value="">Select Category</option>' +
+                    categories.map(category => 
+                        `<option value="${category.id}" ${category.id === subcategory.categoryId ? 'selected' : ''}>${category.name}</option>`
+                    ).join('');
+                
+                // Populate other form fields
+                document.getElementById('subcategoryName').value = subcategory.name;
+                document.getElementById('subcategoryDescription').value = subcategory.description;
+                document.getElementById('subcategoryStatus').value = subcategory.status;
+                
+                // Update modal title
+                document.querySelector('#subcategoryModal .modal-header h2').textContent = 'Edit Subcategory';
+                showModal('subcategoryModal');
+            })
+            .catch(error => console.error('Error fetching subcategory:', error));
+    }
+
+    
+    // Delete Subcategory
+    function deleteSubcategory(id) {
+        if (confirm('Are you sure you want to delete this subcategory?')) {
+            fetch(`/custom_admin/categories/subcategories/delete/${id}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                showToast(data.message);
+                fetchSubcategories();  // Re-fetch subcategories to update the list
+            });
+        }
+    }
+
+    
+    // Toggle Subcategory Status
+    function toggleSubcategoryStatus(id) {
+        fetch(`/custom_admin/categories/subcategories/toggle_status/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken(),
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            showToast(data.message);
+            fetchSubcategories();  // Re-fetch subcategories to update the list
+        });
+    }
+
+    
+    // Metal Type Functions
+    // Edit Metal Type
+    function editMetalType(id) {
+        fetch(`/custom_admin/categories/get_metal_type/${id}/`)  // Adjust endpoint to fetch metal type by ID
+            .then(response => response.json())
+            .then(metal => {
+                currentEditId = id;
+                document.getElementById('metalName').value = metal.name;
+                document.getElementById('metalPurity').value = metal.purity;
+                document.getElementById('metalCode').value = metal.code;
+                document.getElementById('metalStatus').value = metal.status;
+                showModal('metalModal');
+            })
+            .catch(error => console.error('Error fetching metal type:', error));
+    }
+
+    // Delete Metal Type
+    function deleteMetalType(id) {
+        if (confirm('Are you sure you want to delete this metal type?')) {
+            fetch(`/custom_admin/categories/delete_metal_type/${id}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                showToast(data.message);
+                renderMetalTypes();
+            })
+            .catch(error => console.error('Error deleting metal type:', error));
+        }
+    }
+
+    // Toggle Metal Type Status
+    function toggleMetalStatus(id) {
+        fetch(`/custom_admin/categories/toggle_metal_status/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken(),
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            showToast(data.message);
+            renderMetalTypes();
+        })
+        .catch(error => console.error('Error toggling metal type status:', error));
+    }
+    
+    // Edit Weight Option
+    function editWeightOption(id) {
+        fetch(`/custom_admin/categories/weight_options/${id}/`)
+            .then(response => response.json())
+            .then(weight => {
+                currentEditId = id;
+                document.getElementById('weightName').value = weight.name;
+                document.getElementById('minWeight').value = weight.min_weight;
+                document.getElementById('maxWeight').value = weight.max_weight;
+                document.getElementById('weightStatus').value = weight.status;
+                showModal('weightModal');
+            })
+            .catch(error => console.error('Error fetching weight option:', error));
+    }
+
+    // Delete Weight Option
+    function deleteWeightOption(id) {
+        if (confirm('Are you sure you want to delete this weight option?')) {
+            fetch(`/custom_admin/categories/weight_options/delete/${id}/`, {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': getCSRFToken(),
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                showToast(data.message);
+                renderWeightOptions();
+            });
+        }
+    }
+
+    // Toggle Weight Option Status
+    function toggleWeightStatus(id) {
+        fetch(`/custom_admin/categories/weight_options/toggle_status/${id}/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken(),
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            showToast(data.message);
+            renderWeightOptions();
+        });
+    }
+    
+    // Enhanced Form Initialization
+    function initializeForms() {
+        // Populate the parent category dropdown in the subcategory form
+        const parentCategorySelect = document.getElementById('parentCategory');
+        parentCategorySelect.innerHTML = '';  // Clear previous options
+
+        // Add a default option
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Select Category';  // Default placeholder
+        parentCategorySelect.appendChild(defaultOption);
+
+        // Populate categories dynamically
+        categories.forEach(category => {
+            const option = document.createElement('option');
+            option.value = category.id;  // ID from the backend
+            option.textContent = category.name;  // Name from the backend
+            parentCategorySelect.appendChild(option);
+        });
+
+
+        
+            
+        // Add validation for weight range
+        const weightForm = document.getElementById('weightForm');
+        if (weightForm) {
+            weightForm.addEventListener('submit', (e) => {
+                const minWeight = parseFloat(document.getElementById('minWeight').value);
+                const maxWeight = parseFloat(document.getElementById('maxWeight').value);
+                
+                if (maxWeight <= minWeight) {
+                    e.preventDefault();
+                    showToast('Maximum weight must be greater than minimum weight', 'error');
+                }
+            });
+        }
+    
+        // Add validation for metal code uniqueness
+        const metalForm = document.getElementById('metalForm');
+        if (metalForm) {
+            metalForm.addEventListener('submit', (e) => {
+                const code = document.getElementById('metalCode').value;
+                const existingMetal = metalTypes.find(m => 
+                    m.code === code && m.id !== currentEditId
+                );
+                
+                if (existingMetal) {
+                    e.preventDefault();
+                    showToast('Metal code must be unique', 'error');
+                }
+            });
+        }
+    }
+    
+    // Call the fetchCategories function to load categories and initialize forms
+
+    // Enhanced Initialize Function
+    document.addEventListener('DOMContentLoaded', () => {
+        initTabs();
+        initializeForms();
+        renderCategories();
+        renderSubcategories();
+        renderMetalTypes();
+        renderWeightOptions();
+        fetchCategories();
+        fetchSubcategories();  // Fetch subcategories when the page loads
+        fetchMetalTypes();
+    
+        // Add event listeners for modal close buttons
+        document.querySelectorAll('.modal-close').forEach(button => {
+            button.addEventListener('click', () => {
+                const modal = button.closest('.modal');
+                if (modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+    
+        // Add click outside modal to close
+        document.querySelectorAll('.modal').forEach(modal => {
+            modal.addEventListener('click', (e) => {
+                if (e.target === modal) {
+                    closeModal(modal.id);
+                }
+            });
+        });
+    });
+    </script>
+</html>
